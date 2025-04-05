@@ -32,10 +32,10 @@ export const Navbar = () => {
                     Contact
                 </a>
                 <a
-                    href="/"
+                    href="/list"
                     className="hidden font-semibold transition duration-200 hover:text-yellow-500 md:flex"
                 >
-                    Agents
+                    Property
                 </a>
             </div>
             <div className="flex h-full flex-[2] items-center justify-end bg-transparent md:bg-[#fcf5f3]">
@@ -68,7 +68,7 @@ export const Navbar = () => {
                     <a href="/">Home</a>
                     <a href="/">About</a>
                     <a href="/">Contact</a>
-                    <a href="/">Agents</a>
+                    <a href="/list">Property</a>
                     <a href="/">Sign In</a>
                     <a href="/">Sign Up</a>
                 </div>
