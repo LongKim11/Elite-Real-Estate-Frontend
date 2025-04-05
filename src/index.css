@@ -3,6 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+input:-webkit-autofill {
+    background-color: transparent !important; /* Màu nền bạn muốn */
+    box-shadow: 0 0 0 30px #fff inset !important; /* Làm mất màu xanh */
+}
+
 button {
     cursor: pointer;
 }

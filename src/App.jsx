@@ -1,11 +1,8 @@
-import { Navbar } from './components/Navbar';
+import { RouterProvider } from 'react-router-dom';
+import { AppRouter } from './routes/AppRoutes';
 
 function App() {
-    return (
-        <div className="mx-auto h-screen max-w-[1366px]">
-            <Navbar />
-        </div>
-    );
+    return <RouterProvider router={AppRouter}></RouterProvider>;
 }
 
 export default App;
