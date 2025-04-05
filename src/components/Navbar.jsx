@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export const Navbar = () => {
     const [open, setOpen] = useState(false);
+
+    const user = true;
 
     return (
         <nav className="flex h-[100px] items-center justify-between">
@@ -39,18 +42,38 @@ export const Navbar = () => {
                 </a>
             </div>
             <div className="flex h-full flex-[2] items-center justify-end bg-transparent md:bg-[#fcf5f3]">
-                <a
-                    href="/"
-                    className="m-5 hidden px-6 py-3 font-semibold transition-all duration-200 hover:scale-105 md:flex"
-                >
-                    Sign In
-                </a>
-                <a
-                    href="/"
-                    className="m-5 hidden rounded bg-[#fece51] px-6 py-3 font-semibold transition-all duration-200 hover:scale-105 md:flex"
-                >
-                    Sign Up
-                </a>
+                {user ? (
+                    <div className="flex items-center font-bold">
+                        <img
+                            src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                            className="mr-3 h-[40px] w-[40px] rounded-full object-cover"
+                        ></img>
+                        <span>John Doe</span>
+                        <Link
+                            to={'/profile'}
+                            className="mx-5 bg-[#fece51] px-6 py-3 transition-all duration-200 hover:scale-105"
+                        >
+                            Profile
+                        </Link>
+                    </div>
+                ) : (
+                    <>
+                        {' '}
+                        <a
+                            href="/"
+                            className="m-5 hidden px-6 py-3 font-semibold transition-all duration-200 hover:scale-105 md:flex"
+                        >
+                            Sign In
+                        </a>
+                        <a
+                            href="/"
+                            className="m-5 hidden rounded bg-[#fece51] px-6 py-3 font-semibold transition-all duration-200 hover:scale-105 md:flex"
+                        >
+                            Sign Up
+                        </a>
+                    </>
+                )}
+
                 <div className="flex md:hidden">
                     <img
                         src="/menu.png"

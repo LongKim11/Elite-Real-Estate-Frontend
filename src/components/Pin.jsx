@@ -13,24 +13,26 @@ export const Pin = ({ item }) => {
                         maxWidth: '250px'
                     }}
                 >
-                    <img
-                        src={item.img}
-                        alt={item.title}
-                        style={{
-                            width: '100%',
-                            height: '150px',
-                            objectFit: 'cover',
-                            borderRadius: '8px'
-                        }}
-                    />
                     <Link
                         to={`/list/${item.id}`}
                         style={{
                             fontWeight: 'bold',
                             fontSize: '16px'
                         }}
+                        className="space-y-3"
                     >
-                        {item.title}
+                        <img
+                            src={item.img}
+                            alt={item.title}
+                            style={{
+                                width: '100%',
+                                height: '150px',
+                                objectFit: 'cover',
+                                borderRadius: '8px'
+                            }}
+                            className="transition-all duration-300 ease-in-out hover:scale-105"
+                        />
+                        <span>{item.title}</span>
                     </Link>
                     <div className="mt-2 flex items-center justify-between">
                         <div className="flex items-center gap-2">
