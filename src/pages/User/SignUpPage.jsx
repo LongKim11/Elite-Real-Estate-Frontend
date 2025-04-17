@@ -38,10 +38,11 @@ export const SignUpPage = () => {
 
     return (
         <div className="flex h-full">
-            <div className="relative flex-[2] md:bg-[#fcf5f3]">
-                <img src="/home-bg.png"></img>
-            </div>
-            <div className="flex-[3]">
+            <div
+                className="relative flex-[3] bg-cover bg-center md:bg-[#fcf5f3]"
+                style={{ backgroundImage: "url('/left-bg.png')" }}
+            ></div>
+            <div className="flex-[3] text-center">
                 <div className="mx-auto max-w-xl p-6">
                     <h1 className="mb-2 text-3xl font-bold">
                         Create an account
@@ -52,7 +53,7 @@ export const SignUpPage = () => {
                     </p>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="space-y-5">
+                        <div className="mb-5 space-y-3">
                             <Label htmlFor="name">Name</Label>
                             <Input
                                 id="name"
@@ -64,7 +65,7 @@ export const SignUpPage = () => {
                             />
                         </div>
 
-                        <div className="space-y-5">
+                        <div className="mb-5 space-y-3">
                             <Label htmlFor="email">Email</Label>
                             <Input
                                 id="email"
@@ -77,7 +78,7 @@ export const SignUpPage = () => {
                             />
                         </div>
 
-                        <div className="space-y-5">
+                        <div className="mb-5 space-y-3">
                             <Label htmlFor="phone">Phone Number</Label>
                             <Input
                                 id="phone"
@@ -90,7 +91,7 @@ export const SignUpPage = () => {
                             />
                         </div>
 
-                        <div className="space-y-5">
+                        <div className="mb-5 space-y-3">
                             <Label htmlFor="password">Password</Label>
                             <Input
                                 id="password"
@@ -103,7 +104,7 @@ export const SignUpPage = () => {
                             />
                         </div>
 
-                        <div className="space-y-5">
+                        <div className="mb-5 space-y-3">
                             <Label htmlFor="confirmPassword">
                                 Confirm your password
                             </Label>
@@ -120,10 +121,15 @@ export const SignUpPage = () => {
                         </div>
 
                         <div className="flex items-center space-x-2">
-                            <Checkbox id="terms" name="agreeToTerms" required />
+                            <Checkbox
+                                id="terms"
+                                name="agreeToTerms"
+                                required
+                                className="border-gray-300"
+                            />
                             <label
                                 htmlFor="terms"
-                                className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                className="text-sm leading-none font-medium"
                             >
                                 I agree to the{' '}
                                 <Link

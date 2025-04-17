@@ -5,12 +5,12 @@ export const HomePage = () => {
     return (
         <div
             className="relative h-screen bg-cover bg-center"
-            style={{ backgroundImage: "url('/hero-section2.png')" }}
+            style={{ backgroundImage: "url('/hero-section.png')" }}
         >
             <div className="flex items-center justify-center px-6 text-white">
                 <div className="max-w-3xl text-center">
-                    <h1 className="mt-20 mb-3 text-5xl leading-relaxed font-bold">
-                        Unlock Your Dream Home.
+                    <h1 className="mt-20 mb-8 text-5xl leading-relaxed font-bold">
+                        Unlock Your Dream Home
                     </h1>
                     <h1 className="mb-8 text-5xl leading-relaxed font-bold">
                         And Start Your Journey Here.
