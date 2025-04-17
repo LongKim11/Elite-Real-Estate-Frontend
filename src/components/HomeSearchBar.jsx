@@ -4,8 +4,8 @@ export const HomeSearchBar = () => {
     const [query, setQuery] = useState({
         type: 'buy',
         location: '',
-        minPrice: 0,
-        maxPrice: 0
+        minPrice: '',
+        maxPrice: ''
     });
 
     const handleSearch = (e) => {
@@ -57,7 +57,7 @@ export const HomeSearchBar = () => {
                         <input
                             type="text"
                             placeholder="City, Location"
-                            className="w-full bg-transparent px-4 py-3 outline-none"
+                            className="w-full bg-transparent px-4 py-3 text-black outline-none"
                             value={query.location}
                             name="location"
                             onChange={handleInputChange}
@@ -67,11 +67,9 @@ export const HomeSearchBar = () => {
                     {/* Min Price Input */}
                     <div className="flex-1 border-b border-gray-200 md:border-r md:border-b-0">
                         <input
-                            type="number"
+                            type="text"
                             placeholder="Min Price"
-                            className="w-full bg-transparent px-4 py-3 outline-none"
-                            min={0}
-                            max={1000000}
+                            className="w-full bg-transparent px-4 py-3 text-black placeholder-gray-500 outline-none"
                             value={query.minPrice}
                             name="minPrice"
                             onChange={handleInputChange}
@@ -81,11 +79,9 @@ export const HomeSearchBar = () => {
                     {/* Max Price Input */}
                     <div className="flex-1">
                         <input
-                            type="number"
+                            type="text"
                             placeholder="Max Price"
-                            className="w-full bg-transparent px-4 py-3 outline-none"
-                            min={0}
-                            max={1000000}
+                            className="w-full bg-transparent px-4 py-3 text-black outline-none"
                             value={query.maxPrice}
                             name="maxPrice"
                             onChange={handleInputChange}

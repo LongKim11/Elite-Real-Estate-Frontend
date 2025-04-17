@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 
 export const PropertyDetails = () => {
     return (
-        <div className="flex h-full">
+        <div className="flex h-full px-12">
             {/* Left */}
             <div className="flex-[3] overflow-y-hidden">
                 {/* Wrapper */}

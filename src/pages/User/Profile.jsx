@@ -8,7 +8,7 @@ export const Profile = () => {
     const data = listData;
 
     return (
-        <div className="flex h-full">
+        <div className="flex h-full px-12">
             {/* Profile */}
             <div className="flex-[3] overflow-y-scroll">
                 {/* Wrapper */}

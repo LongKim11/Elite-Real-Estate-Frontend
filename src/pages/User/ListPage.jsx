@@ -8,7 +8,7 @@ export const ListPage = () => {
     const data = listData;
 
     return (
-        <div className="flex h-full">
+        <div className="flex h-full pr-12 pl-32">
             <div className="flex-[3]">
                 <div className="mb-5 flex h-full flex-col gap-12 overflow-y-scroll pr-8 pb-5">
                     <ListFilter />

@@ -38,8 +38,11 @@ export const SignUpPage = () => {
 
     return (
         <div className="flex h-full">
+            <div className="relative flex-[2] md:bg-[#fcf5f3]">
+                <img src="/home-bg.png"></img>
+            </div>
             <div className="flex-[3]">
-                <div className="mx-auto max-w-md p-6">
+                <div className="mx-auto max-w-xl p-6">
                     <h1 className="mb-2 text-3xl font-bold">
                         Create an account
                     </h1>
@@ -49,7 +52,7 @@ export const SignUpPage = () => {
                     </p>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="space-y-4">
+                        <div className="space-y-5">
                             <Label htmlFor="name">Name</Label>
                             <Input
                                 id="name"
@@ -61,7 +64,7 @@ export const SignUpPage = () => {
                             />
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-5">
                             <Label htmlFor="email">Email</Label>
                             <Input
                                 id="email"
@@ -74,7 +77,7 @@ export const SignUpPage = () => {
                             />
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-5">
                             <Label htmlFor="phone">Phone Number</Label>
                             <Input
                                 id="phone"
@@ -87,7 +90,7 @@ export const SignUpPage = () => {
                             />
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-5">
                             <Label htmlFor="password">Password</Label>
                             <Input
                                 id="password"
@@ -100,7 +103,7 @@ export const SignUpPage = () => {
                             />
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-5">
                             <Label htmlFor="confirmPassword">
                                 Confirm your password
                             </Label>
@@ -142,14 +145,11 @@ export const SignUpPage = () => {
 
                     <p className="mt-6 text-center">
                         Already have account?{' '}
-                        <Link href="/sign-in" className="text-black underline">
+                        <Link to={'/sign-in'} className="text-black underline">
                             Sign in
                         </Link>
                     </p>
                 </div>
-            </div>
-            <div className="relative flex-[2] md:bg-[#fcf5f3]">
-                <img src="/home-bg.png"></img>
             </div>
         </div>
     );

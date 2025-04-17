@@ -7,7 +7,7 @@ export const Navbar = () => {
     const user = false;
 
     return (
-        <nav className="flex h-[100px] items-center justify-between">
+        <nav className="flex h-[100px] items-center justify-between px-8">
             <div className="flex flex-[3] items-center gap-16">
                 <Link
                     to={'/'}

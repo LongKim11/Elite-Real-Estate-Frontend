@@ -6,7 +6,10 @@ import { Link } from 'react-router-dom';
 export const NotFoundPage = () => {
     return (
         <div className="flex h-full">
-            <div className="mt-25 flex-[3] flex-col items-center justify-center text-center">
+            <div className="relative flex-[2] md:bg-[#fcf5f3]">
+                <img src="/home-bg.png"></img>
+            </div>
+            <div className="mt-30   flex-[3] flex-col items-center justify-center text-center">
                 <div className="mx-auto max-w-md space-y-6">
                     <h1 className="text-primary text-9xl font-extrabold tracking-tight">
                         404
@@ -26,9 +29,6 @@ export const NotFoundPage = () => {
                         </Link>
                     </Button>
                 </div>
-            </div>
-            <div className="relative flex-[2] md:bg-[#fcf5f3]">
-                <img src="/home-bg.png"></img>
             </div>
         </div>
     );
