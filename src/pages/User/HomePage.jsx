@@ -5,7 +5,7 @@ export const HomePage = () => {
     return (
         <div className="flex h-full">
             <div className="flex-[3]">
-                <div className="mr-8">
+                <div className="mr-12">
                     <h1 className="mt-20 text-5xl leading-relaxed font-bold">
                         Unlock Your Dream Home & Start Your Journey Here
                     </h1>

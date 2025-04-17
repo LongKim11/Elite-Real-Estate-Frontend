@@ -7,7 +7,7 @@ export const NotFoundPage = () => {
     return (
         <div className="flex h-full">
             <div className="mt-25 flex-[3] flex-col items-center justify-center text-center">
-                <div className="max-w-md space-y-6">
+                <div className="mx-auto max-w-md space-y-6">
                     <h1 className="text-primary text-9xl font-extrabold tracking-tight">
                         404
                     </h1>

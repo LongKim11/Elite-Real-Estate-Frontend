@@ -5,6 +5,8 @@ import { ListPage } from '@/pages/User/ListPage';
 import { PropertyDetails } from '@/pages/User/PropertyDetails';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { Profile } from '@/pages/User/Profile';
+import { SignUpPage } from '@/pages/User/SignUpPage';
+import { SignInPage } from '@/pages/SignInPage';
 
 export const AppRouter = createBrowserRouter([
     {
@@ -15,6 +17,8 @@ export const AppRouter = createBrowserRouter([
             { path: 'list', element: <ListPage /> },
             { path: 'list/:id', element: <PropertyDetails /> },
             { path: 'profile', element: <Profile /> },
+            { path: '/sign-up', element: <SignUpPage /> },
+            { path: '/sign-in', element: <SignInPage /> },
             {
                 path: '*',
                 element: <NotFoundPage />
