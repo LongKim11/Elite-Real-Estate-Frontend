@@ -10,6 +10,7 @@ export const Map = ({ items }) => {
             zoom={7}
             scrollWheelZoom={true}
             className="h-full w-full rounded-md"
+            style={{ zIndex: 0 }}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

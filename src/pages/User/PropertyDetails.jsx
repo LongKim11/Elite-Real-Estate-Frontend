@@ -1,9 +1,10 @@
 import { Slider } from '@/components/Slider';
 import React from 'react';
 import { singlePostData, userData } from '@/lib/dummydata';
-import { MapPinHouse, MessageSquareMore, Bookmark } from 'lucide-react';
+import { MapPinHouse, MessageSquareMore, Bookmark, Home } from 'lucide-react';
 import { Map } from '@/components/Map';
 import { Button } from '@/components/ui/button';
+import { HouseVisitDialog } from '@/components/HouseVisitDialog';
 
 export const PropertyDetails = () => {
     return (
@@ -169,12 +170,10 @@ export const PropertyDetails = () => {
                     </div>
 
                     {/* Buttons Section */}
-                    <div className="mb-8 flex justify-between gap-4">
-                        <Button className="w-1/2 bg-green-500 hover:bg-green-600">
-                            <MessageSquareMore />
-                            <span>Send a message</span>
-                        </Button>
-                        <Button className="bg-am w-1/2 bg-blue-500 hover:bg-blue-600">
+                    <div className="mb-8 grid grid-cols-2 gap-x-5">
+                        <HouseVisitDialog />
+
+                        <Button className="bg-blue-500 hover:bg-blue-600">
                             <Bookmark />
                             <span>Save the property</span>
                         </Button>

@@ -23,7 +23,7 @@ export const Slider = ({ images }) => {
     return (
         <div className="flex h-[400px] w-full gap-5">
             {imageIdx !== null && (
-                <div className="absolute top-0 left-0 flex h-screen w-full items-center justify-between bg-black">
+                <div className="fixed inset-0 z-[100] flex items-center justify-between bg-black/95">
                     <div
                         className="flex flex-[1] cursor-pointer items-center justify-center"
                         onClick={() => changeSlide('left')}
