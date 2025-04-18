@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -15,8 +15,10 @@ import { MessageSquareMore } from 'lucide-react';
 import { DateTimePicker } from './DateTimePicker';
 
 export const HouseVisitDialog = () => {
+    const [openDialog, setOpenDialog] = useState(false);
+
     return (
-        <Dialog>
+        <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogTrigger asChild>
                 <Button className="w-full bg-green-500 hover:bg-green-600">
                     <MessageSquareMore />
@@ -65,10 +67,12 @@ export const HouseVisitDialog = () => {
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="email" className="text-right">
+                        <Label htmlFor="date-time" className="text-right">
                             Date & Time
                         </Label>
-                        <DateTimePicker />
+                        <div className="col-span-3 flex w-full gap-4">
+                            <DateTimePicker className="w-full" />
+                        </div>
                     </div>
                 </div>
                 <DialogFooter>
