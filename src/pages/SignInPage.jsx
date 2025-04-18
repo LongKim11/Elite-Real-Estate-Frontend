@@ -36,7 +36,7 @@ export const SignInPage = () => {
                 style={{ backgroundImage: "url('/left-bg.png')" }}
             ></div>
             <div className="flex-[3]">
-                <div className="mx-auto mt-20 max-w-xl p-6 text-center">
+                <div className="mx-auto mt-12 max-w-lg p-6 text-center">
                     <h1 className="mb-2 text-3xl font-bold">Sign In</h1>
                     <p className="mb-6 text-gray-600">
                         Welcome back! Enter your credentials to sign in.
