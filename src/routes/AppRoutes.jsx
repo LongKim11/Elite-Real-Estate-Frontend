@@ -7,6 +7,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 import { Profile } from '@/pages/User/Profile';
 import { SignUpPage } from '@/pages/User/SignUpPage';
 import { SignInPage } from '@/pages/SignInPage';
+import { AddPostPage } from '@/pages/User/AddPostPage';
 
 export const AppRouter = createBrowserRouter([
     {
@@ -19,6 +20,7 @@ export const AppRouter = createBrowserRouter([
             { path: 'profile', element: <Profile /> },
             { path: '/sign-up', element: <SignUpPage /> },
             { path: '/sign-in', element: <SignInPage /> },
+            { path: '/add-post', element: <AddPostPage /> },
             {
                 path: '*',
                 element: <NotFoundPage />

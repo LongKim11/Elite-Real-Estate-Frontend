@@ -2,13 +2,14 @@ import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
 import { listData } from '@/lib/dummydata';
 import { Card } from '@/components/Card';
+import { Link } from 'react-router-dom';
 
 export const Profile = () => {
     const [activeTab, setActiveTab] = useState('myList');
     const data = listData;
 
     return (
-        <div className="flex h-full px-12">
+        <div className="flex h-full pr-12 pl-32">
             {/* Profile */}
             <div className="flex-[3] overflow-y-scroll">
                 {/* Wrapper */}
@@ -67,9 +68,11 @@ export const Profile = () => {
                                     Saved List
                                 </button>
                             </div>
-                            <Button className="bg-amber-300 text-black hover:bg-amber-400">
-                                Add New Post
-                            </Button>
+                            <Link to={'/add-post'}>
+                                <Button className="bg-amber-300 text-black hover:bg-amber-400">
+                                    Add New Post
+                                </Button>
+                            </Link>
                         </div>
 
                         {/* Tab Content */}
