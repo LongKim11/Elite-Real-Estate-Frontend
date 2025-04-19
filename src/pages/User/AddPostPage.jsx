@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BadgeDollarSign, Tag, ArrowLeft } from 'lucide-react';
+import { ApartmentForm } from '@/components/ApartmentForm';
+import { HouseForm } from '@/components/HouseForm';
+import { LandForm } from '@/components/LandForm';
 
 export const AddPostPage = () => {
     const [step, setStep] = useState(1);
     const [typeTransaction, setTypeTransaction] = useState(null);
     const [category, setCategory] = useState('');
-    const [formData, setFormData] = useState({});
 
     const navigate = useNavigate();
 
     const handleNext = () => setStep(step + 1);
-    const handleBack = () => setStep(step - 1);
+    const handleBack = () => {
+        if (step > 1) {
+            setStep(step - 1);
+        } else {
+            navigate(-1);
+        }
+    };
 
     const handleTransactionTypeSelect = (type) => {
         setTypeTransaction(type);
@@ -23,37 +31,10 @@ export const AddPostPage = () => {
         handleNext();
     };
 
-    const handleFormChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
-    };
-
-    const handleSubmit = () => {
-        const completeData = {
-            userId: 'your-user-id',
-            typeTransaction,
-            category,
-            ...formData
-        };
-        console.log(completeData);
-        navigate('/posts');
-    };
-
-    const handleTopBack = () => {
-        if (step > 1) {
-            setStep(step - 1);
-        } else {
-            navigate(-1);
-        }
-    };
-
     return (
         <div className="relative h-full">
             <button
-                onClick={handleTopBack}
+                onClick={handleBack}
                 className="absolute top-4 right-12 p-3"
             >
                 <div className="flex items-center justify-center gap-x-2 font-semibold">
@@ -156,125 +137,11 @@ export const AddPostPage = () => {
                 </div>
             )}
             {step === 3 && (
-                <form
-                    className="flex flex-[2] flex-col justify-center space-y-4 p-10"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSubmit();
-                    }}
-                >
-                    <h1 className="mb-4 text-2xl font-bold tracking-tight text-gray-900">
-                        Enter Property Details
-                    </h1>
-                    <input
-                        name="title"
-                        type="text"
-                        placeholder="Title"
-                        onChange={handleFormChange}
-                        className="w-full rounded border p-2"
-                    />
-                    <textarea
-                        name="description"
-                        placeholder="Description"
-                        onChange={handleFormChange}
-                        className="w-full rounded border p-2"
-                    />
-                    <input
-                        name="price"
-                        type="number"
-                        placeholder="Price"
-                        onChange={handleFormChange}
-                        className="w-full rounded border p-2"
-                    />
-
-                    {category === 'Apartment' && (
-                        <>
-                            <input
-                                name="numBedrooms"
-                                type="number"
-                                placeholder="Bedrooms"
-                                onChange={handleFormChange}
-                                className="w-full rounded border p-2"
-                            />
-                            <input
-                                name="floor"
-                                type="number"
-                                placeholder="Floor"
-                                onChange={handleFormChange}
-                                className="w-full rounded border p-2"
-                            />
-                            <label className="flex items-center space-x-2">
-                                <input
-                                    type="checkbox"
-                                    name="hasBalcony"
-                                    onChange={handleFormChange}
-                                />
-                                <span>Has Balcony</span>
-                            </label>
-                        </>
-                    )}
-
-                    {category === 'Land' && (
-                        <>
-                            <input
-                                name="roadFrontage"
-                                type="number"
-                                placeholder="Road Frontage (m)"
-                                onChange={handleFormChange}
-                                className="w-full rounded border p-2"
-                            />
-                            <input
-                                name="landUsageDuration"
-                                type="text"
-                                placeholder="Land Usage Duration"
-                                onChange={handleFormChange}
-                                className="w-full rounded border p-2"
-                            />
-                        </>
-                    )}
-
-                    {category === 'House' && (
-                        <>
-                            <input
-                                name="numFloors"
-                                type="number"
-                                placeholder="Number of Floors"
-                                onChange={handleFormChange}
-                                className="w-full rounded border p-2"
-                            />
-                            <input
-                                name="numBedrooms"
-                                type="number"
-                                placeholder="Bedrooms"
-                                onChange={handleFormChange}
-                                className="w-full rounded border p-2"
-                            />
-                            <input
-                                name="numBathrooms"
-                                type="number"
-                                placeholder="Bathrooms"
-                                onChange={handleFormChange}
-                                className="w-full rounded border p-2"
-                            />
-                        </>
-                    )}
-
-                    <div className="flex justify-start">
-                        {' '}
-                        <button
-                            onClick={handleBack}
-                            className="rounded bg-gray-300 px-4 py-2"
-                        >
-                            Back
-                        </button>
-                        <button
-                            type="submit"
-                            className="ml-3 rounded bg-green-500 px-4 py-2 text-white"
-                        >
-                            Submit
-                        </button>
-                    </div>
-                </form>
+                <div className="h-full overflow-y-scroll">
+                    {category === 'Apartment' && <ApartmentForm />}
+                    {category === 'House' && <HouseForm />}
+                    {category === 'Land' && <LandForm />}
+                </div>
             )}
         </div>
     );
