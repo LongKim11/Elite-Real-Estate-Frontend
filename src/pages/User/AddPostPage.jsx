@@ -4,6 +4,7 @@ import { BadgeDollarSign, Tag, ArrowLeft } from 'lucide-react';
 import { ApartmentForm } from '@/components/ApartmentForm';
 import { HouseForm } from '@/components/HouseForm';
 import { LandForm } from '@/components/LandForm';
+import { PostPaymentPage } from './PostPaymentPage';
 
 export const AddPostPage = () => {
     const [step, setStep] = useState(1);
@@ -138,9 +139,20 @@ export const AddPostPage = () => {
             )}
             {step === 3 && (
                 <div className="h-full overflow-y-scroll">
-                    {category === 'Apartment' && <ApartmentForm />}
-                    {category === 'House' && <HouseForm />}
-                    {category === 'Land' && <LandForm />}
+                    {category === 'Apartment' && (
+                        <ApartmentForm onFormSubmit={handleNext} />
+                    )}
+                    {category === 'House' && (
+                        <HouseForm onFormSubmit={handleNext} />
+                    )}
+                    {category === 'Land' && (
+                        <LandForm onFormSubmit={handleNext} />
+                    )}
+                </div>
+            )}
+            {step === 4 && (
+                <div className="h-full overflow-y-scroll">
+                    <PostPaymentPage />
                 </div>
             )}
         </div>

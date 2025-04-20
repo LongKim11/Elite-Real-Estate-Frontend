@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 
-export const ApartmentForm = () => {
+export const ApartmentForm = ({ onFormSubmit }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [images, setImages] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
@@ -114,10 +114,9 @@ export const ApartmentForm = () => {
             console.log('Form data:', formData);
             console.log('Images:', images);
 
+            onFormSubmit();
             // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 1500));
 
-            alert('Listing created successfully!');
             // Reset form if needed
         } catch (error) {
             console.error('Error submitting form:', error);
