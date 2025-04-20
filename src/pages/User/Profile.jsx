@@ -3,15 +3,16 @@ import React, { useState } from 'react';
 import { listData } from '@/lib/dummydata';
 import { Card } from '@/components/Card';
 import { Link } from 'react-router-dom';
+import { ProfileFund } from '@/components/ProfileFund';
 
 export const Profile = () => {
     const [activeTab, setActiveTab] = useState('myList');
     const data = listData;
 
     return (
-        <div className="flex h-full pr-12 pl-32">
+        <div className="flex h-full overflow-y-scroll pr-12 pl-32">
             {/* Profile */}
-            <div className="flex-[3] overflow-y-scroll">
+            <div className="flex-[3]">
                 {/* Wrapper */}
                 <div className="mt-5 flex flex-col gap-8 pr-8">
                     {/* User Information */}
@@ -91,8 +92,8 @@ export const Profile = () => {
             </div>
 
             {/* Payment History */}
-            <div className="flex-[2] bg-[#fcf5f3]">
-                <div className="px-5">Payment History</div>
+            <div className="flex-[2]">
+                <ProfileFund />
             </div>
         </div>
     );

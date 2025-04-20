@@ -21,6 +21,7 @@ export const AppRouter = createBrowserRouter([
             { path: '/sign-up', element: <SignUpPage /> },
             { path: '/sign-in', element: <SignInPage /> },
             { path: '/add-post', element: <AddPostPage /> },
+
             {
                 path: '*',
                 element: <NotFoundPage />
