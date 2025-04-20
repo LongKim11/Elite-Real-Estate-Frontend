@@ -15,7 +15,7 @@ import { AddFundDialog } from '@/components/AddFundDialog';
 
 export const PostPaymentPage = () => {
     // Mock data - in a real app, this would come from props or context
-    const [userBalance, setUserBalance] = useState(25.5);
+    const [userBalance, setUserBalance] = useState(65.5);
     const [postCost, setPostCost] = useState(50.0);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);

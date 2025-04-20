@@ -8,7 +8,7 @@ export const AppLayout = () => {
             <div>
                 <Navbar />
             </div>
-            <div className="h-[calc(100vh-100px)]">
+            <div className="h-[calc(100vh-100px)] overflow-y-auto">
                 <Outlet />
             </div>
         </div>
