@@ -46,8 +46,8 @@ export const Navbar = () => {
                 {user ? (
                     <div className="flex items-center font-bold">
                         <img
-                            src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                            className="mr-3 h-[40px] w-[40px] rounded-full object-cover"
+                            src="/user-default.png"
+                            className="mr-3 h-[45px] w-[45px] rounded-full object-cover"
                         ></img>
                         <span>{user.name}</span>
                         <Link

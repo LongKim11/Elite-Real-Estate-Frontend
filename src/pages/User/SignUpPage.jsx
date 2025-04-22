@@ -12,14 +12,14 @@ import { toast } from 'sonner';
 
 export const SignUpPage = () => {
     const [formData, setFormData] = useState({
-        fullname: '',
+        fullName: '',
         password: '',
         phoneNumber: ''
     });
 
     const navigate = useNavigate();
 
-    const { mutate: handleRegister, isPending } = useMutation({
+    const { mutate: handleRegister, isLoading } = useMutation({
         mutationFn: register,
         onSuccess: (res) => {
             console.log('Register Response:', res);
@@ -54,115 +54,125 @@ export const SignUpPage = () => {
     };
 
     return (
-        <div className="flex h-full">
-            {isPending && <Spinner />}
-            <div
-                className="relative flex-[3] bg-cover bg-center md:bg-[#fcf5f3]"
-                style={{ backgroundImage: "url('/left-bg.png')" }}
-            ></div>
-            <div className="flex-[3] text-center">
-                <div className="mx-auto max-w-lg">
-                    <h1 className="mb-2 text-3xl font-bold">
-                        Create an account
-                    </h1>
-                    <p className="mb-6 text-gray-600">
-                        Let's get started. Fill in the details below to create
-                        your account.
-                    </p>
+        <>
+            {isLoading ? (
+                <div className="flex h-full w-full items-center justify-center">
+                    <Spinner />
+                </div>
+            ) : (
+                <div className="flex h-full">
+                    <div
+                        className="relative flex-[3] bg-cover bg-center md:bg-[#fcf5f3]"
+                        style={{ backgroundImage: "url('/left-bg.png')" }}
+                    ></div>
+                    <div className="flex-[3] text-center">
+                        <div className="mx-auto max-w-lg">
+                            <h1 className="mb-2 text-3xl font-bold">
+                                Create an account
+                            </h1>
+                            <p className="mb-6 text-gray-600">
+                                Let's get started. Fill in the details below to
+                                create your account.
+                            </p>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="mb-3 space-y-3">
-                            <Label htmlFor="fullname">Name</Label>
-                            <Input
-                                id="fullname"
-                                name="fullname"
-                                placeholder="e.g. John Smith"
-                                value={formData.fullname}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div className="mb-3 space-y-3">
+                                    <Label htmlFor="fullName">Name</Label>
+                                    <Input
+                                        id="fullName"
+                                        name="fullName"
+                                        placeholder="e.g. John Smith"
+                                        value={formData.fullName}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
 
-                        <div className="mb-3 space-y-3">
-                            <Label htmlFor="phone">Phone Number</Label>
-                            <Input
-                                id="phone"
-                                name="phoneNumber"
-                                type="text"
-                                placeholder="Enter your phone number"
-                                value={formData.phoneNumber}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+                                <div className="mb-3 space-y-3">
+                                    <Label htmlFor="phone">Phone Number</Label>
+                                    <Input
+                                        id="phone"
+                                        name="phoneNumber"
+                                        type="text"
+                                        placeholder="Enter your phone number"
+                                        value={formData.phoneNumber}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
 
-                        <div className="mb-3 space-y-3">
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                name="password"
-                                type="password"
-                                placeholder="At least 8 characters"
-                                value={formData.password}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+                                <div className="mb-3 space-y-3">
+                                    <Label htmlFor="password">Password</Label>
+                                    <Input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        placeholder="At least 8 characters"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
 
-                        <div className="mb-3 space-y-3">
-                            <Label htmlFor="confirmPassword">
-                                Confirm your password
-                            </Label>
-                            <Input
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                type="password"
-                                placeholder="Re-enter to confirm your password"
-                                value={formData.confirmPassword}
-                                onChange={(e) =>
-                                    setConfirmPassword(e.target.value)
-                                }
-                                required
-                            />
-                        </div>
+                                <div className="mb-3 space-y-3">
+                                    <Label htmlFor="confirmPassword">
+                                        Confirm your password
+                                    </Label>
+                                    <Input
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        type="password"
+                                        placeholder="Re-enter to confirm your password"
+                                        value={formData.confirmPassword}
+                                        onChange={(e) =>
+                                            setConfirmPassword(e.target.value)
+                                        }
+                                        required
+                                    />
+                                </div>
 
-                        <div className="flex items-center space-x-2">
-                            <Checkbox
-                                id="terms"
-                                name="agreeToTerms"
-                                required
-                                className="border-gray-300"
-                            />
-                            <label
-                                htmlFor="terms"
-                                className="text-sm leading-none font-medium"
-                            >
-                                I agree to the{' '}
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id="terms"
+                                        name="agreeToTerms"
+                                        required
+                                        className="border-gray-300"
+                                    />
+                                    <label
+                                        htmlFor="terms"
+                                        className="text-sm leading-none font-medium"
+                                    >
+                                        I agree to the{' '}
+                                        <Link
+                                            href="/terms"
+                                            className="text-black underline"
+                                        >
+                                            Terms & Conditions
+                                        </Link>
+                                    </label>
+                                </div>
+
+                                <Button
+                                    type="submit"
+                                    className="w-full bg-black text-white hover:bg-gray-800"
+                                >
+                                    Sign up
+                                </Button>
+                            </form>
+
+                            <p className="mt-3 text-center">
+                                Already have account?{' '}
                                 <Link
-                                    href="/terms"
+                                    to={'/sign-in'}
                                     className="text-black underline"
                                 >
-                                    Terms & Conditions
+                                    Sign in
                                 </Link>
-                            </label>
+                            </p>
                         </div>
-
-                        <Button
-                            type="submit"
-                            className="w-full bg-black text-white hover:bg-gray-800"
-                        >
-                            Sign up
-                        </Button>
-                    </form>
-
-                    <p className="mt-3 text-center">
-                        Already have account?{' '}
-                        <Link to={'/sign-in'} className="text-black underline">
-                            Sign in
-                        </Link>
-                    </p>
+                    </div>
                 </div>
-            </div>
-        </div>
+            )}{' '}
+        </>
     );
 };

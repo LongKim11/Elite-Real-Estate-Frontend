@@ -1,4 +1,5 @@
 import React from 'react';
+import { Triangle } from 'react-loader-spinner';
 
 export const Spinner = () => {
     return (

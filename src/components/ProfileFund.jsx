@@ -4,7 +4,7 @@ import { FundHistoryCard } from './FundHistoryCard';
 import { PostPaymentHistoryCard } from './PostPaymentHistoryCard';
 import { AddFundDialog } from './AddFundDialog';
 
-export const ProfileFund = () => {
+export const ProfileFund = ({ userInfo }) => {
     return (
         <div className="mt-5 h-full">
             <div className="rounded-md border bg-white p-6 shadow-md">
@@ -20,7 +20,9 @@ export const ProfileFund = () => {
                 {/* Current Balance */}
                 <div className="mt-6 rounded-lg bg-amber-50 p-4">
                     <p className="text-lg text-gray-600">Current Balance</p>
-                    <p className="text-3xl font-bold text-gray-800">$175.00</p>
+                    <p className="text-3xl font-bold text-gray-800">
+                        ${userInfo?.data.balance}
+                    </p>
                 </div>
 
                 {/* Navigation Cards */}

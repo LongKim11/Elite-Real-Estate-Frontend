@@ -1,5 +1,5 @@
 import api from './axiosInstance';
-import { setToken } from '@/utils/auth';
+import { getToken, setToken } from '@/utils/auth';
 import useAuthStore from '@/store/useAuthStore';
 
 export const register = (data) => {
@@ -9,12 +9,21 @@ export const register = (data) => {
 export const login = async (data) => {
     const res = await api.post('/auth/login', data);
 
-    const { id, token, role } = res.data.data;
+    const { id, token, role, name } = res.data.data;
     const message = res.data.message;
 
     setToken(token);
 
-    useAuthStore.getState().setUser({ id, name: '' });
+    useAuthStore.getState().setUser({ id, name });
 
     return { id, message, role };
+};
+
+export const getMe = () => {
+    const token = getToken();
+    return api
+        .get('/auth/me', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
 };
