@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export const Navbar = () => {
     const [open, setOpen] = useState(false);
 
-    const user = true;
+    const user = false;
 
     return (
         <nav className="flex h-[100px] items-center justify-between px-8">

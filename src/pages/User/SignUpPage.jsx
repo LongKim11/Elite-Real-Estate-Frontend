@@ -4,17 +4,35 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Link } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { register } from '@/api/authService';
+import { useNavigate } from 'react-router-dom';
+import { Spinner } from '@/components/Spinner';
+import { toast } from 'sonner';
 
 export const SignUpPage = () => {
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
+        fullname: '',
         password: '',
-        confirmPassword: '',
         phone: ''
     });
 
-    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const { mutate: handleRegister, isPending } = useMutation({
+        mutationFn: register,
+        onSuccess: (res) => {
+            console.log('Register Response:', res);
+            toast.success(res.data.message);
+            navigate('/sign-in');
+        },
+        onError: (err) => {
+            console.error('Register Error:', err.response.data.error);
+            toast.error(err.response.data.error);
+        }
+    });
+
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,17 +45,17 @@ export const SignUpPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
 
-        if (formData.confirmPassword !== formData.password) {
-            setError('Confirmation password does not match');
+        if (confirmPassword !== formData.password) {
+            toast.error('Confirmation password does not match');
+        } else {
+            handleRegister(formData);
         }
-
-        // Add your form submission logic here
     };
 
     return (
         <div className="flex h-full">
+            {isPending && <Spinner />}
             <div
                 className="relative flex-[3] bg-cover bg-center md:bg-[#fcf5f3]"
                 style={{ backgroundImage: "url('/left-bg.png')" }}
@@ -54,25 +72,12 @@ export const SignUpPage = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="mb-3 space-y-3">
-                            <Label htmlFor="name">Name</Label>
+                            <Label htmlFor="fullname">Name</Label>
                             <Input
-                                id="name"
-                                name="name"
+                                id="fullname"
+                                name="fullname"
                                 placeholder="e.g. John Smith"
-                                value={formData.name}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="mb-3 space-y-3">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                name="email"
-                                type="email"
-                                placeholder="example@example.com"
-                                value={formData.email}
+                                value={formData.fullname}
                                 onChange={handleChange}
                                 required
                             />
@@ -114,10 +119,11 @@ export const SignUpPage = () => {
                                 type="password"
                                 placeholder="Re-enter to confirm your password"
                                 value={formData.confirmPassword}
-                                onChange={handleChange}
+                                onChange={(e) =>
+                                    setConfirmPassword(e.target.value)
+                                }
                                 required
                             />
-                            <p className="text-sm text-red-500">{error}</p>
                         </div>
 
                         <div className="flex items-center space-x-2">

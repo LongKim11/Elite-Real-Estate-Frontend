@@ -5,6 +5,7 @@ import { listData } from '@/lib/dummydata';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Footer } from '@/components/Footer';
+import { Link } from 'react-router-dom';
 
 export const HomePage = () => {
     const data = listData;
@@ -136,12 +137,14 @@ export const HomePage = () => {
                             Let us help you find the perfect place to live and
                             thrive.
                         </p>
-                        <Button
-                            className="bg-[#fece51] font-semibold text-black hover:bg-amber-400"
-                            size="lg"
-                        >
-                            View Properties <ArrowRight className="ml-2" />
-                        </Button>
+                        <Link to={'/list'}>
+                            <Button
+                                className="bg-[#fece51] font-semibold text-black hover:bg-amber-400"
+                                size="lg"
+                            >
+                                View Properties <ArrowRight className="ml-2" />
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </section>
