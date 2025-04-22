@@ -14,7 +14,7 @@ export const SignUpPage = () => {
     const [formData, setFormData] = useState({
         fullname: '',
         password: '',
-        phone: ''
+        phoneNumber: ''
     });
 
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ export const SignUpPage = () => {
         mutationFn: register,
         onSuccess: (res) => {
             console.log('Register Response:', res);
-            toast.success(res.data.message);
+            toast.success(res.message);
             navigate('/sign-in');
         },
         onError: (err) => {
@@ -87,10 +87,10 @@ export const SignUpPage = () => {
                             <Label htmlFor="phone">Phone Number</Label>
                             <Input
                                 id="phone"
-                                name="phone"
+                                name="phoneNumber"
                                 type="text"
-                                placeholder="Your phone number"
-                                value={formData.phone}
+                                placeholder="Enter your phone number"
+                                value={formData.phoneNumber}
                                 onChange={handleChange}
                                 required
                             />

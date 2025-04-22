@@ -4,14 +4,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Link } from 'react-router-dom';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useMutation } from '@tanstack/react-query';
+import { Spinner } from '@/components/Spinner';
+import { toast } from 'sonner';
+import { login } from '@/api/authService';
+import { useNavigate } from 'react-router-dom';
 
 export const SignInPage = () => {
     const [formData, setFormData] = useState({
-        email: '',
+        phoneNumber: '',
         password: ''
     });
-
-    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,15 +25,33 @@ export const SignInPage = () => {
         });
     };
 
+    const navigate = useNavigate();
+
+    const { mutate: handleLogin, isPending } = useMutation({
+        mutationFn: login,
+        onSuccess: (res) => {
+            console.log('Login Response', res);
+            toast.success(res.message);
+            if (res.role === 'User') {
+                navigate('/');
+            } else {
+                navigate('/admin');
+            }
+        },
+        onError: (err) => {
+            console.error('Login Error:', err.response.data.error);
+            toast.error(err.response.data.error);
+        }
+    });
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
-
-        // Add your form submission logic here
+        handleLogin(formData);
     };
 
     return (
         <div className="flex h-full">
+            {isPending && <Spinner />}
             <div
                 className="relative flex-[3] bg-cover bg-center md:bg-[#fcf5f3]"
                 style={{ backgroundImage: "url('/left-bg.png')" }}
@@ -44,12 +65,12 @@ export const SignInPage = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="mb-5 space-y-3">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="phoneNumber">Phone Number</Label>
                             <Input
-                                id="email"
-                                name="email"
-                                type="email"
-                                placeholder="example@example.com"
+                                id="phoneNumber"
+                                name="phoneNumber"
+                                type="text"
+                                placeholder="Enter your phone number"
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
@@ -74,7 +95,6 @@ export const SignInPage = () => {
                                     id="remember"
                                     name="rememberMe"
                                     className="border-gray-300"
-                                    required
                                 />
                                 <label
                                     htmlFor="remember"
@@ -90,7 +110,7 @@ export const SignInPage = () => {
                                 Forgot password?
                             </Link>
                         </div>
-                        <p className="text-sm text-red-500">{error}</p>
+
                         <Button
                             type="submit"
                             className="w-full bg-black text-white hover:bg-gray-800"

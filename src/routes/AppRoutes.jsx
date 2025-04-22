@@ -8,6 +8,7 @@ import { Profile } from '@/pages/User/Profile';
 import { SignUpPage } from '@/pages/User/SignUpPage';
 import { SignInPage } from '@/pages/SignInPage';
 import { AddPostPage } from '@/pages/User/AddPostPage';
+import { ProtectedRoutes } from './ProtectedRoutes';
 
 export const AppRouter = createBrowserRouter([
     {
@@ -17,7 +18,14 @@ export const AppRouter = createBrowserRouter([
             { path: '', element: <HomePage /> },
             { path: 'list', element: <ListPage /> },
             { path: 'list/:id', element: <PropertyDetails /> },
-            { path: 'profile', element: <Profile /> },
+            {
+                path: 'profile',
+                element: (
+                    <ProtectedRoutes>
+                        <Profile />
+                    </ProtectedRoutes>
+                )
+            },
             { path: '/sign-up', element: <SignUpPage /> },
             { path: '/sign-in', element: <SignInPage /> },
             { path: '/add-post', element: <AddPostPage /> },

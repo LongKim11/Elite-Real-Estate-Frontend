@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import useAuthStore from '@/store/useAuthStore';
 
 export const Navbar = () => {
     const [open, setOpen] = useState(false);
 
-    const user = false;
+    const user = useAuthStore((state) => state.user) || false;
 
     return (
         <nav className="flex h-[100px] items-center justify-between px-8">
@@ -48,7 +49,7 @@ export const Navbar = () => {
                             src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                             className="mr-3 h-[40px] w-[40px] rounded-full object-cover"
                         ></img>
-                        <span>John Doe</span>
+                        <span>{user.name}</span>
                         <Link
                             to={'/profile'}
                             className="mx-5 bg-[#fece51] px-6 py-3 transition-all duration-200 hover:scale-105"
