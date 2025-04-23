@@ -1,57 +1,118 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-    MapPinHouse,
+    MapPin,
     DollarSign,
-    Bed,
-    Bath,
-    Bookmark,
-    PhoneForwarded
+    Ruler,
+    Landmark,
+    CalendarClock,
+    Home
 } from 'lucide-react';
 
 export const Card = ({ item }) => {
-    return (
-        <div className="flex gap-5 rounded-md border bg-white p-4 shadow-md transition hover:shadow-lg">
-            {/* Image wrapper with overflow-hidden to keep border radius during scale */}
-            <Link
-                to={`/list/${item.id}`}
-                className="h-[200px] flex-[2] overflow-hidden rounded-md"
-            >
-                <img
-                    src={item.img}
-                    className="h-full w-full transform object-cover transition-transform duration-300 hover:scale-105"
-                    alt={item.title}
-                />
-            </Link>
+    const {
+        title,
+        price,
+        squareMeters,
+        category,
+        typeTransaction,
+        projectName,
+        fullAddress,
+        startTime,
+        expireTime,
+        images,
+        address
+    } = item;
 
-            {/* Info Section */}
-            <div className="flex flex-[3] flex-col justify-between gap-5">
-                <h3 className="text-xl font-bold hover:text-amber-400">
-                    <Link to={`/list/${item.id}`}>{item.title}</Link>
-                </h3>
-                <div className="flex items-center gap-3 text-gray-600">
-                    <MapPinHouse />
-                    <span>{item.address}</span>
+    return (
+        <div className="group flex flex-col gap-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:border-amber-200 hover:shadow-md sm:flex-row">
+            {/* Image Container with badge */}
+            <div className="relative h-[200px] w-full flex-shrink-0 overflow-hidden rounded-lg sm:w-[300px]">
+                <Link to={`/list/${item.propertyId}`} className="block h-full">
+                    <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <img
+                        src={
+                            images?.[0]?.imageUrl || '/placeholder-property.jpg'
+                        }
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        alt={title}
+                    />
+                </Link>
+
+                {/* Status Badge */}
+                <div className="absolute top-3 left-3 z-20 rounded-full bg-amber-500 px-3 py-1 text-xs font-semibold text-white">
+                    {typeTransaction}
                 </div>
-                <div className="flex items-center gap-3 text-gray-600">
-                    <DollarSign />
-                    <span>{item.price}</span>
+
+                {/* Price Badge */}
+                <div className="absolute bottom-3 left-3 z-20 flex items-center gap-1 rounded-lg bg-white/90 px-3 py-1.5 text-sm font-bold text-gray-900">
+                    <DollarSign className="h-4 w-4 text-amber-500" />
+                    {price.toLocaleString()} VND
                 </div>
-                <div className="flex justify-between">
-                    <div className="flex gap-5 text-gray-600">
-                        <div className="flex items-center gap-2">
-                            <Bed />
-                            <span>{item.bedroom} bedrooms</span>
+            </div>
+
+            {/* Info */}
+            <div className="flex flex-1 flex-col justify-between pt-4 sm:pt-0">
+                {/* Title and main info */}
+                <div className="space-y-4">
+                    <h3 className="line-clamp-2 text-xl font-bold text-gray-800 transition-colors group-hover:text-amber-500">
+                        <Link to={`/list/${item.propertyId}`}>{title}</Link>
+                    </h3>
+
+                    {/* Key details in a row */}
+                    <div className="flex flex-wrap gap-6">
+                        <div className="flex items-center gap-2 text-gray-700">
+                            <Ruler className="h-4 w-4 text-blue-500" />
+                            <span className="font-medium">
+                                {squareMeters} m²
+                            </span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <Bath />
-                            <span>{item.bathroom} bathrooms</span>
+
+                        <div className="flex items-center gap-2 text-gray-700">
+                            <Home className="h-4 w-4 text-emerald-500" />
+                            <span className="font-medium capitalize">
+                                {category}
+                            </span>
                         </div>
                     </div>
-                    <div className="flex cursor-pointer items-center gap-4 text-gray-600">
-                        <Bookmark />
-                        <PhoneForwarded />
+
+                    {/* Location and details */}
+                    <div className="space-y-2 text-sm text-gray-600">
+                        {/* Project Name */}
+                        <div className="flex items-center gap-2">
+                            <Landmark className="h-4 w-4 text-gray-500" />
+                            <span className="truncate">{projectName}</span>
+                        </div>
+
+                        {/* Address */}
+                        <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-gray-500" />
+                            <span className="truncate">{fullAddress}</span>
+                        </div>
+
+                        {/* Start and Expiry Date */}
+                        <div className="flex items-center gap-2">
+                            <CalendarClock className="h-4 w-4 text-gray-500" />
+                            <span>
+                                {new Date(startTime).toLocaleDateString()} →{' '}
+                                {new Date(expireTime).toLocaleDateString()}
+                            </span>
+                        </div>
                     </div>
+                </div>
+
+                {/* Tags */}
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                    {[address?.ward, address?.town, address?.province]
+                        .filter(Boolean)
+                        .map((tag, index) => (
+                            <span
+                                key={index}
+                                className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 transition hover:bg-gray-200"
+                            >
+                                {tag}
+                            </span>
+                        ))}
                 </div>
             </div>
         </div>
