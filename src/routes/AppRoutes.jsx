@@ -28,7 +28,14 @@ export const AppRouter = createBrowserRouter([
             },
             { path: '/sign-up', element: <SignUpPage /> },
             { path: '/sign-in', element: <SignInPage /> },
-            { path: '/add-post', element: <AddPostPage /> },
+            {
+                path: '/add-post',
+                element: (
+                    <ProtectedRoutes>
+                        <AddPostPage />
+                    </ProtectedRoutes>
+                )
+            },
 
             {
                 path: '*',

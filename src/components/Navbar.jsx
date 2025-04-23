@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAuthStore from '@/store/useAuthStore';
+import { useNavigate } from 'react-router-dom';
+import { removeToken } from '@/utils/auth';
 
 export const Navbar = () => {
     const [open, setOpen] = useState(false);
 
     const user = useAuthStore((state) => state.user) || false;
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        removeToken();
+        useAuthStore.getState().clearUser();
+        navigate('/sign-in');
+    };
 
     return (
         <nav className="flex h-[100px] items-center justify-between px-8">
@@ -23,6 +33,19 @@ export const Navbar = () => {
                 >
                     Home
                 </Link>
+
+                <Link
+                    to="/list"
+                    className="hidden font-semibold transition duration-200 hover:text-yellow-500 md:flex"
+                >
+                    Property
+                </Link>
+                <Link
+                    to="/add-post"
+                    className="hidden font-semibold transition duration-200 hover:text-yellow-500 md:flex"
+                >
+                    Sell
+                </Link>
                 <Link
                     to={'/about'}
                     className="hidden font-semibold transition duration-200 hover:text-yellow-500 md:flex"
@@ -35,34 +58,30 @@ export const Navbar = () => {
                 >
                     Contact
                 </Link>
-                <Link
-                    to="/list"
-                    className="hidden font-semibold transition duration-200 hover:text-yellow-500 md:flex"
-                >
-                    Property
-                </Link>
             </div>
             <div className="flex h-full flex-[2] items-center justify-end bg-transparent">
                 {user ? (
                     <div className="flex items-center font-bold">
-                        <img
-                            src="/user-default.png"
-                            className="mr-3 h-[45px] w-[45px] rounded-full object-cover"
-                        ></img>
-                        <span>{user.name}</span>
-                        <Link
-                            to={'/profile'}
-                            className="mx-5 bg-[#fece51] px-6 py-3 transition-all duration-200 hover:scale-105"
-                        >
-                            Profile
+                        <Link to={'/profile'}>
+                            <img
+                                src="/user-default.png"
+                                className="mr-3 h-[45px] w-[45px] rounded-full border-2 border-[#fece51] object-cover"
+                            ></img>
                         </Link>
+                        <span>{user.name}</span>
+                        <button
+                            className="mx-5 bg-[#fece51] px-6 py-3 transition-all duration-200 hover:scale-105"
+                            onClick={handleLogout}
+                        >
+                            Log out
+                        </button>
                     </div>
                 ) : (
                     <>
                         {' '}
                         <Link
                             to={'/sign-in'}
-                            className="m-5 hidden px-6 py-3 font-semibold transition-all duration-200 hover:scale-105 md:flex"
+                            className="hidden px-6 py-3 font-semibold transition-all duration-200 hover:scale-105 md:flex"
                         >
                             Sign In
                         </Link>
