@@ -1,4 +1,3 @@
-import { listData } from '@/lib/dummydata';
 import React from 'react';
 import { ListFilter } from '@/components/ListFilter';
 import { Card } from '@/components/Card';
@@ -8,8 +7,6 @@ import { getListing } from '@/api/listingService';
 import { Spinner } from '@/components/Spinner';
 
 export const ListPage = () => {
-    const data = listData;
-
     const { data: listing, isLoading } = useQuery({
         queryKey: ['listing'],
         queryFn: getListing,

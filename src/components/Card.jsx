@@ -11,6 +11,7 @@ import {
 
 export const Card = ({ item }) => {
     const {
+        propertyId,
         title,
         price,
         squareMeters,
@@ -28,7 +29,7 @@ export const Card = ({ item }) => {
         <div className="group flex flex-col gap-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:border-amber-200 hover:shadow-md sm:flex-row">
             {/* Image Container with badge */}
             <div className="relative h-[200px] w-full flex-shrink-0 overflow-hidden rounded-lg sm:w-[300px]">
-                <Link to={`/list/${item.propertyId}`} className="block h-full">
+                <Link to={`/list/${propertyId}`} className="block h-full">
                     <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 to-transparent"></div>
                     <img
                         src={
