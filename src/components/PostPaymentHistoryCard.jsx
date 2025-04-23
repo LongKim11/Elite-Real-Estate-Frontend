@@ -84,7 +84,7 @@ export const PostPaymentHistoryCard = () => {
                         Post Payments
                     </h2>
                     <p className="mb-4 text-gray-600">
-                        Manage your post payments, extensions, and promotions
+                        Manage your post payments
                     </p>
                     <Button
                         onClick={() => setIsDialogOpen(true)}
