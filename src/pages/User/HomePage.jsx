@@ -151,7 +151,7 @@ export const HomePage = () => {
             {/* Hero Section 3 */}
             <section className="container mx-auto my-36 flex flex-col items-center gap-10 md:flex-row md:items-start">
                 {/* Left Content */}
-                <div className="space-y-6 md:w-2/3">
+                <div className="space-y-6 pl-12 md:w-2/3">
                     <h2 className="text-3xl leading-snug font-bold text-gray-900 md:text-4xl">
                         We Use Real Estate to Show Our Appreciation of The World
                     </h2>
