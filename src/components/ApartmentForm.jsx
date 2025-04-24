@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { CalendarIcon, Loader2, Plus, X } from 'lucide-react';
@@ -17,13 +15,7 @@ import {
     CardHeader,
     CardTitle
 } from '@/components/ui/card';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from '@/components/ui/select';
+
 import {
     Popover,
     PopoverContent,
@@ -31,47 +23,58 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 
-export const ApartmentForm = ({ onFormSubmit }) => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
+export const ApartmentForm = ({ typeTransaction, onFormSubmit }) => {
     const [images, setImages] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
 
     const [formData, setFormData] = useState({
-        title: '',
-        projectName: '',
+        userId: '0123456789', // Fixed
+        address: {
+            ward: '',
+            town: '',
+            province: ''
+        },
         price: '',
-        ward: '',
-        town: '',
-        province: '',
+        category: 'Apartment', // Fixed
+        title: '',
         fullAddress: '',
-        squareMeters: '',
+        projectName: '',
         description: '',
+        typeTransaction: typeTransaction,
+        squareMeters: '',
         longitude: '',
         latitude: '',
-        startTime: new Date(),
-        expireTime: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+        startTime: new Date(), // Fixed
+        expireTime: new Date(new Date().setMonth(new Date().getMonth() + 1)), // Fixed
         numBedrooms: '',
         numBathrooms: '',
         floor: '',
         buildingName: '',
         hasBalcony: false,
         maintenanceFee: '',
-        parkingAvailability: ''
+        parkingAvailability: false
     });
 
+    const tabs = ['basic', 'location', 'details', 'additional'];
+    const [activeTab, setActiveTab] = useState('basic');
+
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
         setFormData({
             ...formData,
-            [name]: type === 'checkbox' ? checked : value
+            [e.target.name]: e.target.value
         });
     };
 
-    const handleSelectChange = (name, value) => {
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+    const handleAddressChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({
+            ...prev,
+            address: {
+                ...prev.address,
+                [name]: value
+            }
+        }));
     };
 
     const handleDateChange = (name, value) => {
@@ -93,7 +96,6 @@ export const ApartmentForm = ({ onFormSubmit }) => {
             const newFiles = Array.from(e.target.files);
             setImages((prev) => [...prev, ...newFiles]);
 
-            // Create URLs for preview
             const newUrls = newFiles.map((file) => URL.createObjectURL(file));
             setImageUrls((prev) => [...prev, ...newUrls]);
         }
@@ -105,24 +107,36 @@ export const ApartmentForm = ({ onFormSubmit }) => {
         setImageUrls(imageUrls.filter((_, i) => i !== index));
     };
 
+    const handleTabChange = (value) => {
+        setActiveTab(value);
+    };
+
+    const handleNextTab = () => {
+        const currentIndex = tabs.indexOf(activeTab);
+        if (currentIndex < tabs.length - 1) {
+            setActiveTab(tabs[currentIndex + 1]);
+        }
+    };
+
+    const handlePreviousTab = () => {
+        const currentIndex = tabs.indexOf(activeTab);
+        if (currentIndex > 0) {
+            setActiveTab(tabs[currentIndex - 1]);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
 
         try {
-            // Here you would typically upload images and submit the form data
             console.log('Form data:', formData);
             console.log('Images:', images);
 
             onFormSubmit();
             // Simulate API call
-
-            // Reset form if needed
         } catch (error) {
             console.error('Error submitting form:', error);
             alert('Failed to create listing. Please try again.');
-        } finally {
-            setIsSubmitting(false);
         }
     };
 
@@ -133,7 +147,11 @@ export const ApartmentForm = ({ onFormSubmit }) => {
             </h1>
 
             <form onSubmit={handleSubmit} className="mb-10 space-y-8">
-                <Tabs defaultValue="basic" className="w-full">
+                <Tabs
+                    value={activeTab}
+                    className="w-full"
+                    onValueChange={handleTabChange}
+                >
                     <TabsList className="mb-6 grid grid-cols-4">
                         <TabsTrigger value="basic">Basic Info</TabsTrigger>
                         <TabsTrigger value="location">Location</TabsTrigger>
@@ -166,9 +184,6 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                         onChange={handleChange}
                                         required
                                     />
-                                    <p className="text-muted-foreground text-sm">
-                                        A catchy title for your listing
-                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
@@ -182,9 +197,6 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                         value={formData.projectName}
                                         onChange={handleChange}
                                     />
-                                    <p className="text-muted-foreground text-sm">
-                                        The name of the development project
-                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
@@ -198,9 +210,6 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                         onChange={handleChange}
                                         required
                                     />
-                                    <p className="text-muted-foreground text-sm">
-                                        The selling price in your local currency
-                                    </p>
                                 </div>
 
                                 <div className="space-y-4">
@@ -290,8 +299,8 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                             id="province"
                                             name="province"
                                             placeholder="e.g., Ontario"
-                                            value={formData.province}
-                                            onChange={handleChange}
+                                            value={formData.address.province}
+                                            onChange={handleAddressChange}
                                             required
                                         />
                                     </div>
@@ -302,8 +311,8 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                             id="town"
                                             name="town"
                                             placeholder="e.g., Toronto"
-                                            value={formData.town}
-                                            onChange={handleChange}
+                                            value={formData.address.town}
+                                            onChange={handleAddressChange}
                                             required
                                         />
                                     </div>
@@ -316,8 +325,8 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                             id="ward"
                                             name="ward"
                                             placeholder="e.g., Downtown"
-                                            value={formData.ward}
-                                            onChange={handleChange}
+                                            value={formData.address.ward}
+                                            onChange={handleAddressChange}
                                             required
                                         />
                                     </div>
@@ -335,9 +344,6 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                         onChange={handleChange}
                                         required
                                     />
-                                    <p className="text-muted-foreground text-sm">
-                                        Complete street address of the property
-                                    </p>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -391,7 +397,9 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                     apartment.
                                 </CardDescription>
                             </CardHeader>
+
                             <CardContent className="space-y-6">
+                                {/* Nhóm 1: Diện tích, tòa nhà, phí bảo trì */}
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div className="space-y-2">
                                         <Label htmlFor="squareMeters">
@@ -406,9 +414,6 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                             onChange={handleChange}
                                             required
                                         />
-                                        <p className="text-muted-foreground text-sm">
-                                            Total area in square meters
-                                        </p>
                                     </div>
 
                                     <div className="space-y-2">
@@ -422,12 +427,29 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                             value={formData.buildingName}
                                             onChange={handleChange}
                                         />
+                                    </div>
+
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label htmlFor="maintenanceFee">
+                                            Maintenance Fee
+                                        </Label>
+                                        <Input
+                                            id="maintenanceFee"
+                                            name="maintenanceFee"
+                                            type="number"
+                                            min="0"
+                                            placeholder="e.g., 250000"
+                                            value={formData.maintenanceFee}
+                                            onChange={handleChange}
+                                        />
                                         <p className="text-muted-foreground text-sm">
-                                            Name of the building (if applicable)
+                                            Monthly maintenance fee (if
+                                            applicable)
                                         </p>
                                     </div>
                                 </div>
 
+                                {/* Nhóm 2: Số phòng & tầng */}
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                                     <div className="space-y-2">
                                         <Label htmlFor="numBedrooms">
@@ -438,6 +460,7 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                             name="numBedrooms"
                                             type="number"
                                             min="0"
+                                            placeholder="e.g., 4"
                                             value={formData.numBedrooms}
                                             onChange={handleChange}
                                             required
@@ -453,6 +476,7 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                             name="numBathrooms"
                                             type="number"
                                             min="0"
+                                            placeholder="e.g., 3"
                                             value={formData.numBathrooms}
                                             onChange={handleChange}
                                             required
@@ -466,90 +490,59 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                             name="floor"
                                             type="number"
                                             min="0"
+                                            placeholder="e.g., 2"
                                             value={formData.floor}
                                             onChange={handleChange}
                                         />
                                     </div>
                                 </div>
 
+                                {/* Nhóm 3: Checkbox tiện ích */}
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="maintenanceFee">
-                                            Maintenance Fee
-                                        </Label>
-                                        <Input
-                                            id="maintenanceFee"
-                                            name="maintenanceFee"
-                                            type="number"
-                                            min="0"
-                                            placeholder="e.g., 250"
-                                            value={formData.maintenanceFee}
-                                            onChange={handleChange}
-                                        />
-                                        <p className="text-muted-foreground text-sm">
-                                            Monthly maintenance fee (if
-                                            applicable)
-                                        </p>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="parkingAvailability">
-                                            Parking Availability
-                                        </Label>
-                                        <Select
-                                            onValueChange={(value) =>
-                                                handleSelectChange(
+                                    <div className="flex items-start space-x-3 rounded-md border p-4">
+                                        <Checkbox
+                                            id="parkingAvailability"
+                                            checked={
+                                                formData.parkingAvailability
+                                            }
+                                            onCheckedChange={(checked) =>
+                                                handleCheckboxChange(
                                                     'parkingAvailability',
-                                                    value
+                                                    checked
                                                 )
                                             }
-                                            value={formData.parkingAvailability}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select parking option" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="none">
-                                                    None
-                                                </SelectItem>
-                                                <SelectItem value="1">
-                                                    1 Space
-                                                </SelectItem>
-                                                <SelectItem value="2">
-                                                    2 Spaces
-                                                </SelectItem>
-                                                <SelectItem value="3+">
-                                                    3+ Spaces
-                                                </SelectItem>
-                                                <SelectItem value="street">
-                                                    Street Parking
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <p className="text-muted-foreground text-sm">
-                                            Available parking options
-                                        </p>
+                                        />
+                                        <div className="space-y-1 leading-none">
+                                            <Label htmlFor="parkingAvailability">
+                                                Parking Availability
+                                            </Label>
+                                            <p className="text-muted-foreground text-sm">
+                                                Is parking available for this
+                                                property?
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4">
-                                    <Checkbox
-                                        id="hasBalcony"
-                                        checked={formData.hasBalcony}
-                                        onCheckedChange={(checked) =>
-                                            handleCheckboxChange(
-                                                'hasBalcony',
-                                                checked
-                                            )
-                                        }
-                                    />
-                                    <div className="space-y-1 leading-none">
-                                        <Label htmlFor="hasBalcony">
-                                            Balcony
-                                        </Label>
-                                        <p className="text-muted-foreground text-sm">
-                                            Does the apartment have a balcony?
-                                        </p>
+                                    <div className="flex items-start space-x-3 rounded-md border p-4">
+                                        <Checkbox
+                                            id="hasBalcony"
+                                            checked={formData.hasBalcony}
+                                            onCheckedChange={(checked) =>
+                                                handleCheckboxChange(
+                                                    'hasBalcony',
+                                                    checked
+                                                )
+                                            }
+                                        />
+                                        <div className="space-y-1 leading-none">
+                                            <Label htmlFor="hasBalcony">
+                                                Balcony
+                                            </Label>
+                                            <p className="text-muted-foreground text-sm">
+                                                Does the apartment have a
+                                                balcony?
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </CardContent>
@@ -574,18 +567,12 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                     <Textarea
                                         id="description"
                                         name="description"
-                                        placeholder="Describe your apartment in detail..."
+                                        placeholder="Provide a detailed description of your apartment, including amenities, features, and any other relevant information."
                                         className="min-h-[150px]"
                                         value={formData.description}
                                         onChange={handleChange}
                                         required
                                     />
-                                    <p className="text-muted-foreground text-sm">
-                                        Provide a detailed description of your
-                                        apartment, including amenities,
-                                        features, and any other relevant
-                                        information.
-                                    </p>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -610,7 +597,10 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                                     )}
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0">
+                                            <PopoverContent
+                                                side="top"
+                                                className="w-auto p-0"
+                                            >
                                                 <Calendar
                                                     mode="single"
                                                     selected={
@@ -653,7 +643,10 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                                                     )}
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0">
+                                            <PopoverContent
+                                                side="top"
+                                                className="w-auto p-0"
+                                            >
                                                 <Calendar
                                                     mode="single"
                                                     selected={
@@ -683,16 +676,21 @@ export const ApartmentForm = ({ onFormSubmit }) => {
                 </Tabs>
 
                 <div className="flex justify-end gap-4">
-                    <Button type="button" variant="outline">
-                        Reset
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handlePreviousTab}
+                    >
+                        Previous
                     </Button>
-
-                    <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting && (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Create
-                    </Button>
+                    {activeTab === 'additional' && (
+                        <Button type="submit">Create</Button>
+                    )}
+                    {activeTab !== 'additional' && (
+                        <Button type="button" onClick={handleNextTab}>
+                            Next
+                        </Button>
+                    )}
                 </div>
             </form>
         </div>

@@ -72,7 +72,7 @@ export const AddPostPage = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <button
                                 onClick={() =>
-                                    handleTransactionTypeSelect('Sale')
+                                    handleTransactionTypeSelect('sale')
                                 }
                                 className="relative rounded-md border border-gray-300 bg-white px-6 py-4 text-lg font-semibold text-green-700 shadow-sm transition-all duration-200 hover:border-green-500 hover:bg-green-50 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
                             >
@@ -83,7 +83,7 @@ export const AddPostPage = () => {
                             </button>
                             <button
                                 onClick={() =>
-                                    handleTransactionTypeSelect('Lease')
+                                    handleTransactionTypeSelect('rent')
                                 }
                                 className="relative rounded-md border border-gray-300 bg-white px-6 py-4 text-lg font-semibold text-blue-700 shadow-sm transition-all duration-200 hover:border-blue-500 hover:bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
                             >
@@ -138,9 +138,12 @@ export const AddPostPage = () => {
                 </div>
             )}
             {step === 3 && (
-                <div className="h-full overflow-y-scroll">
+                <div className="h-full overflow-y-auto">
                     {category === 'Apartment' && (
-                        <ApartmentForm onFormSubmit={handleNext} />
+                        <ApartmentForm
+                            typeTransaction={typeTransaction}
+                            onFormSubmit={handleNext}
+                        />
                     )}
                     {category === 'House' && (
                         <HouseForm onFormSubmit={handleNext} />
