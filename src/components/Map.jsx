@@ -6,7 +6,11 @@ import { Pin } from './Pin';
 export const Map = ({ items }) => {
     return (
         <MapContainer
-            center={[items[0].latitude, items[0].longitude]}
+            center={
+                items.length !== 0
+                    ? [items[0].latitude, items[0].longitude]
+                    : [21.0285, 105.8542]
+            }
             zoom={7}
             scrollWheelZoom={true}
             className="h-full w-full rounded-md"
@@ -16,9 +20,8 @@ export const Map = ({ items }) => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {items.map((item, index) => (
-                <Pin item={item} key={index} />
-            ))}
+            {items.length !== 0 &&
+                items?.map((item, index) => <Pin item={item} key={index} />)}
         </MapContainer>
     );
 };

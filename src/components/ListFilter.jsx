@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,24 +10,14 @@ import {
 } from '@/components/ui/select';
 import { Search } from 'lucide-react';
 
-export const ListFilter = () => {
-    const [filters, setFilters] = useState({
-        location: '',
-        type: '',
-        property: '',
-        minPrice: '',
-        maxPrice: '',
-        bedrooms: ''
-    });
-
+export const ListFilter = ({ filters, onChange, onFilter }) => {
     const handleChange = (name, value) => {
-        setFilters((prev) => ({ ...prev, [name]: value }));
+        onChange({ ...filters, [name]: value });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Filters applied:', filters);
-        // Here you would typically filter results or navigate to a filtered results page
+        onFilter();
     };
 
     return (
@@ -37,27 +26,57 @@ export const ListFilter = () => {
 
             <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
-                    <Label htmlFor="location">Location</Label>
+                    <Label htmlFor="fullAddress">Full Address</Label>
                     <Input
-                        id="location"
-                        placeholder="City, Location"
-                        value={filters.location}
+                        id="fullAddress"
+                        placeholder="e.g. 1600 Amphitheatre Parkway, Mountain View, CA"
+                        value={filters.fullAddress}
                         onChange={(e) =>
-                            handleChange('location', e.target.value)
+                            handleChange('fullAddress', e.target.value)
                         }
                     />
                 </div>
 
-                <div className="grid gap-5 xl:grid-cols-5">
+                <div className="grid gap-5 xl:grid-cols-2">
                     <div className="space-y-2">
-                        <Label htmlFor="type">Type</Label>
+                        <Label htmlFor="province">Province</Label>
+                        <Input
+                            id="province"
+                            placeholder="e.g. Ho Chi Minh"
+                            value={filters.province}
+                            onChange={(e) =>
+                                handleChange('province', e.target.value)
+                            }
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="district">District</Label>
+                        <Input
+                            id="district"
+                            placeholder="e.g. Tan Phong"
+                            value={filters.district}
+                            onChange={(e) =>
+                                handleChange('district', e.target.value)
+                            }
+                        />
+                    </div>
+                </div>
+
+                <div className="grid gap-5 xl:grid-cols-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="transactionType">
+                            Transaction Type
+                        </Label>
                         <Select
-                            value={filters.type}
+                            value={filters.transactionType}
                             onValueChange={(value) =>
-                                handleChange('type', value)
+                                handleChange('transactionType', value)
                             }
                         >
-                            <SelectTrigger id="type" className="w-full">
+                            <SelectTrigger
+                                id="transactionType"
+                                className="w-full"
+                            >
                                 <SelectValue placeholder="Any" />
                             </SelectTrigger>
                             <SelectContent>
@@ -69,14 +88,14 @@ export const ListFilter = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="property">Property</Label>
+                        <Label htmlFor="Category">Category</Label>
                         <Select
-                            value={filters.property}
+                            value={filters.category}
                             onValueChange={(value) =>
-                                handleChange('property', value)
+                                handleChange('category', value)
                             }
                         >
-                            <SelectTrigger id="property" className="w-full">
+                            <SelectTrigger id="category" className="w-full">
                                 <SelectValue placeholder="Any" />
                             </SelectTrigger>
                             <SelectContent>
@@ -85,10 +104,7 @@ export const ListFilter = () => {
                                 <SelectItem value="apartment">
                                     Apartment
                                 </SelectItem>
-                                <SelectItem value="condo">Condo</SelectItem>
-                                <SelectItem value="townhouse">
-                                    Townhouse
-                                </SelectItem>
+                                <SelectItem value="townhouse">Land</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -113,18 +129,6 @@ export const ListFilter = () => {
                             value={filters.maxPrice}
                             onChange={(e) =>
                                 handleChange('maxPrice', e.target.value)
-                            }
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="bedrooms">Bedrooms</Label>
-                        <Input
-                            id="bedrooms"
-                            placeholder="Any"
-                            value={filters.bedrooms}
-                            onChange={(e) =>
-                                handleChange('bedrooms', e.target.value)
                             }
                         />
                     </div>

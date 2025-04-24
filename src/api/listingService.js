@@ -1,7 +1,8 @@
 import api from './axiosInstance';
 
-export const getListing = () => {
-    return api.get('/properties/search').then((res) => res.data);
+export const getListing = (queryString) => {
+    console.log('Query String', queryString);
+    return api.get(`/properties/search?${queryString}`).then((res) => res.data);
 };
 
 export const getPropertyDetails = (id) => {
