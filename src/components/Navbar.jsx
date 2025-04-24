@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import useAuthStore from '@/store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import { removeToken } from '@/utils/auth';
+import { toast } from 'sonner';
 
 export const Navbar = () => {
     const [open, setOpen] = useState(false);
@@ -14,6 +15,7 @@ export const Navbar = () => {
     const handleLogout = () => {
         removeToken();
         useAuthStore.getState().clearUser();
+        toast.success('Logout successfully');
         navigate('/sign-in');
     };
 
