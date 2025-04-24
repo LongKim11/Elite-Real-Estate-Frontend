@@ -12,16 +12,26 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
-
 import { Plus, CreditCard } from 'lucide-react';
+import { createPayment } from '@/api/paymentService';
+import { useMutation } from '@tanstack/react-query';
 
 export const AddFundDialog = () => {
     const [paymentMethod, setPaymentMethod] = useState('vnpay');
-    const [addAmount, setAddAmount] = useState(50);
+    const [addAmount, setAddAmount] = useState(50000);
 
-    const handleAddFunds = () => {
-        console.log('Add Funds');
-    };
+    const { mutate: handleAddFunds, isPending } = useMutation({
+        mutationFn: () => createPayment(addAmount),
+        onSuccess: (data) => {
+            console.log(data);
+            if (data?.data) {
+                window.location.href = data.data;
+            }
+        },
+        onError: (err) => {
+            console.log('Payment Error', err.response.data.message);
+        }
+    });
 
     return (
         <Dialog>
@@ -41,7 +51,7 @@ export const AddFundDialog = () => {
                     <div className="grid gap-2">
                         <Label htmlFor="amount">Amount</Label>
                         <div className="flex items-center">
-                            <span className="mr-2">$</span>
+                            <span className="mr-2">VND</span>
                             <Input
                                 id="amount"
                                 type="number"
@@ -57,12 +67,12 @@ export const AddFundDialog = () => {
                                 key={amount}
                                 variant="outline"
                                 size="sm"
-                                onClick={() => setAddAmount(amount)}
+                                onClick={() => setAddAmount(amount * 1000)}
                                 className={
                                     addAmount === amount ? 'border-primary' : ''
                                 }
                             >
-                                ${amount}
+                                {amount}K
                             </Button>
                         ))}
                     </div>
@@ -114,9 +124,9 @@ export const AddFundDialog = () => {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={handleAddFunds} className="w-full">
-                        <CreditCard className="mr-2 h-4 w-4" /> Add ${addAmount}{' '}
-                        with {paymentMethod === 'vnpay' ? 'VNPay' : 'MoMo'}
+                    <Button onClick={() => handleAddFunds()} className="w-full">
+                        <CreditCard className="mr-2 h-4 w-4" /> Add {addAmount}
+                        VND with {paymentMethod === 'vnpay' ? 'VNPay' : 'MoMo'}
                     </Button>
                 </DialogFooter>
             </DialogContent>

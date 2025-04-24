@@ -9,6 +9,7 @@ import { SignUpPage } from '@/pages/User/SignUpPage';
 import { SignInPage } from '@/pages/SignInPage';
 import { AddPostPage } from '@/pages/User/AddPostPage';
 import { ProtectedRoutes } from './ProtectedRoutes';
+import { PaymentSuccessPage } from '@/pages/User/PaymentSuccessPage';
 
 export const AppRouter = createBrowserRouter([
     {
@@ -26,17 +27,17 @@ export const AppRouter = createBrowserRouter([
                     </ProtectedRoutes>
                 )
             },
-            { path: '/sign-up', element: <SignUpPage /> },
-            { path: '/sign-in', element: <SignInPage /> },
+            { path: 'sign-up', element: <SignUpPage /> },
+            { path: 'sign-in', element: <SignInPage /> },
             {
-                path: '/add-post',
+                path: 'add-post',
                 element: (
                     <ProtectedRoutes>
                         <AddPostPage />
                     </ProtectedRoutes>
                 )
             },
-
+            { path: 'payment-success', element: <PaymentSuccessPage /> },
             {
                 path: '*',
                 element: <NotFoundPage />
