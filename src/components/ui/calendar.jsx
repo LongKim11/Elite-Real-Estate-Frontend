@@ -44,10 +44,10 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
                     'day-range-start aria-selected:bg-primary aria-selected:text-primary-foreground',
                 day_range_end:
                     'day-range-end aria-selected:bg-primary aria-selected:text-primary-foreground',
-                // Chỉnh sửa lại phần day_selected, thêm lớp bg-primary nếu muốn
+
                 day_selected:
                     'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
-                day_today: 'bg-transparent text-primary-foreground', // Đổi nền của ngày hôm nay về trong suốt
+                day_today: 'bg-transparent text-black',
                 day_outside:
                     'day-outside text-muted-foreground aria-selected:text-muted-foreground',
                 day_disabled: 'text-muted-foreground opacity-50',

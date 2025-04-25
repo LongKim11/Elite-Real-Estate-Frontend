@@ -498,7 +498,7 @@ export const PropertyDetails = () => {
                             Interested in this property?
                         </h3>
                         <div className="space-y-4">
-                            <HouseVisitDialog />
+                            <HouseVisitDialog id={id} />
 
                             <Button className="w-full bg-blue-500 hover:bg-blue-600">
                                 <Bookmark className="mr-2" size={18} />

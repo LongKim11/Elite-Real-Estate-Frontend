@@ -13,9 +13,43 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { MessageSquareMore } from 'lucide-react';
 import { DateTimePicker } from './DateTimePicker';
+import { useMutation } from '@tanstack/react-query';
+import { scheduleViewing } from '@/api/listingService';
+import { toast } from 'sonner';
 
-export const HouseVisitDialog = () => {
+export const HouseVisitDialog = ({ id }) => {
     const [openDialog, setOpenDialog] = useState(false);
+
+    const [formData, setFormData] = useState({
+        propertyId: id,
+        viewerName: '',
+        viewerPhone: '',
+        viewerEmail: '',
+        scheduledAt: ''
+    });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const { mutate, isLoading } = useMutation({
+        mutationFn: scheduleViewing,
+        onSuccess: (res) => {
+            console.log(res);
+            setOpenDialog(false);
+            toast.success(res.message);
+        },
+        onError: (err) => {
+            console.log('Viewing Schedule Error', err.response.data.err);
+            setOpenDialog(false);
+            toast.error(err.response.data.err);
+        }
+    });
+
+    const handleBookingVisit = () => {
+        console.log('Viewer info', formData);
+        scheduleViewing(formData);
+    };
 
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -41,8 +75,9 @@ export const HouseVisitDialog = () => {
                         <Input
                             id="name"
                             className="col-span-3"
-                            name="name"
+                            name="viewerName"
                             placeholder="e.g John Doe"
+                            onChange={handleChange}
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
@@ -51,8 +86,10 @@ export const HouseVisitDialog = () => {
                         </Label>
                         <Input
                             id="phone"
+                            name="viewerPhone"
                             className="col-span-3"
                             placeholder="Enter your contact number"
+                            onChange={handleChange}
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
@@ -62,8 +99,9 @@ export const HouseVisitDialog = () => {
                         <Input
                             id="email"
                             className="col-span-3"
-                            name="email"
+                            name="viewerEmail"
                             placeholder="example@example.com"
+                            onChange={handleChange}
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
@@ -71,12 +109,20 @@ export const HouseVisitDialog = () => {
                             Date & Time
                         </Label>
                         <div className="col-span-3 flex w-full gap-4">
-                            <DateTimePicker className="w-full" />
+                            <DateTimePicker
+                                className="w-full"
+                                onChange={(value) => {
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        scheduledAt: value
+                                    }));
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button type="submit">Schedule Now</Button>
+                    <Button onClick={handleBookingVisit}>Schedule Now</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

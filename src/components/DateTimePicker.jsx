@@ -18,22 +18,19 @@ import {
     SelectValue
 } from '@/components/ui/select';
 
-export function DateTimePicker({ className }) {
+export const DateTimePicker = ({ className, onChange }) => {
     const [date, setDate] = useState();
     const [time, setTime] = useState();
     const [open, setOpen] = useState(false);
 
-    // Generate hours for the time picker
     const hours = Array.from({ length: 24 }, (_, i) => {
         return { value: i, label: i.toString().padStart(2, '0') };
     });
 
-    // Generate minutes for the time picker
     const minutes = Array.from({ length: 60 }, (_, i) => {
         return { value: i, label: i.toString().padStart(2, '0') };
     });
 
-    // Format the selected date and time for display
     const formatDateTime = () => {
         if (!date) return 'Pick a date and time';
 
@@ -44,9 +41,29 @@ export function DateTimePicker({ className }) {
         return `${formattedDate} at ${time}`;
     };
 
-    // Handle time selection
     const handleTimeChange = (value) => {
         setTime(value);
+        if (date && value) {
+            const fullDateTime = combineDateTime(date, value);
+            onChange?.(fullDateTime);
+        }
+    };
+
+    const handleDateChange = (selectedDate) => {
+        setDate(selectedDate);
+        if (selectedDate && time) {
+            const fullDateTime = combineDateTime(selectedDate, time);
+            onChange?.(fullDateTime);
+        }
+    };
+
+    const combineDateTime = (date, time) => {
+        const [hour, minute] = time.split(':');
+
+        const local = new Date(date);
+        local.setHours(parseInt(hour), parseInt(minute), 0, 0);
+
+        return local.toISOString();
     };
 
     return (
@@ -68,7 +85,7 @@ export function DateTimePicker({ className }) {
                     <Calendar
                         mode="single"
                         selected={date}
-                        onSelect={setDate}
+                        onSelect={handleDateChange}
                         initialFocus
                         classNames={{
                             months: 'flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1',
@@ -148,4 +165,4 @@ export function DateTimePicker({ className }) {
             </Popover>
         </div>
     );
-}
+};
