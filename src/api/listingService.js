@@ -11,3 +11,9 @@ export const getPropertyDetails = (id) => {
 export const scheduleViewing = (data) => {
     return api.post('/viewings/schedule', data).then((res) => res.data);
 };
+
+export const registerObserver = (id, email) => {
+    return api
+        .post(`/properties/${id}/registerObserver?email=${email}`)
+        .then((res) => res.data);
+};

@@ -32,7 +32,7 @@ export const HouseVisitDialog = ({ id }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const { mutate, isLoading } = useMutation({
+    const { mutate: handleSchduleViewing, isLoading } = useMutation({
         mutationFn: scheduleViewing,
         onSuccess: (res) => {
             console.log(res);
@@ -48,7 +48,7 @@ export const HouseVisitDialog = ({ id }) => {
 
     const handleBookingVisit = () => {
         console.log('Viewer info', formData);
-        scheduleViewing(formData);
+        handleSchduleViewing(formData);
     };
 
     return (
@@ -56,7 +56,7 @@ export const HouseVisitDialog = ({ id }) => {
             <DialogTrigger asChild>
                 <Button className="w-full bg-green-500 hover:bg-green-600">
                     <MessageSquareMore />
-                    Schedule house visit
+                    Schedule House Visit
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
