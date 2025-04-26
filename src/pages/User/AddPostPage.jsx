@@ -153,10 +153,16 @@ export const AddPostPage = () => {
                         />
                     )}
                     {category === 'House' && (
-                        <HouseForm onFormSubmit={handleNext} />
+                        <HouseForm
+                            typeTransaction={typeTransaction}
+                            onFormSubmit={handleFormDataSubmit}
+                        />
                     )}
                     {category === 'Land' && (
-                        <LandForm onFormSubmit={handleNext} />
+                        <LandForm
+                            typeTransaction={typeTransaction}
+                            onFormSubmit={handleFormDataSubmit}
+                        />
                     )}
                 </div>
             )}

@@ -34,7 +34,7 @@ export const ApartmentForm = ({ typeTransaction, onFormSubmit }) => {
             province: ''
         },
         price: '',
-        category: 'Apartment', // Fixed
+        category: 'Apartment',
         title: '',
         fullAddress: '',
         projectName: '',
@@ -43,8 +43,8 @@ export const ApartmentForm = ({ typeTransaction, onFormSubmit }) => {
         squareMeters: '',
         longitude: '',
         latitude: '',
-        startTime: new Date(), // Fixed
-        expireTime: new Date(new Date().setMonth(new Date().getMonth() + 1)), // Fixed
+        startTime: new Date(),
+        expireTime: new Date(new Date().setMonth(new Date().getMonth() + 1)),
         numBedrooms: '',
         numBathrooms: '',
         floor: '',
@@ -400,7 +400,6 @@ export const ApartmentForm = ({ typeTransaction, onFormSubmit }) => {
                             </CardHeader>
 
                             <CardContent className="space-y-6">
-                                {/* Nhóm 1: Diện tích, tòa nhà, phí bảo trì */}
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div className="space-y-2">
                                         <Label htmlFor="squareMeters">
@@ -450,7 +449,6 @@ export const ApartmentForm = ({ typeTransaction, onFormSubmit }) => {
                                     </div>
                                 </div>
 
-                                {/* Nhóm 2: Số phòng & tầng */}
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                                     <div className="space-y-2">
                                         <Label htmlFor="numBedrooms">
@@ -498,7 +496,6 @@ export const ApartmentForm = ({ typeTransaction, onFormSubmit }) => {
                                     </div>
                                 </div>
 
-                                {/* Nhóm 3: Checkbox tiện ích */}
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div className="flex items-start space-x-3 rounded-md border p-4">
                                         <Checkbox

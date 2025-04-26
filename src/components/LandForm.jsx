@@ -31,21 +31,24 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 
-export const LandForm = ({ onFormSubmit }) => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
+export const LandForm = ({ typeTransaction, onFormSubmit }) => {
     const [images, setImages] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
 
     const [formData, setFormData] = useState({
-        title: '',
-        projectName: '',
+        address: {
+            ward: '',
+            town: '',
+            province: ''
+        },
         price: '',
-        ward: '',
-        town: '',
-        province: '',
+        category: 'Land',
+        title: '',
         fullAddress: '',
-        squareMeters: '',
+        projectName: '',
         description: '',
+        typeTransaction: typeTransaction,
+        squareMeters: '',
         longitude: '',
         latitude: '',
         startTime: new Date(),
@@ -53,31 +56,37 @@ export const LandForm = ({ onFormSubmit }) => {
         landUsageDuration: '',
         legalStatus: '',
         roadFrontage: '',
-        buildingName: '',
         landType: '',
-        zoneType: '',
+        zoningType: '',
         canBuild: false
     });
 
+    const tabs = ['basic', 'location', 'details', 'additional'];
+    const [activeTab, setActiveTab] = useState('basic');
+
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
         setFormData({
             ...formData,
-            [name]: type === 'checkbox' ? checked : value
+            [e.target.name]: e.target.value
         });
     };
 
-    const handleSelectChange = (name, value) => {
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+    const handleAddressChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({
+            ...prev,
+            address: {
+                ...prev.address,
+                [name]: value
+            }
+        }));
     };
 
     const handleDateChange = (name, value) => {
         setFormData({
             ...formData,
-            [name]: value
+            [name]: new Date(value).toISOString()
         });
     };
 
@@ -93,7 +102,6 @@ export const LandForm = ({ onFormSubmit }) => {
             const newFiles = Array.from(e.target.files);
             setImages((prev) => [...prev, ...newFiles]);
 
-            // Create URLs for preview
             const newUrls = newFiles.map((file) => URL.createObjectURL(file));
             setImageUrls((prev) => [...prev, ...newUrls]);
         }
@@ -105,34 +113,53 @@ export const LandForm = ({ onFormSubmit }) => {
         setImageUrls(imageUrls.filter((_, i) => i !== index));
     };
 
+    const handleTabChange = (value) => {
+        setActiveTab(value);
+    };
+
+    const handleNextTab = () => {
+        const currentIndex = tabs.indexOf(activeTab);
+        if (currentIndex < tabs.length - 1) {
+            setActiveTab(tabs[currentIndex + 1]);
+        }
+    };
+
+    const handlePreviousTab = () => {
+        const currentIndex = tabs.indexOf(activeTab);
+        if (currentIndex > 0) {
+            setActiveTab(tabs[currentIndex - 1]);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
 
-        try {
-            // Here you would typically upload images and submit the form data
-            console.log('Form data:', formData);
-            console.log('Images:', images);
-            onFormSubmit();
-            // Simulate API call
+        const formDataToSend = new FormData();
 
-            // Reset form if needed
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            alert('Failed to create listing. Please try again.');
-        } finally {
-            setIsSubmitting(false);
-        }
+        const propertyRequest = { ...formData };
+
+        formDataToSend.append(
+            'propertyRequest',
+            JSON.stringify(propertyRequest)
+        );
+
+        images.forEach((image) => formDataToSend.append('files', image));
+
+        onFormSubmit(formDataToSend);
     };
 
     return (
         <div className="container mx-auto px-4 py-10">
             <h1 className="mb-8 text-3xl font-bold">
-                Provide Apartment Information
+                Provide Land Information
             </h1>
 
             <form onSubmit={handleSubmit} className="mb-10 space-y-8">
-                <Tabs defaultValue="basic" className="w-full">
+                <Tabs
+                    value={activeTab}
+                    className="w-full"
+                    onValueChange={handleTabChange}
+                >
                     <TabsList className="mb-6 grid grid-cols-4">
                         <TabsTrigger value="basic">Basic Info</TabsTrigger>
                         <TabsTrigger value="location">Location</TabsTrigger>
@@ -165,9 +192,6 @@ export const LandForm = ({ onFormSubmit }) => {
                                         onChange={handleChange}
                                         required
                                     />
-                                    <p className="text-muted-foreground text-sm">
-                                        A catchy title for your listing
-                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
@@ -181,9 +205,6 @@ export const LandForm = ({ onFormSubmit }) => {
                                         value={formData.projectName}
                                         onChange={handleChange}
                                     />
-                                    <p className="text-muted-foreground text-sm">
-                                        The name of the development project
-                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
@@ -197,9 +218,6 @@ export const LandForm = ({ onFormSubmit }) => {
                                         onChange={handleChange}
                                         required
                                     />
-                                    <p className="text-muted-foreground text-sm">
-                                        The selling price in your local currency
-                                    </p>
                                 </div>
 
                                 <div className="space-y-4">
@@ -289,8 +307,8 @@ export const LandForm = ({ onFormSubmit }) => {
                                             id="province"
                                             name="province"
                                             placeholder="e.g., Ontario"
-                                            value={formData.province}
-                                            onChange={handleChange}
+                                            value={formData.address.province}
+                                            onChange={handleAddressChange}
                                             required
                                         />
                                     </div>
@@ -301,8 +319,8 @@ export const LandForm = ({ onFormSubmit }) => {
                                             id="town"
                                             name="town"
                                             placeholder="e.g., Toronto"
-                                            value={formData.town}
-                                            onChange={handleChange}
+                                            value={formData.address.town}
+                                            onChange={handleAddressChange}
                                             required
                                         />
                                     </div>
@@ -315,8 +333,8 @@ export const LandForm = ({ onFormSubmit }) => {
                                             id="ward"
                                             name="ward"
                                             placeholder="e.g., Downtown"
-                                            value={formData.ward}
-                                            onChange={handleChange}
+                                            value={formData.address.ward}
+                                            onChange={handleAddressChange}
                                             required
                                         />
                                     </div>
@@ -334,9 +352,6 @@ export const LandForm = ({ onFormSubmit }) => {
                                         onChange={handleChange}
                                         required
                                     />
-                                    <p className="text-muted-foreground text-sm">
-                                        Complete street address of the property
-                                    </p>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -405,29 +420,57 @@ export const LandForm = ({ onFormSubmit }) => {
                                             onChange={handleChange}
                                             required
                                         />
-                                        <p className="text-muted-foreground text-sm">
-                                            Total area in square meters
-                                        </p>
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="buildingName">
-                                            Building Name
+                                        <Label htmlFor="roadFrontage">
+                                            Road Frontage
                                         </Label>
                                         <Input
-                                            id="buildingName"
-                                            name="buildingName"
-                                            placeholder="e.g., Sunset Residences"
-                                            value={formData.buildingName}
+                                            id="roadFrontage"
+                                            name="roadFrontage"
+                                            type="number"
+                                            min="0"
+                                            placeholder="e.g., 10"
+                                            value={formData.roadFrontage}
                                             onChange={handleChange}
                                         />
+                                    </div>
+
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label htmlFor="zoningType">
+                                            Zoning Type
+                                        </Label>
+                                        <Input
+                                            id="zoningType"
+                                            name="zoningType"
+                                            type="text"
+                                            placeholder="e.g., Residential"
+                                            value={formData.zoningType}
+                                            onChange={handleChange}
+                                            required
+                                        />
                                         <p className="text-muted-foreground text-sm">
-                                            Name of the building (if applicable)
+                                            Specify the zoning classification of
+                                            the property.
                                         </p>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="landType">
+                                            Land Type
+                                        </Label>
+                                        <Input
+                                            id="landType"
+                                            name="landType"
+                                            placeholder="e.g., Agricultural Land"
+                                            value={formData.landType}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+
                                     <div className="space-y-2">
                                         <Label htmlFor="landUsageDuration">
                                             Land Usage Duration
@@ -438,6 +481,7 @@ export const LandForm = ({ onFormSubmit }) => {
                                             type="text"
                                             value={formData.landUsageDuration}
                                             onChange={handleChange}
+                                            placeholder="e.g., Long-term,"
                                             required
                                         />
                                     </div>
@@ -452,58 +496,9 @@ export const LandForm = ({ onFormSubmit }) => {
                                             type="text"
                                             value={formData.legalStatus}
                                             onChange={handleChange}
+                                            placeholder="e.g., Freehold"
                                             required
                                         />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="roadFrontage">
-                                            Road Frontage
-                                        </Label>
-                                        <Input
-                                            id="roadFrontage"
-                                            name="roadFrontage"
-                                            type="number"
-                                            min="0"
-                                            value={formData.roadFrontage}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="zoningType">
-                                            Zoning Type
-                                        </Label>
-                                        <Input
-                                            id="zoningType"
-                                            name="zoningType"
-                                            type="text"
-                                            placeholder="lorem ispum"
-                                            value={formData.zoningType}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                        <p className="text-muted-foreground text-sm">
-                                            Lorem ispum
-                                        </p>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="landType">
-                                            Land Type
-                                        </Label>
-                                        <Input
-                                            id="landType"
-                                            name="landType"
-                                            placeholder="Lorem ispum"
-                                            value={formData.landType}
-                                            onChange={handleChange}
-                                        />
-                                        <p className="text-muted-foreground text-sm">
-                                            Lorem ispum
-                                        </p>
                                     </div>
                                 </div>
 
@@ -555,12 +550,6 @@ export const LandForm = ({ onFormSubmit }) => {
                                         onChange={handleChange}
                                         required
                                     />
-                                    <p className="text-muted-foreground text-sm">
-                                        Provide a detailed description of your
-                                        apartment, including amenities,
-                                        features, and any other relevant
-                                        information.
-                                    </p>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -585,7 +574,10 @@ export const LandForm = ({ onFormSubmit }) => {
                                                     )}
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0">
+                                            <PopoverContent
+                                                className="w-auto p-0"
+                                                side="top"
+                                            >
                                                 <Calendar
                                                     mode="single"
                                                     selected={
@@ -628,7 +620,10 @@ export const LandForm = ({ onFormSubmit }) => {
                                                     )}
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0">
+                                            <PopoverContent
+                                                className="w-auto p-0"
+                                                side="top"
+                                            >
                                                 <Calendar
                                                     mode="single"
                                                     selected={
@@ -658,16 +653,21 @@ export const LandForm = ({ onFormSubmit }) => {
                 </Tabs>
 
                 <div className="flex justify-end gap-4">
-                    <Button type="button" variant="outline">
-                        Reset
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handlePreviousTab}
+                    >
+                        Previous
                     </Button>
-
-                    <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting && (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Create
-                    </Button>
+                    {activeTab === 'additional' && (
+                        <Button type="submit">Create</Button>
+                    )}
+                    {activeTab !== 'additional' && (
+                        <Button type="button" onClick={handleNextTab}>
+                            Next
+                        </Button>
+                    )}
                 </div>
             </form>
         </div>

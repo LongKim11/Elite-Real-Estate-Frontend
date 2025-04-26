@@ -57,11 +57,7 @@ export const Profile = () => {
                                             </span>{' '}
                                             {userInfo?.data.fullName}
                                         </p>
-                                        <p className="text-lg font-medium">
-                                            <span className="font-bold">
-                                                Email:
-                                            </span>{' '}
-                                        </p>
+
                                         <p className="text-lg font-medium">
                                             <span className="font-bold">
                                                 Status:
