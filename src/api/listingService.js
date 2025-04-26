@@ -45,3 +45,23 @@ export const createProperty = ({ propertyType, formDataToSend }) => {
         }
     );
 };
+
+export const getOwned = () => {
+    const token = getToken();
+
+    return api
+        .get('/properties/owned', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};
+
+export const getSavedList = () => {
+    const token = getToken();
+
+    return api
+        .get('/properties/favorites', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};

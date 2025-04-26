@@ -1,31 +1,53 @@
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
-import { listData } from '@/lib/dummydata';
 import { Card } from '@/components/Card';
 import { Link } from 'react-router-dom';
 import { ProfileFund } from '@/components/ProfileFund';
 import { getMe } from '@/api/authService';
 import { useQuery } from '@tanstack/react-query';
 import { Spinner } from '@/components/Spinner';
+import { getOwned } from '@/api/listingService';
+import { getSavedList } from '@/api/listingService';
 
 export const Profile = () => {
     const [activeTab, setActiveTab] = useState('myList');
-    const post = listData;
 
-    const { data: userInfo, isLoading } = useQuery({
+    const { data: userInfo, isLoading: isLoadingUserInfo } = useQuery({
         queryKey: ['getMe'],
         queryFn: getMe,
         onSuccess: (data) => {
             console.log('Get Me data:', data);
         },
         onError: (err) => {
-            console.log('Get me error', err);
+            console.log('Get me error', err.response.data.error);
+        }
+    });
+
+    const { data: ownedPost, isLoading: isLoadingOwnedPost } = useQuery({
+        queryKey: ['getOwned'],
+        queryFn: getOwned,
+        onSuccess: (data) => {
+            console.log('Get owned data:', data);
+        },
+        onError: (err) => {
+            console.log('Get owned error', err.response.data.error);
+        }
+    });
+
+    const { data: savedPost, isLoading: isLoadingSavedPost } = useQuery({
+        queryKey: ['getFavorites'],
+        queryFn: getSavedList,
+        onSuccess: (data) => {
+            console.log('Get saved post data', data);
+        },
+        onError: (err) => {
+            console.log('Get saved post error', err.response.data.error);
         }
     });
 
     return (
         <>
-            {isLoading ? (
+            {isLoadingUserInfo || isLoadingOwnedPost || isLoadingSavedPost ? (
                 <Spinner />
             ) : (
                 <div className="flex h-full overflow-y-scroll pr-12 pl-32">
@@ -109,11 +131,11 @@ export const Profile = () => {
                                 {/* Tab Content */}
                                 <div className="mt-6 space-y-8">
                                     {activeTab === 'myList' &&
-                                        post.map((item, index) => (
+                                        ownedPost?.data?.map((item, index) => (
                                             <Card key={index} item={item} />
                                         ))}
                                     {activeTab === 'savedList' &&
-                                        post.map((item, index) => (
+                                        savedPost?.data?.map((item, index) => (
                                             <Card key={index} item={item} />
                                         ))}
                                 </div>
