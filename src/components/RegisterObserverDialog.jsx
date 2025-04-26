@@ -12,11 +12,11 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { Bookmark } from 'lucide-react';
+import { Bookmark, BellRing } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { registerObserver } from '@/api/listingService';
 
-export const RegisterObserverDialog = ({ id }) => {
+export const RegisterObserverDialog = ({ id, isFollowed }) => {
     const [email, setEmail] = useState('');
     const [open, setOpen] = useState(false);
     const [error, setError] = useState('');
@@ -39,7 +39,7 @@ export const RegisterObserverDialog = ({ id }) => {
 
     const handleRegisterInterest = () => {
         if (email.length > 0 && email.includes('@')) {
-            handleRegisterObserver(id, email);
+            handleRegisterObserver({ id, email });
         } else {
             setError('Please enter a valid email address.');
         }
@@ -47,12 +47,21 @@ export const RegisterObserverDialog = ({ id }) => {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
+            {isFollowed === '0' && (
+                <DialogTrigger asChild>
+                    <Button className="w-full bg-blue-500 hover:bg-blue-600">
+                        <Bookmark className="mr-2" size={18} />
+                        <span>Get Property Updates</span>
+                    </Button>
+                </DialogTrigger>
+            )}
+
+            {isFollowed === '1' && (
                 <Button className="w-full bg-blue-500 hover:bg-blue-600">
-                    <Bookmark className="mr-2" size={18} />
-                    <span>Get Property Updates</span>
+                    <BellRing className="mr-2" size={18} />
+                    <span>Updates Are On</span>
                 </Button>
-            </DialogTrigger>
+            )}
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>Stay Updated</DialogTitle>

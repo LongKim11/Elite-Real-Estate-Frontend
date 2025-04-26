@@ -1,10 +1,20 @@
 import api from './axiosInstance';
+import { getToken } from '@/utils/auth';
 
 export const getListing = (queryString) => {
     return api.get(`/properties/search?${queryString}`).then((res) => res.data);
 };
 
 export const getPropertyDetails = (id) => {
+    const token = getToken();
+
+    if (token) {
+        return api
+            .get(`/properties/details/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then((res) => res.data);
+    }
     return api.get(`/properties/details/${id}`).then((res) => res.data);
 };
 
@@ -12,8 +22,12 @@ export const scheduleViewing = (data) => {
     return api.post('/viewings/schedule', data).then((res) => res.data);
 };
 
-export const registerObserver = (id, email) => {
+export const registerObserver = ({ id, email }) => {
+    const token = getToken();
+
     return api
-        .post(`/properties/${id}/registerObserver?email=${email}`)
+        .post(`/properties/${id}/registerObserver?email=${email}`, null, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
         .then((res) => res.data);
 };

@@ -18,6 +18,7 @@ import {
     CheckCheck,
     Sparkles,
     Hammer,
+    Crown,
     Map as MapIcon
 } from 'lucide-react';
 import { Map } from '@/components/Map';
@@ -43,6 +44,7 @@ export const PropertyDetails = () => {
     });
 
     const property = data?.data;
+    const isFollowed = data?.error;
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -557,10 +559,23 @@ export const PropertyDetails = () => {
                         <h3 className="mb-4 text-lg font-semibold">
                             Interested in this property?
                         </h3>
-                        <div className="space-y-4">
-                            <HouseVisitDialog id={id} />
 
-                            <RegisterObserverDialog id={id} />
+                        <div className="space-y-4">
+                            {isFollowed === '3' ? (
+                                <Button className="w-ful">
+                                    <Crown className="mr-2" size={18} />
+                                    <span>Owned by You</span>
+                                </Button>
+                            ) : (
+                                <>
+                                    <HouseVisitDialog id={id} />
+
+                                    <RegisterObserverDialog
+                                        id={id}
+                                        isFollowed={isFollowed}
+                                    />
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
