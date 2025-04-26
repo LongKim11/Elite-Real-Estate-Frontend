@@ -28,6 +28,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '@/components/Spinner';
 import { RegisterObserverDialog } from '@/components/RegisterObserverDialog';
+import { Button } from '@/components/ui/button';
 
 export const PropertyDetails = () => {
     const { id } = useParams();
@@ -561,8 +562,8 @@ export const PropertyDetails = () => {
                         </h3>
 
                         <div className="space-y-4">
-                            {isFollowed === '3' ? (
-                                <Button className="w-ful">
+                            {isFollowed === '2' ? (
+                                <Button className="w-full">
                                     <Crown className="mr-2" size={18} />
                                     <span>Owned by You</span>
                                 </Button>

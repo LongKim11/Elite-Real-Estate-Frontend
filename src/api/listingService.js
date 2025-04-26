@@ -31,3 +31,17 @@ export const registerObserver = ({ id, email }) => {
         })
         .then((res) => res.data);
 };
+
+export const createProperty = ({ propertyType, formDataToSend }) => {
+    const token = getToken();
+    return api.post(
+        `/properties?propertyType=${propertyType}`,
+        formDataToSend,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+    );
+};

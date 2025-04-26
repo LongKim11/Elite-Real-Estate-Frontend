@@ -22,7 +22,7 @@ export const Pin = ({ item }) => {
                         className="space-y-3"
                     >
                         <img
-                            src={item.img}
+                            src={item.images[0].imageUrl}
                             alt={item.title}
                             style={{
                                 width: '100%',
@@ -37,10 +37,10 @@ export const Pin = ({ item }) => {
                     <div className="mt-2 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <span className="font-bold text-amber-600">
-                                {item.bedroom} bedrooms
+                                {item.numBedrooms} bedrooms
                             </span>
                             <span className="font-bold text-amber-600">
-                                {item.bathroom} badrooms
+                                {item.numBathrooms} badrooms
                             </span>
                         </div>
                         <div className="flex items-center gap-2">

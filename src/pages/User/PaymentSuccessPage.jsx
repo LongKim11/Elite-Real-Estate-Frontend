@@ -18,7 +18,7 @@ export const PaymentSuccessPage = () => {
 
     const amount = params.get('amount');
     const transactionID = params.get('transactionId');
-    const status = params.get('status');
+    // const status = params.get('status');
     const bankCode = params.get('bankCode');
 
     return (

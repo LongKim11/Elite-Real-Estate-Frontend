@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, Loader2, Plus, X } from 'lucide-react';
+import { CalendarIcon, Plus, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +28,6 @@ export const ApartmentForm = ({ typeTransaction, onFormSubmit }) => {
     const [imageUrls, setImageUrls] = useState([]);
 
     const [formData, setFormData] = useState({
-        userId: '0123456789', // Fixed
         address: {
             ward: '',
             town: '',
@@ -80,7 +79,7 @@ export const ApartmentForm = ({ typeTransaction, onFormSubmit }) => {
     const handleDateChange = (name, value) => {
         setFormData({
             ...formData,
-            [name]: value
+            [name]: new Date(value).toISOString()
         });
     };
 
@@ -128,16 +127,18 @@ export const ApartmentForm = ({ typeTransaction, onFormSubmit }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            console.log('Form data:', formData);
-            console.log('Images:', images);
+        const formDataToSend = new FormData();
 
-            onFormSubmit();
-            // Simulate API call
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            alert('Failed to create listing. Please try again.');
-        }
+        const propertyRequest = { ...formData };
+
+        formDataToSend.append(
+            'propertyRequest',
+            JSON.stringify(propertyRequest)
+        );
+
+        images.forEach((image) => formDataToSend.append('files', image));
+
+        onFormSubmit(formDataToSend);
     };
 
     return (

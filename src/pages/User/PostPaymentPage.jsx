@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,24 +12,35 @@ import {
 } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AddFundDialog } from '@/components/AddFundDialog';
+import { useMutation } from '@tanstack/react-query';
+import { createProperty } from '@/api/listingService';
+import { Loader2 } from 'lucide-react';
 
-export const PostPaymentPage = () => {
-    // Mock data - in a real app, this would come from props or context
+export const PostPaymentPage = ({ propertyType, formDataToSend }) => {
     const [userBalance, setUserBalance] = useState(65.5);
     const [postCost, setPostCost] = useState(50.0);
-    const [isProcessing, setIsProcessing] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
     const hasSufficientFunds = userBalance >= postCost;
 
-    const handlePurchase = () => {
-        setIsProcessing(true);
-        // Simulate API call
-        setTimeout(() => {
-            setUserBalance((prevBalance) => prevBalance - postCost);
-            setIsProcessing(false);
+    const { mutate, isLoading } = useMutation({
+        mutationFn: createProperty,
+        onSuccess: (data) => {
+            console.log('Create property successfully', data);
             setIsSuccess(true);
-        }, 1500);
+        },
+        onError: (err) => {
+            console.log('Create property failed', err.response.data.error);
+        }
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        mutate({
+            propertyType,
+            formDataToSend
+        });
     };
 
     if (isSuccess) {
@@ -38,7 +49,7 @@ export const PostPaymentPage = () => {
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-center">
-                            Payment Successful!
+                            Add Listing Successful!
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col items-center space-y-4">
@@ -49,7 +60,7 @@ export const PostPaymentPage = () => {
                     </CardContent>
                     <CardFooter className="flex justify-center">
                         <Button asChild>
-                            <Link href="/dashboard">Go to Dashboard</Link>
+                            <Link to={'/list'}>Go to Dashboard</Link>
                         </Button>
                     </CardFooter>
                 </Card>
@@ -102,12 +113,17 @@ export const PostPaymentPage = () => {
                     ) : (
                         <Button
                             className="w-full"
-                            onClick={handlePurchase}
-                            disabled={isProcessing}
+                            onClick={handleSubmit}
+                            disabled={isLoading}
                         >
-                            {isProcessing
-                                ? 'Processing...'
-                                : 'Pay & Publish Post'}
+                            {isLoading ? (
+                                <div className="flex items-center justify-center gap-2">
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                    Please wait...
+                                </div>
+                            ) : (
+                                'Pay & Publish Post'
+                            )}
                         </Button>
                     )}
 

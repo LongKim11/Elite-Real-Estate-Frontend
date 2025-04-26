@@ -41,35 +41,30 @@ export const ListPage = () => {
     };
 
     return (
-        <>
-            {isLoading ? (
-                <Spinner />
-            ) : (
-                <div className="flex h-full pr-12 pl-32">
-                    <div className="flex-[3]">
-                        <div className="mb-5 flex h-full flex-col gap-12 overflow-y-scroll pr-8 pb-5">
-                            <ListFilter
-                                filters={filters}
-                                onChange={setFilters}
-                                onFilter={handleFilter}
-                            />
-                            {listing?.data?.map((item, index) => (
-                                <Card key={index} item={item} />
-                            ))}
-                            {listing?.data === null && (
-                                <div className="flex h-[200px] items-center justify-center">
-                                    <span className="text-xl font-semibold">
-                                        No Property Found
-                                    </span>
-                                </div>
-                            )}
+        <div className="flex h-full pr-12 pl-32">
+            <div className="flex-[3]">
+                {isLoading && <Spinner />}
+                <div className="mb-5 flex h-full flex-col gap-12 overflow-y-scroll pr-8 pb-5">
+                    <ListFilter
+                        filters={filters}
+                        onChange={setFilters}
+                        onFilter={handleFilter}
+                    />
+                    {listing?.data?.map((item, index) => (
+                        <Card key={index} item={item} />
+                    ))}
+                    {listing?.data === null && (
+                        <div className="flex h-[200px] items-center justify-center">
+                            <span className="text-xl font-semibold">
+                                No Property Found
+                            </span>
                         </div>
-                    </div>
-                    <div className="h-full flex-[2] md:bg-[#fcf5f3]">
-                        <Map items={listing?.data ?? []} />
-                    </div>
+                    )}
                 </div>
-            )}
-        </>
+            </div>
+            <div className="h-full flex-[2] md:bg-[#fcf5f3]">
+                <Map items={listing?.data ?? []} />
+            </div>
+        </div>
     );
 };

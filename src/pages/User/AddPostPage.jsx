@@ -11,6 +11,8 @@ export const AddPostPage = () => {
     const [typeTransaction, setTypeTransaction] = useState(null);
     const [category, setCategory] = useState('');
 
+    const [formDataToSend, setFormDataToSend] = useState();
+
     const navigate = useNavigate();
 
     const handleNext = () => setStep(step + 1);
@@ -29,6 +31,11 @@ export const AddPostPage = () => {
 
     const handleCategorySelect = (type) => {
         setCategory(type);
+        handleNext();
+    };
+
+    const handleFormDataSubmit = (data) => {
+        setFormDataToSend(data);
         handleNext();
     };
 
@@ -142,7 +149,7 @@ export const AddPostPage = () => {
                     {category === 'Apartment' && (
                         <ApartmentForm
                             typeTransaction={typeTransaction}
-                            onFormSubmit={handleNext}
+                            onFormSubmit={handleFormDataSubmit}
                         />
                     )}
                     {category === 'House' && (
@@ -155,7 +162,10 @@ export const AddPostPage = () => {
             )}
             {step === 4 && (
                 <div className="h-full overflow-y-scroll">
-                    <PostPaymentPage />
+                    <PostPaymentPage
+                        propertyType={category.toLowerCase()}
+                        formDataToSend={formDataToSend}
+                    />
                 </div>
             )}
         </div>

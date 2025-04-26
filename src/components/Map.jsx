@@ -1,16 +1,28 @@
-import React from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 import { Pin } from './Pin';
+
+const MapBounds = ({ items }) => {
+    const map = useMap();
+
+    useEffect(() => {
+        if (items.length === 0) return;
+
+        const bounds = L.latLngBounds(
+            items.map((item) => [item.latitude, item.longitude])
+        );
+        map.fitBounds(bounds, { padding: [50, 50] });
+    }, [items, map]);
+
+    return null;
+};
 
 export const Map = ({ items }) => {
     return (
         <MapContainer
-            center={
-                items.length !== 0
-                    ? [items[0].latitude, items[0].longitude]
-                    : [21.0285, 105.8542]
-            }
+            center={[21.0285, 105.8542]}
             zoom={7}
             scrollWheelZoom={true}
             className="h-full w-full rounded-md"
@@ -22,6 +34,7 @@ export const Map = ({ items }) => {
             />
             {items.length !== 0 &&
                 items?.map((item, index) => <Pin item={item} key={index} />)}
+            <MapBounds items={items} />
         </MapContainer>
     );
 };
