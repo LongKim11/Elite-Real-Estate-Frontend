@@ -149,7 +149,7 @@ export const LandForm = ({ typeTransaction, onFormSubmit }) => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-10">
+        <div className="container mx-auto max-w-7xl px-4 py-10">
             <h1 className="mb-8 text-3xl font-bold">
                 Provide Land Information
             </h1>
