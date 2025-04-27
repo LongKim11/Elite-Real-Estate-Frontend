@@ -531,53 +531,48 @@ export const PropertyDetails = () => {
 
             {/* Right Sidebar */}
             <div className="mt-6 flex-[2] lg:mt-0">
-                <div className="sticky top-6 space-y-6">
-                    {/* Location Map */}
-                    <div className="bor rounded-lg border bg-white p-4 shadow-sm">
-                        <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold">
-                            <MapIcon className="text-blue-600" size={20} />
-                            Location
-                        </h3>
-                        <div className="h-[300px] w-full overflow-hidden rounded-lg">
-                            <Map items={[property]} />
+                {/* Location Map */}
+                <div className="h-[400px] rounded-lg border bg-white p-4 shadow-sm">
+                    <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+                        <MapIcon className="text-blue-600" size={20} />
+                        Location
+                    </h3>
+                    <div className="h-[270px] w-full overflow-hidden rounded-lg">
+                        <Map items={[property]} />
+                    </div>
+                    <div className="mt-3 text-sm text-gray-600">
+                        <div className="mb-1 flex items-center gap-2">
+                            <MapPinHouse className="text-blue-600" size={16} />
+                            {property.address.ward}, {property.address.town}
                         </div>
-                        <div className="mt-4 text-sm text-gray-600">
-                            <div className="mb-1 flex items-center gap-2">
-                                <MapPinHouse
-                                    className="text-blue-600"
-                                    size={16}
-                                />
-                                {property.address.ward}, {property.address.town}
-                            </div>
-                            <div className="font-medium text-gray-800">
-                                {property.address.province}
-                            </div>
+                        <div className="font-medium text-gray-800">
+                            {property.address.province}
                         </div>
                     </div>
+                </div>
 
-                    {/* Contact Section */}
-                    <div className="rounded-lg border bg-amber-50 p-6 shadow-sm">
-                        <h3 className="mb-4 text-lg font-semibold">
-                            Interested in this property?
-                        </h3>
+                {/* Contact Section */}
+                <div className="mt-6 rounded-lg border bg-amber-50 p-6 shadow-sm">
+                    <h3 className="mb-4 text-lg font-semibold">
+                        Interested in this property?
+                    </h3>
 
-                        <div className="space-y-4">
-                            {isFollowed === '2' ? (
-                                <Button className="w-full">
-                                    <Crown className="mr-2" size={18} />
-                                    <span>Owned by You</span>
-                                </Button>
-                            ) : (
-                                <>
-                                    <HouseVisitDialog id={id} />
+                    <div className="space-y-4">
+                        {isFollowed === '2' ? (
+                            <Button className="w-full">
+                                <Crown className="mr-2" size={18} />
+                                <span>Owned by You</span>
+                            </Button>
+                        ) : (
+                            <>
+                                <HouseVisitDialog id={id} />
 
-                                    <RegisterObserverDialog
-                                        id={id}
-                                        isFollowed={isFollowed}
-                                    />
-                                </>
-                            )}
-                        </div>
+                                <RegisterObserverDialog
+                                    id={id}
+                                    isFollowed={isFollowed}
+                                />
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
