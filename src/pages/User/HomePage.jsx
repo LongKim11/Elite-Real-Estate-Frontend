@@ -143,24 +143,24 @@ export const HomePage = () => {
                     <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-3">
                         <div>
                             <img
-                                src="apartment.jpg"
-                                className="h-[450px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
+                                src="featured1.jpg"
+                                className="h-[250px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
                             ></img>
                             <p>Apartment</p>
                             <p>11+ Properties</p>
                         </div>
                         <div>
                             <img
-                                src="house.jpg"
-                                className="h-[450px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
+                                src="featured2.jpg"
+                                className="h-[250px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
                             ></img>
                             <p>House</p>
                             <p>35+ Properties</p>
                         </div>
                         <div>
                             <img
-                                src="land.jpg"
-                                className="h-[450px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
+                                src="featured3.jpg"
+                                className="h-[250px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
                             ></img>
                             <p>Land</p>
                             <p>23+ Properties</p>
