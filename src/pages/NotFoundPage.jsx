@@ -7,7 +7,7 @@ export const NotFoundPage = () => {
     return (
         <div className="flex h-full">
             <div className="relative flex-[2] md:bg-[#fcf5f3]">
-                <img src="/not-found-bg.png"></img>
+                <img src="/not-found-bg.png" className="h-full w-full"></img>
             </div>
             <div className="mt-30 flex-[3] flex-col items-center justify-center text-center">
                 <div className="mx-auto max-w-md space-y-6">
