@@ -1,15 +1,12 @@
 import React from 'react';
 import { HomeSearchBar } from '@/components/HomeSearchBar';
 import { Home, Shield, FileText } from 'lucide-react';
-import { listData } from '@/lib/dummydata';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { Link } from 'react-router-dom';
 
 export const HomePage = () => {
-    const data = listData;
-
     return (
         <>
             {/* Hero Section */}
@@ -49,8 +46,47 @@ export const HomePage = () => {
                     </div>
                 </div>
             </div>
+            {/* Category Section */}
+            <section className="mt-30 bg-white text-center">
+                <div className="container mx-auto px-4">
+                    <h2 className="mb-2 text-3xl font-bold">
+                        Feature Categories
+                    </h2>
+                    <p className="mb-10 text-gray-500">
+                        Easily browse and discover the diverse types of real
+                        estate we offer.
+                    </p>
+                    <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-3">
+                        <div>
+                            <img
+                                src="apartment.jpg"
+                                className="h-[450px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
+                            ></img>
+                            <p>Apartment</p>
+                            <p>11+ Properties</p>
+                        </div>
+                        <div>
+                            <img
+                                src="house.jpg"
+                                className="h-[450px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
+                            ></img>
+                            <p>House</p>
+                            <p>35+ Properties</p>
+                        </div>
+                        <div>
+                            <img
+                                src="land.jpg"
+                                className="h-[450px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
+                            ></img>
+                            <p>Land</p>
+                            <p>23+ Properties</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Feature Section */}
-            <section className="mt-12 bg-white py-16 text-center">
+            <section className="mt-30 bg-white text-center">
                 <div className="container mx-auto px-4">
                     <h2 className="mb-2 text-3xl font-bold">
                         Why You Should Work With Us
@@ -93,21 +129,9 @@ export const HomePage = () => {
                     </div>
                 </div>
             </section>
-            {/* Category Section */}
-            <section className="mt-12 bg-white py-16 text-center">
-                <div className="container mx-auto px-4">
-                    <h2 className="mb-2 text-3xl font-bold">
-                        Feature Categories
-                    </h2>
-                    <p className="mb-10 text-gray-500">
-                        Easily browse and discover the diverse types of real
-                        estate we offer.
-                    </p>
-                    <div className="mx-auto grid max-w-5xl grid-cols-1 gap-12 md:grid-cols-3"></div>
-                </div>
-            </section>
+
             {/* Property Section */}
-            <section className="mt-12 bg-white py-16 text-center">
+            <section className="mt-30 bg-white text-center">
                 <div className="container mx-auto px-4">
                     <h2 className="mb-2 text-3xl font-bold">
                         Discover Our Best Deals
@@ -116,11 +140,37 @@ export const HomePage = () => {
                         Connecting you with exceptional homes and investment
                         opportunities.
                     </p>
-                    <div className="mx-auto grid max-w-5xl grid-cols-1 gap-12 md:grid-cols-3"></div>
+                    <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-3">
+                        <div>
+                            <img
+                                src="apartment.jpg"
+                                className="h-[450px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
+                            ></img>
+                            <p>Apartment</p>
+                            <p>11+ Properties</p>
+                        </div>
+                        <div>
+                            <img
+                                src="house.jpg"
+                                className="h-[450px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
+                            ></img>
+                            <p>House</p>
+                            <p>35+ Properties</p>
+                        </div>
+                        <div>
+                            <img
+                                src="land.jpg"
+                                className="h-[450px] w-full cursor-pointer rounded-md object-cover transition-all duration-300 hover:scale-105"
+                            ></img>
+                            <p>Land</p>
+                            <p>23+ Properties</p>
+                        </div>
+                    </div>
                 </div>
             </section>
+
             {/* Hero Section 2 */}
-            <section className="relative mt-12">
+            <section className="relative mt-30">
                 <img
                     src="/hero-section2.png"
                     alt="Hero Background"
@@ -149,7 +199,7 @@ export const HomePage = () => {
                 </div>
             </section>
             {/* Hero Section 3 */}
-            <section className="container mx-auto my-36 flex flex-col items-center gap-10 md:flex-row md:items-start">
+            <section className="container mx-auto my-30 flex flex-col items-center gap-10 md:flex-row md:items-start">
                 {/* Left Content */}
                 <div className="space-y-6 pl-12 md:w-2/3">
                     <h2 className="text-3xl leading-snug font-bold text-gray-900 md:text-4xl">
