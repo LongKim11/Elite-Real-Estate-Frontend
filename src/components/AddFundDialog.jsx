@@ -15,12 +15,13 @@ import { Button } from '@/components/ui/button';
 import { Plus, CreditCard } from 'lucide-react';
 import { createPayment } from '@/api/paymentService';
 import { useMutation } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
 
 export const AddFundDialog = () => {
     const [paymentMethod, setPaymentMethod] = useState('vnpay');
     const [addAmount, setAddAmount] = useState(50000);
 
-    const { mutate: handleAddFunds, isPending } = useMutation({
+    const { mutate: handleAddFunds, isLoading } = useMutation({
         mutationFn: () => createPayment(addAmount),
         onSuccess: (data) => {
             console.log(data);
@@ -127,8 +128,20 @@ export const AddFundDialog = () => {
                 </div>
                 <DialogFooter>
                     <Button onClick={() => handleAddFunds()} className="w-full">
-                        <CreditCard className="mr-2 h-4 w-4" /> Add {addAmount}
-                        VND with {paymentMethod === 'vnpay' ? 'VNPay' : 'MoMo'}
+                        {isLoading ? (
+                            <div className="flex items-center justify-center gap-2">
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                                Please wait...
+                            </div>
+                        ) : (
+                            <>
+                                {' '}
+                                <CreditCard className="mr-2 h-4 w-4" /> Add{' '}
+                                {addAmount}
+                                VND with{' '}
+                                {paymentMethod === 'vnpay' ? 'VNPay' : 'MoMo'}
+                            </>
+                        )}
                     </Button>
                 </DialogFooter>
             </DialogContent>
