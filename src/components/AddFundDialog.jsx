@@ -69,7 +69,9 @@ export const AddFundDialog = () => {
                                 size="sm"
                                 onClick={() => setAddAmount(amount * 1000)}
                                 className={
-                                    addAmount === amount ? 'border-primary' : ''
+                                    addAmount === amount * 1000
+                                        ? 'border-primary'
+                                        : ''
                                 }
                             >
                                 {amount}K
