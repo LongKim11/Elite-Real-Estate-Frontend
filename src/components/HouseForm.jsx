@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, Loader2, Plus, X } from 'lucide-react';
+import { CalendarIcon, Plus, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,10 @@ import {
     CardHeader,
     CardTitle
 } from '@/components/ui/card';
+import { editProperty } from '@/api/listingService';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 import {
     Popover,
@@ -23,7 +27,12 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 
-export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
+export const HouseForm = ({
+    typeTransaction,
+    onFormSubmit,
+    updateStatus = false,
+    item = null
+}) => {
     const [images, setImages] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
 
@@ -56,6 +65,28 @@ export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
 
     const tabs = ['basic', 'location', 'details', 'additional'];
     const [activeTab, setActiveTab] = useState('basic');
+
+    useEffect(() => {
+        if (item) {
+            const {
+                propertyId,
+                observers,
+                images,
+                propertyObservers,
+                userId,
+                category,
+                ...filteredItem
+            } = item;
+
+            setFormData({
+                ...filteredItem
+            });
+
+            if (item.images) {
+                setImageUrls(item.images.map((img) => img.imageUrl));
+            }
+        }
+    }, [item]);
 
     const handleChange = (e) => {
         setFormData({
@@ -139,6 +170,40 @@ export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
         images.forEach((image) => formDataToSend.append('files', image));
 
         onFormSubmit(formDataToSend);
+    };
+
+    const navigate = useNavigate();
+
+    const { mutate: updateProperty, isLoading } = useMutation({
+        mutationFn: ({ propertyId, formDataToSend }) =>
+            editProperty({ propertyId, formDataToSend }),
+        onSuccess: (res) => {
+            console.log('Update Property Data', res);
+            toast.success('Update Property Successfully');
+            navigate(`list/${item.propertyId}`);
+        },
+        onError: (err) => {
+            console.log('Update Property Error', err.response.data.error);
+            toast.error('Error occured while updating property');
+        }
+    });
+
+    const handleUpdate = () => {
+        const formDataToSend = new FormData();
+
+        const { address, startTime, expireTime, ...formUpdateData } = formData;
+
+        const propertyRequest = { ...formUpdateData };
+
+        console.log(formUpdateData);
+
+        formDataToSend.append(
+            'propertyRequest',
+            JSON.stringify(propertyRequest)
+        );
+
+        formDataToSend.append('files', []);
+        updateProperty({ propertyId: item.propertyId, formDataToSend });
     };
 
     return (
@@ -240,6 +305,7 @@ export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
                                                     accept="image/*"
                                                     className="hidden"
                                                     onChange={handleImageChange}
+                                                    disabled={updateStatus}
                                                 />
                                             </label>
                                         </div>
@@ -261,6 +327,9 @@ export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
                                                         />
                                                         <button
                                                             type="button"
+                                                            disabled={
+                                                                updateStatus
+                                                            }
                                                             onClick={() =>
                                                                 removeImage(
                                                                     index
@@ -302,6 +371,7 @@ export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
                                             placeholder="e.g., Ontario"
                                             value={formData.address.province}
                                             onChange={handleAddressChange}
+                                            disabled={updateStatus}
                                             required
                                         />
                                     </div>
@@ -314,6 +384,7 @@ export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
                                             placeholder="e.g., Toronto"
                                             value={formData.address.town}
                                             onChange={handleAddressChange}
+                                            disabled={updateStatus}
                                             required
                                         />
                                     </div>
@@ -328,6 +399,7 @@ export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
                                             placeholder="e.g., Downtown"
                                             value={formData.address.ward}
                                             onChange={handleAddressChange}
+                                            disabled={updateStatus}
                                             required
                                         />
                                     </div>
@@ -608,6 +680,7 @@ export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
                                                         )
                                                     }
                                                     initialFocus
+                                                    disabled={updateStatus}
                                                 />
                                             </PopoverContent>
                                         </Popover>
@@ -654,9 +727,7 @@ export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
                                                         )
                                                     }
                                                     initialFocus
-                                                    disabled={(date) =>
-                                                        date < new Date()
-                                                    }
+                                                    disabled={updateStatus}
                                                 />
                                             </PopoverContent>
                                         </Popover>
@@ -679,7 +750,27 @@ export const HouseForm = ({ typeTransaction, onFormSubmit }) => {
                         Previous
                     </Button>
                     {activeTab === 'additional' && (
-                        <Button type="submit">Create</Button>
+                        <>
+                            {!updateStatus && (
+                                <Button type="submit">Create</Button>
+                            )}
+                            {updateStatus && (
+                                <Button
+                                    type="button"
+                                    onClick={handleUpdate}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? (
+                                        <div className="flex items-center justify-center gap-2">
+                                            <Loader2 className="h-5 w-5 animate-spin" />
+                                            Please wait...
+                                        </div>
+                                    ) : (
+                                        <>Update Property</>
+                                    )}
+                                </Button>
+                            )}
+                        </>
                     )}
                     {activeTab !== 'additional' && (
                         <Button type="button" onClick={handleNextTab}>

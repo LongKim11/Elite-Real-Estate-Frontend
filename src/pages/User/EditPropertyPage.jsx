@@ -2,6 +2,10 @@ import React from 'react';
 import { getPropertyDetails } from '@/api/listingService';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { ApartmentForm } from '@/components/ApartmentForm';
+import { HouseForm } from '@/components/HouseForm';
+import { LandForm } from '@/components/LandForm';
+import { Spinner } from '@/components/Spinner';
 
 export const EditPropertyPage = () => {
     const { id } = useParams();
@@ -18,5 +22,23 @@ export const EditPropertyPage = () => {
         }
     });
 
-    return <div>EditPropertyPage</div>;
+    const category = propertyData?.data?.category;
+
+    if (isLoading) {
+        return <Spinner />;
+    }
+
+    return (
+        <div className="h-full overflow-y-auto">
+            {category === 'Apartment' && (
+                <ApartmentForm updateStatus={true} item={propertyData.data} />
+            )}
+            {category === 'Land' && (
+                <LandForm updateStatus={true} item={propertyData.data} />
+            )}
+            {category === 'House' && (
+                <HouseForm updateStatus={true} item={propertyData.data} />
+            )}
+        </div>
+    );
 };

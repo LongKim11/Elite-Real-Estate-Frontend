@@ -61,3 +61,18 @@ export const getSavedList = () => {
         })
         .then((res) => res.data);
 };
+
+export const editProperty = ({ propertyId, formDataToSend }) => {
+    const token = getToken();
+
+    console.log('Id', propertyId);
+
+    return api
+        .put(`/properties?propertyId=${propertyId}`, formDataToSend, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then((res) => res.data);
+};
