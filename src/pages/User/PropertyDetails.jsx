@@ -1,5 +1,6 @@
 import { Slider } from '@/components/Slider';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
     MapPinHouse,
     Home,
@@ -19,6 +20,7 @@ import {
     Sparkles,
     Hammer,
     Crown,
+    FilePen,
     Map as MapIcon
 } from 'lucide-react';
 import { Map } from '@/components/Map';
@@ -101,7 +103,7 @@ export const PropertyDetails = () => {
                         </div>
 
                         <div>
-                            <div className="flex items-center gap-4 text-gray-700">
+                            <div className="flex flex-wrap items-center gap-4 text-gray-700">
                                 <Calendar size={18} className="text-red-500" />
                                 <div>
                                     <div className="font-bold">
@@ -559,10 +561,18 @@ export const PropertyDetails = () => {
 
                     <div className="space-y-4">
                         {isFollowed === '2' ? (
-                            <Button className="w-full">
-                                <Crown className="mr-2" size={18} />
-                                <span>Owned by You</span>
-                            </Button>
+                            <>
+                                <Button className="w-full">
+                                    <Crown className="mr-2" size={18} />
+                                    <span>Owned by You</span>
+                                </Button>
+                                <Link to={`/edit/${property.propertyId}`}>
+                                    <Button className="w-full bg-green-500 hover:bg-green-600">
+                                        <FilePen className="mr-2" size={18} />
+                                        <span>Update Details</span>
+                                    </Button>
+                                </Link>
+                            </>
                         ) : (
                             <>
                                 <HouseVisitDialog id={id} />

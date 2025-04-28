@@ -10,6 +10,7 @@ import { SignInPage } from '@/pages/SignInPage';
 import { AddPostPage } from '@/pages/User/AddPostPage';
 import { ProtectedRoutes } from './ProtectedRoutes';
 import { PaymentSuccessPage } from '@/pages/User/PaymentSuccessPage';
+import { EditPropertyPage } from '@/pages/User/EditPropertyPage';
 
 export const AppRouter = createBrowserRouter([
     {
@@ -34,6 +35,14 @@ export const AppRouter = createBrowserRouter([
                 element: (
                     <ProtectedRoutes>
                         <AddPostPage />
+                    </ProtectedRoutes>
+                )
+            },
+            {
+                path: 'edit/:id',
+                element: (
+                    <ProtectedRoutes>
+                        <EditPropertyPage />
                     </ProtectedRoutes>
                 )
             },

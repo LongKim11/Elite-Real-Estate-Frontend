@@ -6,10 +6,11 @@ import {
     Ruler,
     Landmark,
     CalendarClock,
-    Home
+    Home,
+    FilePen
 } from 'lucide-react';
 
-export const Card = ({ item }) => {
+export const Card = ({ item, canUpdate = false }) => {
     const {
         propertyId,
         title,
@@ -102,18 +103,32 @@ export const Card = ({ item }) => {
                     </div>
                 </div>
 
-                {/* Tags */}
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                    {[address?.ward, address?.town, address?.province]
-                        .filter(Boolean)
-                        .map((tag, index) => (
-                            <span
-                                key={index}
-                                className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 transition hover:bg-gray-200"
-                            >
-                                {tag}
-                            </span>
-                        ))}
+                {/* Tags + Edit Button */}
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+                    {/* Location Tags */}
+                    <div className="flex flex-wrap items-center gap-2">
+                        {[address?.ward, address?.town, address?.province]
+                            .filter(Boolean)
+                            .map((tag, index) => (
+                                <span
+                                    key={index}
+                                    className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 transition hover:bg-gray-200"
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                    </div>
+
+                    {/* Edit Button */}
+                    {canUpdate && (
+                        <Link
+                            to={`/edit/${propertyId}`}
+                            className="inline-flex items-center justify-center rounded-full p-2 text-blue-500 transition hover:bg-blue-100 hover:text-blue-500"
+                            title="Edit Post"
+                        >
+                            <FilePen className="h-5 w-5" />
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>

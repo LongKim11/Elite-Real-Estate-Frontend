@@ -132,7 +132,11 @@ export const Profile = () => {
                                 <div className="mt-6 space-y-8">
                                     {activeTab === 'myList' &&
                                         ownedPost?.data?.map((item, index) => (
-                                            <Card key={index} item={item} />
+                                            <Card
+                                                key={index}
+                                                item={item}
+                                                canUpdate={true}
+                                            />
                                         ))}
                                     {activeTab === 'savedList' &&
                                         savedPost?.data?.map((item, index) => (
