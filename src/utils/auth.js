@@ -18,6 +18,7 @@ export const isTokenValid = (token) => {
         const currentTime = Math.floor(Date.now() / 1000);
         return decoded.exp && currentTime < decoded.exp;
     } catch (err) {
+        console.log('JWT Decode Error', err);
         return false;
     }
 };

@@ -127,7 +127,11 @@ export const AddFundDialog = () => {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={() => handleAddFunds()} className="w-full">
+                    <Button
+                        onClick={() => handleAddFunds()}
+                        className="w-full"
+                        disabled={isLoading}
+                    >
                         {isLoading ? (
                             <div className="flex items-center justify-center gap-2">
                                 <Loader2 className="h-5 w-5 animate-spin" />

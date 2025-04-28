@@ -18,10 +18,6 @@ export const getPropertyDetails = (id) => {
     return api.get(`/properties/details/${id}`).then((res) => res.data);
 };
 
-export const scheduleViewing = (data) => {
-    return api.post('/viewings/schedule', data).then((res) => res.data);
-};
-
 export const registerObserver = ({ id, email }) => {
     const token = getToken();
 

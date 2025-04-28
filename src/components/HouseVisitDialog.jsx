@@ -14,8 +14,9 @@ import { Label } from '@/components/ui/label';
 import { MessageSquareMore } from 'lucide-react';
 import { DateTimePicker } from './DateTimePicker';
 import { useMutation } from '@tanstack/react-query';
-import { scheduleViewing } from '@/api/listingService';
+import { scheduleViewing } from '@/api/rentalService';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 export const HouseVisitDialog = ({ id }) => {
     const [openDialog, setOpenDialog] = useState(false);
@@ -25,6 +26,7 @@ export const HouseVisitDialog = ({ id }) => {
         viewerName: '',
         viewerPhone: '',
         viewerEmail: '',
+        viewNotes: '',
         scheduledAt: ''
     });
 
@@ -105,6 +107,18 @@ export const HouseVisitDialog = ({ id }) => {
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="notes" className="text-right">
+                            Notes
+                        </Label>
+                        <Input
+                            id="notes"
+                            className="col-span-3"
+                            name="viewNotes"
+                            placeholder="Add any special notes here..."
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="date-time" className="text-right">
                             Date & Time
                         </Label>
@@ -122,7 +136,17 @@ export const HouseVisitDialog = ({ id }) => {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={handleBookingVisit}>Schedule Now</Button>
+                    <Button onClick={handleBookingVisit} disabled={isLoading}>
+                        {' '}
+                        {isLoading ? (
+                            <div className="flex items-center justify-center gap-2">
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                                Please wait...
+                            </div>
+                        ) : (
+                            <>Schedule Now</>
+                        )}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
