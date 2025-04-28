@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, Plus, X } from 'lucide-react';
-
+import { CalendarIcon, Plus, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -75,11 +74,13 @@ export const HouseForm = ({
                 propertyObservers,
                 userId,
                 category,
+                numFloors,
                 ...filteredItem
             } = item;
 
             setFormData({
-                ...filteredItem
+                ...filteredItem,
+                floor: numFloors
             });
 
             if (item.images) {
@@ -180,7 +181,7 @@ export const HouseForm = ({
         onSuccess: (res) => {
             console.log('Update Property Data', res);
             toast.success('Update Property Successfully');
-            navigate(`list/${item.propertyId}`);
+            navigate(`/list/${item.propertyId}`);
         },
         onError: (err) => {
             console.log('Update Property Error', err.response.data.error);
@@ -202,7 +203,6 @@ export const HouseForm = ({
             JSON.stringify(propertyRequest)
         );
 
-        formDataToSend.append('files', []);
         updateProperty({ propertyId: item.propertyId, formDataToSend });
     };
 

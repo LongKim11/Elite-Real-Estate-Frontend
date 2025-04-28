@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, Plus, X } from 'lucide-react';
+import { CalendarIcon, Plus, X, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -178,7 +178,7 @@ export const LandForm = ({
         onSuccess: (res) => {
             console.log('Update Property Data', res);
             toast.success('Update Property Successfully');
-            navigate(`list/${item.propertyId}`);
+            navigate(`/list/${item.propertyId}`);
         },
         onError: (err) => {
             console.log('Update Property Error', err.response.data.error);
@@ -193,14 +193,12 @@ export const LandForm = ({
 
         const propertyRequest = { ...formUpdateData };
 
-        console.log(formUpdateData);
-
         formDataToSend.append(
             'propertyRequest',
             JSON.stringify(propertyRequest)
         );
 
-        formDataToSend.append('files', []);
+      
         updateProperty({ propertyId: item.propertyId, formDataToSend });
     };
 

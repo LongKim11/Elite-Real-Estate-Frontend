@@ -180,7 +180,7 @@ export const ApartmentForm = ({
         onSuccess: (res) => {
             console.log('Update Property Data', res);
             toast.success('Update Property Successfully');
-            navigate(`list/${item.propertyId}`);
+            navigate(`/list/${item.propertyId}`);
         },
         onError: (err) => {
             console.log('Update Property Error', err.response.data.error);
@@ -195,14 +195,11 @@ export const ApartmentForm = ({
 
         const propertyRequest = { ...formUpdateData };
 
-        console.log(formUpdateData);
-
         formDataToSend.append(
             'propertyRequest',
             JSON.stringify(propertyRequest)
         );
 
-        formDataToSend.append('files', []);
         updateProperty({ propertyId: item.propertyId, formDataToSend });
     };
 

@@ -65,8 +65,6 @@ export const getSavedList = () => {
 export const editProperty = ({ propertyId, formDataToSend }) => {
     const token = getToken();
 
-    console.log('Id', propertyId);
-
     return api
         .put(`/properties?propertyId=${propertyId}`, formDataToSend, {
             headers: {
