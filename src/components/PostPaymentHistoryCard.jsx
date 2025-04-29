@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BanknoteArrowUp } from 'lucide-react';
+import { FileCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -78,19 +78,19 @@ export const PostPaymentHistoryCard = () => {
             <div className="rounded-lg border p-6 transition-shadow hover:shadow-md">
                 <div className="flex flex-col items-center text-center">
                     <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
-                        <BanknoteArrowUp className="text-amber-600" />
+                        <FileCheck className="text-amber-600" />
                     </div>
                     <h2 className="mb-2 text-xl font-semibold text-gray-800">
-                        Post Payments
+                        Listing Usage
                     </h2>
                     <p className="mb-4 text-gray-600">
-                        Manage your post payments
+                        View your posting activity using listing plans
                     </p>
                     <Button
                         onClick={() => setIsDialogOpen(true)}
                         className="w-full bg-amber-300 text-black hover:bg-amber-400"
                     >
-                        View Post Payments
+                        View Details
                     </Button>
                 </div>
             </div>

@@ -19,57 +19,6 @@ import { Loader2 } from 'lucide-react';
 import { getPaymentHistory } from '@/api/paymentService';
 import { format } from 'date-fns';
 
-// const paymentHistory = [
-//     {
-//         id: 1,
-//         date: '2023-05-15',
-//         amount: 50.0,
-//         type: 'Deposit',
-//         status: 'Completed',
-//         method: 'Credit Card'
-//     },
-//     {
-//         id: 2,
-//         date: '2023-05-10',
-//         amount: 25.0,
-//         type: 'Withdrawal',
-//         status: 'Completed',
-//         method: 'Bank Transfer'
-//     },
-//     {
-//         id: 3,
-//         date: '2023-04-28',
-//         amount: 100.0,
-//         type: 'Deposit',
-//         status: 'Completed',
-//         method: 'Credit Card'
-//     },
-//     {
-//         id: 4,
-//         date: '2023-04-15',
-//         amount: 35.0,
-//         type: 'Withdrawal',
-//         status: 'Pending',
-//         method: 'Bank Transfer'
-//     },
-//     {
-//         id: 5,
-//         date: '2023-04-05',
-//         amount: 75.0,
-//         type: 'Deposit',
-//         status: 'Completed',
-//         method: 'PayPal'
-//     },
-//     {
-//         id: 6,
-//         date: '2023-03-22',
-//         amount: 40.0,
-//         type: 'Withdrawal',
-//         status: 'Completed',
-//         method: 'Bank Transfer'
-//     }
-// ];
-
 export const FundHistoryCard = () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -93,16 +42,16 @@ export const FundHistoryCard = () => {
                         <CreditCard className="text-blue-600" />
                     </div>
                     <h2 className="mb-2 text-xl font-semibold text-gray-800">
-                        Payment History
+                        Transaction History
                     </h2>
                     <p className="mb-4 text-gray-600">
-                        View your deposits history
+                        Review your deposit and plan purchase activity
                     </p>
                     <Button
                         className="w-full bg-blue-500 hover:bg-blue-600"
                         onClick={() => setIsOpen(true)}
                     >
-                        View Payment History
+                        View Details
                     </Button>
                 </div>
             </div>
@@ -165,6 +114,13 @@ export const FundHistoryCard = () => {
                         </div>
 
                         <div className="space-y-3">
+                            {isLoading && (
+                                <div className="flex items-center justify-center gap-2">
+                                    <Loader2 className="h-10 w-10 animate-spin" />
+                                    Retriving Payment History...
+                                </div>
+                            )}
+
                             {paymentHistory?.data?.map((payment) => (
                                 <div
                                     key={payment.walletTopupsId}

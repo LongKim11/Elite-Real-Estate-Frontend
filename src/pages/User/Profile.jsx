@@ -50,7 +50,7 @@ export const Profile = () => {
             {isLoadingUserInfo || isLoadingOwnedPost || isLoadingSavedPost ? (
                 <Spinner />
             ) : (
-                <div className="flex h-full overflow-y-scroll pr-12 pl-32">
+                <div className="flex h-full overflow-y-scroll pr-12 pl-12">
                     {' '}
                     {/* Profile */}
                     <div className="flex-[3]">

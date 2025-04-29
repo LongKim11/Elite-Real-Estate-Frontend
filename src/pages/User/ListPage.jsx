@@ -41,7 +41,7 @@ export const ListPage = () => {
     };
 
     return (
-        <div className="flex h-full pr-12 pl-32">
+        <div className="flex h-full pr-12 pl-12">
             <div className="flex-[3]">
                 {isLoading ? (
                     <Spinner />
