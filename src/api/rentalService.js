@@ -19,8 +19,8 @@ export const updateScheduleStatus = (id, status) => {
     const token = getToken();
 
     return api
-        .patch(`/view-schedule/${id}/${status}`, {
-            header: { Authorization: `Bearer ${token}` }
+        .put(`/view-schedule/${id}/${status}`, null, {
+            headers: { Authorization: `Bearer ${token}` }
         })
         .then((res) => res.data);
 };
