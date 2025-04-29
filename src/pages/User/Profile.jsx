@@ -136,6 +136,7 @@ export const Profile = () => {
                                                 key={index}
                                                 item={item}
                                                 canUpdate={true}
+                                                canViewSchedule={true}
                                             />
                                         ))}
                                     {activeTab === 'savedList' &&

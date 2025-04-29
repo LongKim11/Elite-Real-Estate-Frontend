@@ -8,7 +8,7 @@ import {
     Bath,
     Bed,
     CheckSquare,
-    Calendar,
+    CalendarDays,
     DollarSign,
     Ruler,
     Clock,
@@ -31,6 +31,7 @@ import { useParams } from 'react-router-dom';
 import { Spinner } from '@/components/Spinner';
 import { RegisterObserverDialog } from '@/components/RegisterObserverDialog';
 import { Button } from '@/components/ui/button';
+import { PropertySchedule } from '@/components/PropertyScheduleDialog';
 
 export const PropertyDetails = () => {
     const { id } = useParams();
@@ -104,7 +105,10 @@ export const PropertyDetails = () => {
 
                         <div>
                             <div className="flex flex-wrap items-center gap-4 text-gray-700">
-                                <Calendar size={18} className="text-red-500" />
+                                <CalendarDays
+                                    size={18}
+                                    className="text-red-500"
+                                />
                                 <div>
                                     <div className="font-bold">
                                         Listed on:{' '}
@@ -585,6 +589,28 @@ export const PropertyDetails = () => {
                         )}
                     </div>
                 </div>
+                {isFollowed === '2' && (
+                    <div className="mt-6 overflow-hidden rounded-lg border border-red-200 bg-white shadow-sm">
+                        <div className="bg-gradient-to-r from-red-50 to-red-100 px-6 py-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <PropertySchedule
+                                        propertyId={property.propertyId}
+                                    />
+                                    <h3 className="font-semibold text-gray-800">
+                                        Visit Schedule
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="p-4">
+                            <p className="text-sm text-gray-600">
+                                View and manage all scheduled house visits for
+                                this property.
+                            </p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

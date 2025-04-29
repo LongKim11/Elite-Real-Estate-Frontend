@@ -9,8 +9,9 @@ import {
     Home,
     FilePen
 } from 'lucide-react';
+import { PropertySchedule } from './PropertyScheduleDialog';
 
-export const Card = ({ item, canUpdate = false }) => {
+export const Card = ({ item, canUpdate = false, canViewSchedule = false }) => {
     const {
         propertyId,
         title,
@@ -119,16 +120,22 @@ export const Card = ({ item, canUpdate = false }) => {
                             ))}
                     </div>
 
-                    {/* Edit Button */}
-                    {canUpdate && (
-                        <Link
-                            to={`/edit/${propertyId}`}
-                            className="inline-flex items-center justify-center rounded-full p-2 text-blue-500 transition hover:bg-blue-100 hover:text-blue-500"
-                            title="Edit Post"
-                        >
-                            <FilePen className="h-5 w-5" />
-                        </Link>
-                    )}
+                    <div>
+                        {/* Edit Button */}
+                        {canUpdate && (
+                            <Link
+                                to={`/edit/${propertyId}`}
+                                className="inline-flex items-center justify-center rounded-full p-2 text-blue-500 transition hover:bg-blue-100 hover:text-blue-500"
+                            >
+                                <FilePen className="h-5 w-5" />
+                            </Link>
+                        )}
+
+                        {/* View Schedule Button */}
+                        {canViewSchedule && (
+                            <PropertySchedule propertyId={propertyId} />
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
