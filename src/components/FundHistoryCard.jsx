@@ -14,60 +14,76 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select';
+import { useQuery } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
+import { getPaymentHistory } from '@/api/paymentService';
+import { format } from 'date-fns';
 
-const paymentHistory = [
-    {
-        id: 1,
-        date: '2023-05-15',
-        amount: 50.0,
-        type: 'Deposit',
-        status: 'Completed',
-        method: 'Credit Card'
-    },
-    {
-        id: 2,
-        date: '2023-05-10',
-        amount: 25.0,
-        type: 'Withdrawal',
-        status: 'Completed',
-        method: 'Bank Transfer'
-    },
-    {
-        id: 3,
-        date: '2023-04-28',
-        amount: 100.0,
-        type: 'Deposit',
-        status: 'Completed',
-        method: 'Credit Card'
-    },
-    {
-        id: 4,
-        date: '2023-04-15',
-        amount: 35.0,
-        type: 'Withdrawal',
-        status: 'Pending',
-        method: 'Bank Transfer'
-    },
-    {
-        id: 5,
-        date: '2023-04-05',
-        amount: 75.0,
-        type: 'Deposit',
-        status: 'Completed',
-        method: 'PayPal'
-    },
-    {
-        id: 6,
-        date: '2023-03-22',
-        amount: 40.0,
-        type: 'Withdrawal',
-        status: 'Completed',
-        method: 'Bank Transfer'
-    }
-];
+// const paymentHistory = [
+//     {
+//         id: 1,
+//         date: '2023-05-15',
+//         amount: 50.0,
+//         type: 'Deposit',
+//         status: 'Completed',
+//         method: 'Credit Card'
+//     },
+//     {
+//         id: 2,
+//         date: '2023-05-10',
+//         amount: 25.0,
+//         type: 'Withdrawal',
+//         status: 'Completed',
+//         method: 'Bank Transfer'
+//     },
+//     {
+//         id: 3,
+//         date: '2023-04-28',
+//         amount: 100.0,
+//         type: 'Deposit',
+//         status: 'Completed',
+//         method: 'Credit Card'
+//     },
+//     {
+//         id: 4,
+//         date: '2023-04-15',
+//         amount: 35.0,
+//         type: 'Withdrawal',
+//         status: 'Pending',
+//         method: 'Bank Transfer'
+//     },
+//     {
+//         id: 5,
+//         date: '2023-04-05',
+//         amount: 75.0,
+//         type: 'Deposit',
+//         status: 'Completed',
+//         method: 'PayPal'
+//     },
+//     {
+//         id: 6,
+//         date: '2023-03-22',
+//         amount: 40.0,
+//         type: 'Withdrawal',
+//         status: 'Completed',
+//         method: 'Bank Transfer'
+//     }
+// ];
 
 export const FundHistoryCard = () => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const { data: paymentHistory, isLoading } = useQuery({
+        queryKey: ['getPaymentHistory'],
+        queryFn: getPaymentHistory,
+        onSuccess: (res) => {
+            console.log('Payment History', res);
+        },
+        onError: (err) => {
+            console.log('Payment History Error', err.response.data.error);
+        },
+        enabled: isOpen
+    });
 
     return (
         <>
@@ -80,7 +96,7 @@ export const FundHistoryCard = () => {
                         Payment History
                     </h2>
                     <p className="mb-4 text-gray-600">
-                        View your deposits and transaction history
+                        View your deposits history
                     </p>
                     <Button
                         className="w-full bg-blue-500 hover:bg-blue-600"
@@ -149,43 +165,33 @@ export const FundHistoryCard = () => {
                         </div>
 
                         <div className="space-y-3">
-                            {paymentHistory.map((payment) => (
+                            {paymentHistory?.data?.map((payment) => (
                                 <div
-                                    key={payment.id}
+                                    key={payment.walletTopupsId}
                                     className="flex items-center justify-between rounded-md border p-3 hover:bg-gray-50"
                                 >
-                                    <div className="flex flex-col">
-                                        <span className="font-medium text-gray-800">
-                                            {payment.type}
+                                    <div className="flex flex-col space-y-2">
+                                        <span className="font-semibold text-green-700">
+                                            Deposit
                                         </span>
                                         <span className="text-sm text-gray-500">
-                                            {payment.date}
+                                            Date:{' '}
+                                            {format(
+                                                new Date(payment.createdTime),
+                                                'dd/MM/yyyy HH:mm'
+                                            )}
                                         </span>
-                                        <span className="text-xs text-gray-500">
-                                            Method: {payment.method}
+                                        <span className="text-sm text-gray-500">
+                                            Method: VN Pay
                                         </span>
                                     </div>
                                     <div className="flex flex-col items-end gap-1">
-                                        <span
-                                            className={`font-semibold ${
-                                                payment.type === 'Deposit'
-                                                    ? 'text-green-600'
-                                                    : 'text-red-600'
-                                            }`}
-                                        >
-                                            {payment.type === 'Deposit'
-                                                ? '+'
-                                                : '-'}
-                                            ${payment.amount.toFixed(2)}
+                                        <span className="text-green-600">
+                                            + ${payment.amount}
                                         </span>
-                                        <span
-                                            className={`rounded-full px-2 py-1 text-xs ${
-                                                payment.status === 'Completed'
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : 'bg-yellow-100 text-yellow-800'
-                                            }`}
-                                        >
-                                            {payment.status}
+                                        <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">
+                                            {payment.status === true &&
+                                                'Success'}
                                         </span>
                                     </div>
                                 </div>
@@ -194,12 +200,7 @@ export const FundHistoryCard = () => {
                     </div>
 
                     <div className="mt-6 flex justify-end">
-                        <Button
-                            variant="outline"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Close
-                        </Button>
+                        <Button onClick={() => setIsOpen(false)}>Close</Button>
                     </div>
                 </DialogContent>
             </Dialog>

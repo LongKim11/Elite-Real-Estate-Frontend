@@ -10,3 +10,13 @@ export const createPayment = (amount) => {
         })
         .then((res) => res.data);
 };
+
+export const getPaymentHistory = () => {
+    const token = getToken();
+
+    return api
+        .get('/payment/phone', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};
