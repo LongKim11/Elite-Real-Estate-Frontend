@@ -11,6 +11,7 @@ import { AddPostPage } from '@/pages/User/AddPostPage';
 import { ProtectedRoutes } from './ProtectedRoutes';
 import { PaymentSuccessPage } from '@/pages/User/PaymentSuccessPage';
 import { EditPropertyPage } from '@/pages/User/EditPropertyPage';
+import { ListingPlanPage } from '@/pages/User/ListingPlanPage';
 
 export const AppRouter = createBrowserRouter([
     {
@@ -46,7 +47,22 @@ export const AppRouter = createBrowserRouter([
                     </ProtectedRoutes>
                 )
             },
-            { path: 'payment-success', element: <PaymentSuccessPage /> },
+            {
+                path: 'payment-success',
+                element: (
+                    <ProtectedRoutes>
+                        <PaymentSuccessPage />
+                    </ProtectedRoutes>
+                )
+            },
+            {
+                path: 'listing-plan',
+                element: (
+                    <ProtectedRoutes>
+                        <ListingPlanPage />
+                    </ProtectedRoutes>
+                )
+            },
             {
                 path: '*',
                 element: <NotFoundPage />
