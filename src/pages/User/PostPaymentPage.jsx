@@ -14,7 +14,8 @@ import {
     Bell,
     Settings,
     LayoutDashboard,
-    Plus
+    Plus,
+    Wallet
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -36,6 +37,7 @@ import { createProperty } from '@/api/listingService';
 import { getValidListingPlanByUser } from '@/api/saleService';
 import { postPayment } from '@/api/saleService';
 import { Spinner } from '@/components/Spinner';
+import { getMe } from '@/api/authService';
 
 export const PostPaymentPage = ({ propertyType, formDataToSend }) => {
     const [isSuccess, setIsSuccess] = useState(false);
@@ -43,12 +45,25 @@ export const PostPaymentPage = ({ propertyType, formDataToSend }) => {
     const [selectedTier, setSelectedTier] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState('existingPlan');
     const [createdPropertyID, setCreatedPropertyID] = useState('');
-
     const directPaymentPrices = {
         VIP_GOLD: 100,
         VIP_SILVER: 50,
         REGULAR: 20
     };
+
+    const { data: userInfo, isLoading: isLoadingUserInfo } = useQuery({
+        queryKey: ['getMe'],
+        queryFn: getMe,
+        onSuccess: (data) => {
+            console.log('Get Me data:', data);
+        },
+        onError: (err) => {
+            console.log('Get me error', err.response.data.error);
+        },
+        enabled: paymentMethod === 'newPayment'
+    });
+
+    const userBalance = userInfo?.data?.balance;
 
     const { mutate: createPropertyFunc, isLoading: isCreating } = useMutation({
         mutationFn: createProperty
@@ -76,7 +91,8 @@ export const PostPaymentPage = ({ propertyType, formDataToSend }) => {
                 'Get Valid Listing Plans Error',
                 err.response.data.error
             );
-        }
+        },
+        enabled: paymentMethod === 'existingPlan'
     });
 
     const hasValidPlans = listingPlans?.data?.some(
@@ -161,6 +177,10 @@ export const PostPaymentPage = ({ propertyType, formDataToSend }) => {
             default:
                 return false;
         }
+    };
+
+    const isSufficientFund = () => {
+        return userBalance >= directPaymentPrices[selectedTier] * 1000;
     };
 
     if (isSuccess) {
@@ -583,8 +603,80 @@ export const PostPaymentPage = ({ propertyType, formDataToSend }) => {
                         {/* Pay Directly Tab */}
                         <TabsContent
                             value="newPayment"
-                            className="space-y-4 pt-4"
+                            className="space-y-6 pt-4"
                         >
+                            {/* User Balance Section */}
+                            {isLoadingUserInfo ? (
+                                <div className="flex items-center justify-center gap-2">
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                    Loading User Account Balance...
+                                </div>
+                            ) : (
+                                <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+                                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <div className="rounded-full bg-blue-100 p-2">
+                                                <Wallet className="h-5 w-5 text-blue-600" />
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-blue-700">
+                                                    Your Current Balance
+                                                </p>
+                                                <p className="text-xl font-bold text-gray-800">
+                                                    {userBalance?.toLocaleString() ||
+                                                        '0'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <AddFundDialog />
+                                        </div>
+                                    </div>
+
+                                    {selectedTier && (
+                                        <div className="mt-3 border-t border-blue-200 pt-3">
+                                            <div className="flex items-center justify-between text-sm">
+                                                <span className="text-blue-700">
+                                                    Selected tier cost:
+                                                </span>
+                                                <span className="font-medium text-gray-800">
+                                                    {(
+                                                        directPaymentPrices[
+                                                            selectedTier
+                                                        ] * 1000
+                                                    ).toLocaleString()}
+                                                </span>
+                                            </div>
+                                            <div className="mt-1.5 flex items-center justify-between text-sm">
+                                                <span className="text-blue-700">
+                                                    Remaining balance after
+                                                    purchase:
+                                                </span>
+                                                <span
+                                                    className={`font-medium ${
+                                                        (userBalance || 0) <
+                                                        directPaymentPrices[
+                                                            selectedTier
+                                                        ] *
+                                                            1000
+                                                            ? 'text-red-600'
+                                                            : 'text-green-600'
+                                                    }`}
+                                                >
+                                                    {(
+                                                        (userBalance || 0) -
+                                                        directPaymentPrices[
+                                                            selectedTier
+                                                        ] *
+                                                            1000
+                                                    ).toLocaleString()}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                             <div>
                                 <h3 className="mb-3 text-lg font-medium">
                                     Select Listing Tier
@@ -700,7 +792,9 @@ export const PostPaymentPage = ({ propertyType, formDataToSend }) => {
                             isPaying ||
                             (paymentMethod === 'existingPlan' &&
                                 (!selectedPlan || !selectedTier)) ||
-                            (paymentMethod === 'newPayment' && !selectedTier)
+                            (paymentMethod === 'newPayment' && !selectedTier) ||
+                            (paymentMethod === 'newPayment' &&
+                                !isSufficientFund())
                         }
                         onClick={handleSubmit}
                     >
