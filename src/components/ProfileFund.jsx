@@ -45,7 +45,8 @@ export const ProfileFund = ({ userInfo }) => {
                                 Current Balance
                             </p>
                             <p className="text-3xl font-bold text-gray-800">
-                                {userInfo?.data.balance || '0.00'}
+                                {userInfo?.data.balance.toLocaleString() ||
+                                    '0.00'}
                             </p>
                         </div>
                     </div>
@@ -89,7 +90,7 @@ export const ProfileFund = ({ userInfo }) => {
                                                         </h3>
                                                     </div>
                                                     <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-medium text-white">
-                                                        {plan.amountPaid}K
+                                                        {plan.amountPaid.toLocaleString()}
                                                     </span>
                                                 </div>
                                             </div>

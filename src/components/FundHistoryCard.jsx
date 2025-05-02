@@ -17,12 +17,14 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { getPaymentHistory } from '@/api/paymentService';
+import { getAllListingPlanByUser } from '@/api/saleService';
 import { format } from 'date-fns';
 
 export const FundHistoryCard = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [selectedType, setSelectedType] = useState('deposit');
 
-    const { data: paymentHistory, isLoading } = useQuery({
+    const { data: paymentHistory, isLoading: isLoadingPayment } = useQuery({
         queryKey: ['getPaymentHistory'],
         queryFn: getPaymentHistory,
         onSuccess: (res) => {
@@ -30,6 +32,18 @@ export const FundHistoryCard = () => {
         },
         onError: (err) => {
             console.log('Payment History Error', err.response.data.error);
+        },
+        enabled: isOpen
+    });
+
+    const { data: purchaseHistory, isLoading: isLoadingPurchase } = useQuery({
+        queryKey: ['getAllListingPlan'],
+        queryFn: getAllListingPlanByUser,
+        onSuccess: (res) => {
+            console.log('Get All Listing Plan', res);
+        },
+        onError: (err) => {
+            console.log('Get All Listing Plan Error', err.response.data.error);
         },
         enabled: isOpen
     });
@@ -67,19 +81,21 @@ export const FundHistoryCard = () => {
                     <div className="mt-4">
                         <div className="mb-4 flex items-center justify-between">
                             <div className="flex gap-2">
-                                <Select>
+                                <Select
+                                    onValueChange={(value) =>
+                                        setSelectedType(value)
+                                    }
+                                    value={selectedType}
+                                >
                                     <SelectTrigger className="w-[140px]">
-                                        <SelectValue placeholder="All Types" />
+                                        <SelectValue placeholder="Select type" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">
-                                            All Types
-                                        </SelectItem>
                                         <SelectItem value="deposit">
                                             Deposits
                                         </SelectItem>
-                                        <SelectItem value="withdrawal">
-                                            Withdrawals
+                                        <SelectItem value="purchase">
+                                            Purchase
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
@@ -114,44 +130,104 @@ export const FundHistoryCard = () => {
                         </div>
 
                         <div className="space-y-3">
-                            {isLoading && (
+                            {isLoadingPayment || isLoadingPurchase ? (
                                 <div className="flex items-center justify-center gap-2">
                                     <Loader2 className="h-10 w-10 animate-spin" />
-                                    Retriving Payment History...
+                                    Retrieving Payment History...
                                 </div>
-                            )}
+                            ) : (
+                                <>
+                                    {/* Deposits */}
+                                    {selectedType === 'deposit' &&
+                                        paymentHistory?.data?.map((payment) => (
+                                            <div
+                                                key={payment.walletTopupsId}
+                                                className="flex items-center justify-between rounded-md border p-3 hover:bg-gray-50"
+                                            >
+                                                <div className="flex flex-col space-y-2">
+                                                    <span className="font-semibold text-green-700">
+                                                        Deposit
+                                                    </span>
+                                                    <span className="text-sm text-gray-500">
+                                                        Date:{' '}
+                                                        {format(
+                                                            new Date(
+                                                                payment.createdTime
+                                                            ),
+                                                            'dd/MM/yyyy HH:mm'
+                                                        )}
+                                                    </span>
+                                                    <span className="text-sm text-gray-500">
+                                                        Method: VN Pay
+                                                    </span>
+                                                </div>
+                                                <div className="flex flex-col items-end gap-1">
+                                                    <span className="text-green-600">
+                                                        + $
+                                                        {payment.amount.toLocaleString()}
+                                                    </span>
+                                                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">
+                                                        {payment.status ===
+                                                            true && 'Success'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ))}
 
-                            {paymentHistory?.data?.map((payment) => (
-                                <div
-                                    key={payment.walletTopupsId}
-                                    className="flex items-center justify-between rounded-md border p-3 hover:bg-gray-50"
-                                >
-                                    <div className="flex flex-col space-y-2">
-                                        <span className="font-semibold text-green-700">
-                                            Deposit
-                                        </span>
-                                        <span className="text-sm text-gray-500">
-                                            Date:{' '}
-                                            {format(
-                                                new Date(payment.createdTime),
-                                                'dd/MM/yyyy HH:mm'
-                                            )}
-                                        </span>
-                                        <span className="text-sm text-gray-500">
-                                            Method: VN Pay
-                                        </span>
-                                    </div>
-                                    <div className="flex flex-col items-end gap-1">
-                                        <span className="text-green-600">
-                                            + ${payment.amount}
-                                        </span>
-                                        <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">
-                                            {payment.status === true &&
-                                                'Success'}
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
+                                    {/* Purchases */}
+                                    {selectedType === 'purchase' &&
+                                        purchaseHistory?.data?.map(
+                                            (purchase) => (
+                                                <div
+                                                    key={purchase.id}
+                                                    className="flex items-center justify-between rounded-md border p-3 hover:bg-gray-50"
+                                                >
+                                                    <div className="flex flex-col space-y-2">
+                                                        <span className="font-semibold text-blue-700">
+                                                            Purchase
+                                                        </span>
+                                                        <span className="text-sm text-gray-500">
+                                                            Date:{' '}
+                                                            {format(
+                                                                new Date(
+                                                                    purchase.createdAt
+                                                                ),
+                                                                'dd/MM/yyyy HH:mm'
+                                                            )}
+                                                        </span>
+                                                        <span className="text-sm text-gray-500">
+                                                            Plan:{' '}
+                                                            {
+                                                                purchase.packetName
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex flex-col items-end gap-1">
+                                                        <span className="text-blue-600">
+                                                            - $
+                                                            {purchase.amountPaid.toLocaleString()}
+                                                        </span>
+                                                        <span className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800">
+                                                            Success
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )}
+
+                                    {paymentHistory?.data?.length === 0 &&
+                                        purchaseHistory?.length === 0 && (
+                                            <div className="flex flex-col items-center justify-center py-8 text-center">
+                                                <div className="rounded-full bg-gray-100 p-3">
+                                                    <CreditCard className="h-6 w-6 text-gray-400" />
+                                                </div>
+                                                <p className="mt-2 text-gray-500">
+                                                    No transaction history found
+                                                </p>
+                                            </div>
+                                        )}
+                                </>
+                            )}
                         </div>
                     </div>
 

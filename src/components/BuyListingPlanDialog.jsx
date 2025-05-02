@@ -42,8 +42,6 @@ export const BuyListingPlanDialog = ({
         });
     };
 
-    console.log(plan);
-
     if (!plan) return null;
 
     return (
@@ -138,7 +136,7 @@ export const BuyListingPlanDialog = ({
                                     <span>Your Balance:</span>
                                 </div>
                                 <span className="text-lg font-bold">
-                                    {userBalance}
+                                    {userBalance.toLocaleString()}
                                 </span>
                             </div>
 
@@ -152,7 +150,7 @@ export const BuyListingPlanDialog = ({
                                     </p>
                                 </div>
                                 <span className="text-primary text-lg font-bold">
-                                    {plan.price * 1000}
+                                    {(plan.price * 1000).toLocaleString()}
                                 </span>
                             </div>
 
@@ -161,7 +159,10 @@ export const BuyListingPlanDialog = ({
                                 <span
                                     className={`text-lg font-bold ${!hasSufficientFunds ? 'text-red-500' : ''}`}
                                 >
-                                    {userBalance - plan.price * 1000}
+                                    {(
+                                        userBalance -
+                                        plan.price * 1000
+                                    ).toLocaleString()}
                                 </span>
                             </div>
 
