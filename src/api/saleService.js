@@ -40,3 +40,13 @@ export const postPayment = (data) => {
         })
         .then((res) => res.data);
 };
+
+export const getPostPaymentHistory = () => {
+    const token = getToken();
+
+    return api
+        .get('/post-payments/user', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};
