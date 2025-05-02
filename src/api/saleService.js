@@ -30,3 +30,13 @@ export const getValidListingPlanByUser = () => {
         })
         .then((res) => res.data);
 };
+
+export const postPayment = (data) => {
+    const token = getToken();
+
+    return api
+        .post('/post-payments/handle', data, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};
