@@ -3,9 +3,6 @@ import { Outlet } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 
 export const AppLayout = () => {
-
-    
-
     return (
         <div className="mx-auto flex h-screen flex-col">
             <div>

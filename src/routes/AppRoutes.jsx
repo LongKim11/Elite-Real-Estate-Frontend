@@ -12,6 +12,13 @@ import { ProtectedRoutes } from './ProtectedRoutes';
 import { PaymentSuccessPage } from '@/pages/User/PaymentSuccessPage';
 import { EditPropertyPage } from '@/pages/User/EditPropertyPage';
 import { ListingPlanPage } from '@/pages/User/ListingPlanPage';
+import { AdminLayout } from '@/layout/AdminLayout';
+import { DashboardPage } from '@/pages/Admin/DashboardPage';
+import { ListingManagementPage } from '@/pages/Admin/ListingManagementPage';
+import { UserMangamentPage } from '@/pages/Admin/UserMangamentPage';
+import { PaymentMangementPage } from '@/pages/Admin/PaymentMangementPage';
+import { RentalManagementPage } from '@/pages/Admin/RentalManagementPage';
+import { SalesMangementPage } from '@/pages/Admin/SalesMangementPage';
 
 export const AppRouter = createBrowserRouter([
     {
@@ -67,6 +74,21 @@ export const AppRouter = createBrowserRouter([
                 path: '*',
                 element: <NotFoundPage />
             }
+        ]
+    },
+    {
+        path: '/admin',
+        element: <AdminLayout />,
+        children: [
+            {
+                path: '',
+                element: <DashboardPage />
+            },
+            { path: 'listing-management', element: <ListingManagementPage /> },
+            { path: 'user-management', element: <UserMangamentPage /> },
+            { path: 'payment-management', element: <PaymentMangementPage /> },
+            { path: 'rental-management', element: <RentalManagementPage /> },
+            { path: 'sales-management', element: <SalesMangementPage /> }
         ]
     }
 ]);
