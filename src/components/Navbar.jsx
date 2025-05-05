@@ -4,6 +4,7 @@ import useAuthStore from '@/store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import { removeToken } from '@/utils/auth';
 import { toast } from 'sonner';
+import { ArrowLeft } from 'lucide-react';
 
 export const Navbar = () => {
     const [open, setOpen] = useState(false);
@@ -62,7 +63,7 @@ export const Navbar = () => {
                 </Link>
             </div>
             <div className="flex h-full flex-[2] items-center justify-end bg-transparent">
-                {user ? (
+                {user && user.role !== 'Admin' ? (
                     <div className="flex items-center font-bold">
                         <Link to={'/profile'}>
                             <img
@@ -78,6 +79,13 @@ export const Navbar = () => {
                             Log out
                         </button>
                     </div>
+                ) : user.role === 'Admin' ? (
+                    <button
+                        className="mx-5 flex items-center gap-2 bg-[#fece51] px-6 py-3 font-semibold transition-all duration-200 hover:scale-105"
+                        onClick={() => navigate('/admin/listing-management')}
+                    >
+                        <ArrowLeft /> Back
+                    </button>
                 ) : (
                     <>
                         {' '}

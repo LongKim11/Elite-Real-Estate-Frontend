@@ -14,7 +14,7 @@ export const login = async (data) => {
 
     setToken(token);
 
-    useAuthStore.getState().setUser({ id, name });
+    useAuthStore.getState().setUser({ id, name, role });
 
     return { id, message, role };
 };

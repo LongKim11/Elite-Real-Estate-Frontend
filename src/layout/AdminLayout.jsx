@@ -214,7 +214,7 @@ export const AdminLayout = () => {
                     <SidebarTrigger />
                     <div className="font-semibold">Admin Center</div>
                 </header>
-                <main className="flex-1 p-4 md:p-6">
+                <main className="relative h-[calc(100vh-4rem)] overflow-hidden">
                     <Outlet />
                 </main>
             </SidebarInset>

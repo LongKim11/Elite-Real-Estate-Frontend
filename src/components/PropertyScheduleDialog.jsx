@@ -110,13 +110,14 @@ export const PropertySchedule = ({ propertyId }) => {
                     </DialogDescription>
                 </DialogHeader>
 
+                {isLoading && (
+                    <div className="mt-10 flex items-center justify-center gap-2">
+                        <Loader2 className="h-6 w-6 animate-spin" />
+                        Loading Schedules...
+                    </div>
+                )}
+
                 <div className="max-h-[60vh] overflow-y-auto pr-2">
-                    {isLoading && (
-                        <div className="flex items-center justify-center gap-2">
-                            <Loader2 className="h-10 w-10 animate-spin" />
-                            Loading Schedules...
-                        </div>
-                    )}
                     {schedules?.map((schedule) => (
                         <div
                             key={schedule.id}
@@ -158,12 +159,17 @@ export const PropertySchedule = ({ propertyId }) => {
                                             <Clock className="h-4 w-4 text-amber-600" />
                                         </div>
                                         <span className="font-medium text-gray-700">
-                                            {format(
-                                                schedule.scheduledAt,
-                                                'PPP'
-                                            )}{' '}
+                                            {schedule.scheduledAt !== null &&
+                                                format(
+                                                    schedule.scheduledAt,
+                                                    'PPP'
+                                                )}{' '}
                                             at{' '}
-                                            {format(schedule.scheduledAt, 'p')}
+                                            {schedule.scheduledAt !== null &&
+                                                format(
+                                                    schedule.scheduledAt,
+                                                    'p'
+                                                )}
                                         </span>
                                     </div>
 

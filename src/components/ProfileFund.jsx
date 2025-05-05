@@ -68,7 +68,7 @@ export const ProfileFund = ({ userInfo }) => {
                     </div>
                     {isLoading ? (
                         <div className="flex items-center justify-center gap-2">
-                            <Loader2 className="h-8 w-8 animate-spin" />
+                            <Loader2 className="h-6 w-6 animate-spin" />
                             Loading your listing plans...
                         </div>
                     ) : (

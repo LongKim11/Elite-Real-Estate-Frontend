@@ -46,7 +46,7 @@ export const ListPage = () => {
                 {isLoading ? (
                     <Spinner />
                 ) : (
-                    <div className="mb-5 flex h-full flex-col gap-12 overflow-y-scroll pr-8 pb-5">
+                    <div className="my-5 flex h-full flex-col gap-12 overflow-y-scroll pr-8 pb-5">
                         <ListFilter
                             filters={filters}
                             onChange={setFilters}

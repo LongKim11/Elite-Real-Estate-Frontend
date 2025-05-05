@@ -21,7 +21,7 @@ export const ListFilter = ({ filters, onChange, onFilter }) => {
     };
 
     return (
-        <div className="mt-5 w-full">
+        <div className="w-full">
             <h2 className="mb-5 text-2xl font-semibold">Search results for</h2>
 
             <form onSubmit={handleSubmit} className="space-y-5">

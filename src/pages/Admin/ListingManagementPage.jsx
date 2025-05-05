@@ -1,5 +1,81 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Spinner } from '@/components/Spinner';
+import { getListing } from '@/api/listingService';
+import { useQuery } from '@tanstack/react-query';
+import { ListFilter } from '@/components/ListFilter';
+import { Card } from '@/components/Card';
 
 export const ListingManagementPage = () => {
-    return <div>ListingManagementPage</div>;
+    const [queryString, setQueryString] = useState('');
+    const [filters, setFilters] = useState({
+        fullAddress: '',
+        transactionType: '',
+        category: '',
+        province: '',
+        district: '',
+        minPrice: '',
+        maxPrice: ''
+    });
+
+    const { data: listing, isLoading } = useQuery({
+        queryKey: ['getListing', queryString],
+        queryFn: () => getListing(queryString),
+        onSuccess: (res) => {
+            console.log('Listing Response', res);
+        },
+        onError: (err) => {
+            console.log('Listing Error', err.response?.data?.error);
+        }
+    });
+
+    const buildQueryString = (filters) => {
+        return Object.entries(filters)
+            .filter(([_, value]) => value !== '')
+            .map(([key, value]) => `${key}=${value}`)
+            .join('&');
+    };
+
+    const handleFilter = () => {
+        setQueryString(buildQueryString(filters));
+    };
+
+    if (isLoading)
+        return (
+            <div className="flex h-full items-center justify-center">
+                <Spinner />
+            </div>
+        );
+
+    return (
+        <div className="absolute inset-0 overflow-auto">
+            <div className="px-4 pt-6 pb-4">
+                <ListFilter
+                    filters={filters}
+                    onChange={setFilters}
+                    onFilter={handleFilter}
+                />
+            </div>
+
+            <div className="p-4">
+                <div className="flex flex-col gap-5 pb-10">
+                    {listing?.data?.map((item, index) => (
+                        <Card
+                            key={index}
+                            item={item}
+                            canUpdate={true}
+                            canViewSchedule={true}
+                        />
+                    ))}
+
+                    {listing?.data === null && (
+                        <div className="flex h-[200px] items-center justify-center">
+                            <span className="text-xl font-semibold">
+                                No Property Found
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
 };
