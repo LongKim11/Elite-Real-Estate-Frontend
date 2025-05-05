@@ -9,7 +9,7 @@ import {
     LogOut,
     Settings,
     UserPen,
-    LayoutDashboard,
+    Gauge,
     Bell,
     Activity
 } from 'lucide-react';
@@ -30,8 +30,23 @@ import {
     SidebarRail,
     SidebarTrigger
 } from '@/components/ui/sidebar';
+import useAuthStore from '@/store/useAuthStore';
+import { useNavigate } from 'react-router-dom';
+import { removeToken } from '@/utils/auth';
+import { toast } from 'sonner';
 
 export const AdminLayout = () => {
+    const adminInfo = useAuthStore((state) => state.user) || false;
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        removeToken();
+        useAuthStore.getState().clearUser();
+        toast.success('Logout successfully');
+        navigate('/sign-in');
+    };
+
     return (
         <SidebarProvider>
             <Sidebar>
@@ -62,6 +77,14 @@ export const AdminLayout = () => {
                         <SidebarGroupLabel>Overview</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
+                                <SidebarMenuItem>
+                                    <SidebarMenuButton asChild>
+                                        <Link to={'/admin'}>
+                                            <Gauge className="mr-2" />
+                                            <span>Dashboard</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
                                 <SidebarMenuItem>
                                     <SidebarMenuButton asChild>
                                         <Link to={'#'}>
@@ -169,13 +192,16 @@ export const AdminLayout = () => {
                                 />
                                 <div className="flex flex-col text-left">
                                     <span className="text-sm font-semibold">
-                                        John Doe
+                                        {adminInfo.name}
                                     </span>
                                     <span className="text-muted-foreground text-xs">
-                                        johndoe@gmail.com
+                                        Head Manager
                                     </span>
                                 </div>
-                                <LogOut className="ml-auto cursor-pointer text-red-600 hover:text-red-700" />
+                                <LogOut
+                                    className="ml-auto cursor-pointer text-red-600 hover:text-red-700"
+                                    onClick={handleLogout}
+                                />
                             </div>
                         </SidebarMenuItem>
                     </SidebarMenu>
