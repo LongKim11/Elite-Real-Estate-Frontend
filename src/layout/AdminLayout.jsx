@@ -212,7 +212,7 @@ export const AdminLayout = () => {
             <SidebarInset>
                 <header className="bg-background flex h-14 items-center gap-4 border-b px-4 lg:h-16">
                     <SidebarTrigger />
-                    <div className="font-semibold">Admin Dashboard</div>
+                    <div className="font-semibold">Admin Center</div>
                 </header>
                 <main className="flex-1 p-4 md:p-6">
                     <Outlet />

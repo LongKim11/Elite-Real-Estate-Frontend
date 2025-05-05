@@ -27,3 +27,22 @@ export const getMe = () => {
         })
         .then((res) => res.data);
 };
+
+export const getAllUsers = () => {
+    const token = getToken();
+    return api
+        .get('/auth/admin/get-all-users', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};
+
+export const deleteUser = (id) => {
+    const token = getToken();
+
+    return api
+        .delete(`/auth/admin/user/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};
