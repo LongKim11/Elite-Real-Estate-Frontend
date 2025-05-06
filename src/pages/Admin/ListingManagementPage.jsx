@@ -4,6 +4,7 @@ import { getListing } from '@/api/listingService';
 import { useQuery } from '@tanstack/react-query';
 import { ListFilter } from '@/components/ListFilter';
 import { Card } from '@/components/Card';
+import { Map } from '@/components/Map';
 
 export const ListingManagementPage = () => {
     const [queryString, setQueryString] = useState('');
@@ -48,12 +49,17 @@ export const ListingManagementPage = () => {
 
     return (
         <div className="absolute inset-0 overflow-auto">
-            <div className="px-4 pt-6 pb-4">
-                <ListFilter
-                    filters={filters}
-                    onChange={setFilters}
-                    onFilter={handleFilter}
-                />
+            <div className="flex h-[370px] gap-x-11 px-4 pt-6 pb-4">
+                <div className="w-1/2">
+                    <ListFilter
+                        filters={filters}
+                        onChange={setFilters}
+                        onFilter={handleFilter}
+                    />
+                </div>
+                <div className="h-full w-1/2">
+                    <Map items={listing?.data ?? []} />
+                </div>
             </div>
 
             <div className="p-4">

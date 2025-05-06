@@ -186,7 +186,7 @@ export const AdminLayout = () => {
                         <SidebarMenuItem>
                             <div className="flex w-full items-center gap-3">
                                 <img
-                                    src="/user-default.png"
+                                    src="/admin.png"
                                     alt="User avatar"
                                     className="h-10 w-10 rounded-full border-2 border-[#fece51]"
                                 />
