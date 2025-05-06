@@ -20,3 +20,13 @@ export const getPaymentHistory = () => {
         })
         .then((res) => res.data);
 };
+
+export const getAllPayment = () => {
+    const token = getToken();
+
+    return api
+        .get('/payment', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};

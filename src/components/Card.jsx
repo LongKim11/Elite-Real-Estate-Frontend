@@ -34,7 +34,7 @@ export const Card = ({
     } = item;
 
     return (
-        <div className="group flex flex-col gap-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:border-amber-200 hover:shadow-md sm:flex-row">
+        <div className="group flex flex-col gap-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-md sm:flex-row">
             {/* Image Container with badge */}
             <div className="relative h-[200px] w-full flex-shrink-0 overflow-hidden rounded-lg sm:w-[300px]">
                 <Link to={`/list/${propertyId}`} className="block h-full">
@@ -49,7 +49,9 @@ export const Card = ({
                 </Link>
 
                 {/* Status Badge */}
-                <div className="absolute top-3 left-3 z-20 rounded-full bg-amber-500 px-3 py-1 text-xs font-semibold text-white">
+                <div
+                    className={`absolute top-3 left-3 z-20 rounded-full ${typeTransaction === 'sale' ? 'bg-green-500' : 'bg-blue-500'} px-3 py-1 text-xs font-semibold text-white`}
+                >
                     {typeTransaction}
                 </div>
 
@@ -142,7 +144,7 @@ export const Card = ({
                             <PropertySchedule propertyId={propertyId} />
                         )}
                         {/* Delete Property Button */}
-                        {canViewSchedule && (
+                        {canDelete && (
                             <div className="inline-flex cursor-pointer items-center justify-center rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-600">
                                 <Trash className="h-5 w-5" />
                             </div>

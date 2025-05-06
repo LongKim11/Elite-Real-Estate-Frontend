@@ -195,7 +195,7 @@ export const AdminLayout = () => {
                                         {adminInfo.name}
                                     </span>
                                     <span className="text-muted-foreground text-xs">
-                                        Head Manager
+                                        {adminInfo.role}
                                     </span>
                                 </div>
                                 <LogOut

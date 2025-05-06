@@ -37,6 +37,7 @@ import { toast } from 'sonner';
 export const UserMangamentPage = () => {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [deletedUser, setDeletedUser] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const queryClient = useQueryClient();
 
@@ -70,13 +71,21 @@ export const UserMangamentPage = () => {
         }
     });
 
+    const filteredData =
+        userInfo?.data?.filter(
+            (user) =>
+                !searchQuery ||
+                user?.fullName
+                    ?.toLowerCase()
+                    .includes(searchQuery?.toLowerCase())
+        ) || [];
     const handleDeleteUser = () => {
         mutate(deletedUser.id);
     };
 
     if (isGetting)
         return (
-            <div className="flex h-96 items-center justify-center">
+            <div className="flex h-full items-center justify-center">
                 <Spinner />
             </div>
         );
@@ -90,7 +99,12 @@ export const UserMangamentPage = () => {
 
                 <div className="relative w-full max-w-xs sm:ml-auto">
                     <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
-                    <Input placeholder="Search users..." className="pl-9" />
+                    <Input
+                        placeholder="Search users..."
+                        className="pl-9"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                 </div>
             </div>
 
@@ -105,7 +119,7 @@ export const UserMangamentPage = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {userInfo?.data?.length === 0 ? (
+                    {filteredData?.length === 0 ? (
                         <TableRow>
                             <TableCell
                                 colSpan={4}
@@ -115,7 +129,7 @@ export const UserMangamentPage = () => {
                             </TableCell>
                         </TableRow>
                     ) : (
-                        userInfo?.data?.map((user) => (
+                        filteredData?.map((user) => (
                             <TableRow
                                 key={user.id}
                                 className="transition-colors hover:bg-gray-50"

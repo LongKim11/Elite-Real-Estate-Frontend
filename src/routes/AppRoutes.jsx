@@ -16,9 +16,9 @@ import { AdminLayout } from '@/layout/AdminLayout';
 import { DashboardPage } from '@/pages/Admin/DashboardPage';
 import { ListingManagementPage } from '@/pages/Admin/ListingManagementPage';
 import { UserMangamentPage } from '@/pages/Admin/UserMangamentPage';
-import { PaymentMangementPage } from '@/pages/Admin/PaymentMangementPage';
 import { RentalManagementPage } from '@/pages/Admin/RentalManagementPage';
 import { SalesMangementPage } from '@/pages/Admin/SalesMangementPage';
+import { PaymentManagementPage } from '@/pages/Admin/PaymentManagementPage';
 
 export const AppRouter = createBrowserRouter([
     {
@@ -90,7 +90,7 @@ export const AppRouter = createBrowserRouter([
             },
             { path: 'listing-management', element: <ListingManagementPage /> },
             { path: 'user-management', element: <UserMangamentPage /> },
-            { path: 'payment-management', element: <PaymentMangementPage /> },
+            { path: 'payment-management', element: <PaymentManagementPage /> },
             { path: 'rental-management', element: <RentalManagementPage /> },
             { path: 'sales-management', element: <SalesMangementPage /> }
         ]
