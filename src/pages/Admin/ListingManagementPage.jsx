@@ -70,6 +70,7 @@ export const ListingManagementPage = () => {
                             item={item}
                             canUpdate={true}
                             canViewSchedule={true}
+                            canDelete={true}
                         />
                     ))}
 

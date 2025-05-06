@@ -98,7 +98,7 @@ export const PropertySchedule = ({ propertyId }) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <div className="inline-flex cursor-pointer items-center justify-center rounded-full p-2 text-red-500 transition hover:bg-red-100 hover:text-red-500">
+                <div className="inline-flex cursor-pointer items-center justify-center rounded-full p-2 text-red-500 transition hover:bg-red-100 hover:text-red-600">
                     <CalendarHeart className="h-5 w-5" />
                 </div>
             </DialogTrigger>
