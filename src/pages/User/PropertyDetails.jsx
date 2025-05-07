@@ -21,6 +21,7 @@ import {
     Hammer,
     Crown,
     FilePen,
+    ChartLine,
     Map as MapIcon
 } from 'lucide-react';
 import { Map } from '@/components/Map';
@@ -32,6 +33,7 @@ import { Spinner } from '@/components/Spinner';
 import { RegisterObserverDialog } from '@/components/RegisterObserverDialog';
 import { Button } from '@/components/ui/button';
 import { PropertySchedule } from '@/components/PropertyScheduleDialog';
+import { PriceTrendChart } from '@/components/PriceTrendChart';
 
 export const PropertyDetails = () => {
     const { id } = useParams();
@@ -533,6 +535,24 @@ export const PropertyDetails = () => {
                         </div>
                     </div>
                 )}
+
+                <div className="mb-8">
+                    <div className="mb-6">
+                        <div className="flex items-center gap-4 pb-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-md">
+                                <ChartLine size={20} className="text-white" />
+                            </div>
+
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-800">
+                                    Price Trend
+                                </h2>
+                                <div className="mt-1 h-1 w-20 rounded-full bg-blue-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <PriceTrendChart currentPrice={property.price} />
+                </div>
             </div>
 
             {/* Right Sidebar */}
@@ -571,7 +591,7 @@ export const PropertyDetails = () => {
                                     <span>Owned by You</span>
                                 </Button>
                                 <Link to={`/edit/${property.propertyId}`}>
-                                    <Button className="w-full bg-green-500 hover:bg-green-600">
+                                    <Button className="w-full bg-blue-500 hover:bg-blue-600">
                                         <FilePen className="mr-2" size={18} />
                                         <span>Update Details</span>
                                     </Button>
