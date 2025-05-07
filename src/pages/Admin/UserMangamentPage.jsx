@@ -6,7 +6,8 @@ import {
     CheckCircle,
     XCircle,
     Edit,
-    Trash,
+    Lock,
+    LockOpen,
     Search,
     Loader2
 } from 'lucide-react';
@@ -36,14 +37,20 @@ import { toast } from 'sonner';
 
 export const UserMangamentPage = () => {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-    const [deletedUser, setDeletedUser] = useState(null);
+    const [openUnblockDialog, setOpenUnblockDialog] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
 
     const queryClient = useQueryClient();
 
     const handleOpenDeleteDialog = (user) => {
         setOpenDeleteDialog(true);
-        setDeletedUser(user);
+        setSelectedUser(user);
+    };
+
+    const handleOpenUnblockDialog = (user) => {
+        setOpenUnblockDialog(true);
+        setSelectedUser(user);
     };
 
     const { data: userInfo, isLoading: isGetting } = useQuery({
@@ -61,8 +68,8 @@ export const UserMangamentPage = () => {
         mutationFn: deleteUser,
         onSuccess: (res) => {
             console.log('Deleted User Successfully', res);
-            toast.success(`Block ${deletedUser.fullName} successfully`);
-            setDeletedUser(null);
+            toast.success(`Block ${selectedUser.fullName} successfully`);
+            setSelectedUser(null);
             setOpenDeleteDialog(false);
             queryClient.invalidateQueries(['getAllUsers']);
         },
@@ -80,7 +87,7 @@ export const UserMangamentPage = () => {
                     .includes(searchQuery?.toLowerCase())
         ) || [];
     const handleDeleteUser = () => {
-        mutate(deletedUser.id);
+        mutate(selectedUser.id);
     };
 
     if (isGetting)
@@ -163,35 +170,48 @@ export const UserMangamentPage = () => {
                                 </TableCell>
                                 <TableCell>
                                     {user.inActive ? (
-                                        <Badge className="flex w-fit items-center gap-1 bg-red-500 text-white hover:bg-red-600">
+                                        <Badge className="flex w-[80px] items-center gap-1 bg-red-500 text-white hover:bg-red-600">
                                             <XCircle className="h-3.5 w-3.5" />
                                             Inactive
                                         </Badge>
                                     ) : (
-                                        <Badge className="flex w-fit items-center gap-1 bg-green-500 text-white hover:bg-green-600">
+                                        <Badge className="flex w-[80px] items-center gap-1 bg-green-500 text-white hover:bg-green-600">
                                             <CheckCircle className="h-3.5 w-3.5" />
                                             Active
                                         </Badge>
                                     )}
                                 </TableCell>
                                 <TableCell>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-3">
                                         <Button
                                             size="icon"
-                                            className="bg-blue-500 text-white hover:bg-blue-600"
+                                            className="bg-indigo-600 text-white hover:bg-indigo-700"
                                         >
                                             <Edit className="h-4 w-4" />
                                         </Button>
-                                        <Button
-                                            variant="destructive"
-                                            size="icon"
-                                            onClick={() =>
-                                                handleOpenDeleteDialog(user)
-                                            }
-                                            disabled={user.inActive === true}
-                                        >
-                                            <Trash className="h-4 w-4" />
-                                        </Button>
+                                        {user.inActive ? (
+                                            <Button
+                                                size="icon"
+                                                onClick={() =>
+                                                    handleOpenUnblockDialog(
+                                                        user
+                                                    )
+                                                }
+                                                className="bg-blue-600 hover:bg-blue-600"
+                                            >
+                                                <LockOpen className="h-4 w-4" />
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                onClick={() =>
+                                                    handleOpenDeleteDialog(user)
+                                                }
+                                            >
+                                                <Lock className="h-4 w-4" />
+                                            </Button>
+                                        )}
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -207,9 +227,9 @@ export const UserMangamentPage = () => {
                             Are you absolutely sure?
                         </AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. This will permanently
-                            delete <strong>{deletedUser?.fullName}</strong> and
-                            remove data from our servers.
+                            This action cannot be undone. This will block{' '}
+                            <strong>{selectedUser?.fullName}</strong> from
+                            accessing our servers.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -228,7 +248,42 @@ export const UserMangamentPage = () => {
                                     Please wait...
                                 </div>
                             ) : (
-                                <>Continue</>
+                                <>Block</>
+                            )}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog open={openUnblockDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will unblock{' '}
+                            <strong>{selectedUser?.fullName}</strong> from
+                            accessing our servers.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel
+                            onClick={() => setOpenUnblockDialog(false)}
+                        >
+                            Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            className="bg-blue-600 text-white hover:bg-blue-700"
+                            onClick={handleDeleteUser}
+                        >
+                            {isDeleting ? (
+                                <div className="flex items-center justify-center gap-2">
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                    Please wait...
+                                </div>
+                            ) : (
+                                <>Unblock</>
                             )}
                         </AlertDialogAction>
                     </AlertDialogFooter>

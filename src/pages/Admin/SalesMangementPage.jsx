@@ -38,6 +38,7 @@ import {
 export const SalesMangementPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [tierFilter, setTierFilter] = useState('all');
+    const [packageFilter, setPackageFilter] = useState('all');
     const [activeTab, setActiveTab] = useState('user-quotas');
 
     const mockListingPlans = {
@@ -100,9 +101,6 @@ export const SalesMangementPage = () => {
                 !searchQuery ||
                 payment.userId
                     .toLowerCase()
-                    .includes(searchQuery.toLowerCase()) ||
-                payment.postId
-                    .toLowerCase()
                     .includes(searchQuery.toLowerCase());
 
             const matchesTier =
@@ -113,13 +111,15 @@ export const SalesMangementPage = () => {
 
     const filteredListingPlans =
         listingPlans?.data?.filter((plan) => {
-            return (
+            const matchsSearch =
                 !searchQuery ||
-                plan.userId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                plan.packetName
-                    .toLowerCase()
-                    .includes(searchQuery.toLowerCase())
-            );
+                plan.userId.toLowerCase().includes(searchQuery.toLowerCase());
+
+            const matchesPackage =
+                packageFilter === 'all' ||
+                plan.packetName.toLowerCase() === packageFilter.toLowerCase();
+
+            return matchsSearch && matchesPackage;
         }) || [];
 
     const totalPostPaymentAmount =
@@ -128,15 +128,15 @@ export const SalesMangementPage = () => {
             0
         ) || 0;
 
+    const totalPlansRevenue =
+        listingPlans?.data?.reduce((sum, plan) => sum + plan.amountPaid, 0) ||
+        0;
+
     const totalPackageUsed =
         postPayments?.data?.filter((p) => p.paymentType === 'PACKAGE').length ||
         0;
     const totalDirectPayments =
         postPayments?.data?.filter((p) => p.paymentType === 'POST').length || 0;
-
-    const totalPlansRevenue =
-        listingPlans?.data?.reduce((sum, plan) => sum + plan.amountPaid, 0) ||
-        0;
 
     if (isGettingPostPayments) {
         return (
@@ -247,7 +247,7 @@ export const SalesMangementPage = () => {
                         <div className="relative sm:w-72">
                             <Search className="text-muted-foreground absolute top-2.5 left-2 h-4 w-4" />
                             <Input
-                                placeholder="Search by user or post ID..."
+                                placeholder="Search by phone number..."
                                 className="pl-8"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -318,7 +318,7 @@ export const SalesMangementPage = () => {
                                                 'VIP_GOLD' && (
                                                 <Badge
                                                     variant="outline"
-                                                    className="flex w-fit items-center gap-1 border-amber-200 bg-amber-50 text-amber-700"
+                                                    className="flex w-[90px] items-center gap-1 border-amber-200 bg-amber-50 text-amber-700"
                                                 >
                                                     <Crown className="h-3 w-3" />{' '}
                                                     VIP Gold
@@ -328,7 +328,7 @@ export const SalesMangementPage = () => {
                                                 'VIP_SILVER' && (
                                                 <Badge
                                                     variant="outline"
-                                                    className="flex w-fit items-center gap-1 border-gray-200 bg-gray-100 text-gray-700"
+                                                    className="flex w-[90px] items-center gap-1 border-gray-200 bg-gray-100 text-gray-700"
                                                 >
                                                     <Trophy className="h-3 w-3" />{' '}
                                                     VIP Silver
@@ -337,7 +337,7 @@ export const SalesMangementPage = () => {
                                             {payment.postTier === 'REGULAR' && (
                                                 <Badge
                                                     variant="outline"
-                                                    className="flex w-fit items-center gap-1 border-blue-200 bg-blue-50 text-blue-700"
+                                                    className="flex w-[90px] items-center gap-1 border-blue-200 bg-blue-50 text-blue-700"
                                                 >
                                                     <Tag className="h-3 w-3" />{' '}
                                                     Regular
@@ -379,7 +379,7 @@ export const SalesMangementPage = () => {
                                                 variant="outline"
                                                 className="border-green-200 bg-green-50 text-green-700"
                                             >
-                                                {payment.status}
+                                                {payment.status.toLowerCase()}
                                             </Badge>
                                         </TableCell>
                                         <TableCell>
@@ -397,7 +397,7 @@ export const SalesMangementPage = () => {
                                         className="h-24 text-center"
                                     >
                                         <div className="text-muted-foreground flex flex-col items-center justify-center">
-                                            <Package className="mb-2 h-8 w-8" />
+                                            <ShieldCheck className="mb-2 h-8 w-8" />
                                             <span>
                                                 No post payments match your
                                                 filters
@@ -417,20 +417,42 @@ export const SalesMangementPage = () => {
                         <div className="relative sm:w-72">
                             <Search className="text-muted-foreground absolute top-2.5 left-2 h-4 w-4" />
                             <Input
-                                placeholder="Search by user ID or package name..."
+                                placeholder="Search by phone number..."
                                 className="pl-8"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                         </div>
 
-                        <Button
-                            variant="outline"
-                            className="flex items-center gap-2"
-                        >
-                            <Download className="h-4 w-4" />
-                            Export
-                        </Button>
+                        <div className="flex gap-2">
+                            <Select
+                                value={packageFilter}
+                                onValueChange={setPackageFilter}
+                            >
+                                <SelectTrigger className="w-[160px]">
+                                    <SelectValue placeholder="Filter by package" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">
+                                        All Packages
+                                    </SelectItem>
+                                    <SelectItem value="VIP">VIP</SelectItem>
+                                    <SelectItem value="STANDARD">
+                                        Standard
+                                    </SelectItem>
+                                    <SelectItem value="REGULAR">
+                                        Regular
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Button
+                                variant="outline"
+                                className="flex items-center gap-2"
+                            >
+                                <Download className="h-4 w-4" />
+                                Export
+                            </Button>
+                        </div>
                     </div>
 
                     {/* User Quotas Table */}
@@ -458,7 +480,7 @@ export const SalesMangementPage = () => {
                                         <TableCell>
                                             <Badge
                                                 variant="outline"
-                                                className={`flex w-fit items-center gap-1 ${
+                                                className={`flex w-[100px] items-center gap-1 ${
                                                     plan.packetName === 'VIP'
                                                         ? 'border-amber-200 bg-amber-50 text-amber-700'
                                                         : plan.packetName ===

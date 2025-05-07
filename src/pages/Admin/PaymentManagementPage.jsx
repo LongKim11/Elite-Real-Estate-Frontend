@@ -235,7 +235,7 @@ export const PaymentManagementPage = () => {
                                         {payment.status ? (
                                             <Badge
                                                 variant="outline"
-                                                className="border-green-200 bg-green-50 text-green-700"
+                                                className="w-[100px] border-green-200 bg-green-50 text-green-700"
                                             >
                                                 <CheckCircle className="mr-1 h-3 w-3" />{' '}
                                                 Successful
@@ -243,7 +243,7 @@ export const PaymentManagementPage = () => {
                                         ) : (
                                             <Badge
                                                 variant="outline"
-                                                className="border-red-200 bg-red-50 text-red-700"
+                                                className="w-[100px] border-red-200 bg-red-50 text-red-700"
                                             >
                                                 <XCircle className="mr-1 h-3 w-3" />{' '}
                                                 Failed
