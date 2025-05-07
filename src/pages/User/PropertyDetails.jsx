@@ -22,6 +22,7 @@ import {
     Crown,
     FilePen,
     ChartLine,
+    HousePlus,
     Map as MapIcon
 } from 'lucide-react';
 import { Map } from '@/components/Map';
@@ -34,6 +35,7 @@ import { RegisterObserverDialog } from '@/components/RegisterObserverDialog';
 import { Button } from '@/components/ui/button';
 import { PropertySchedule } from '@/components/PropertyScheduleDialog';
 import { PriceTrendChart } from '@/components/PriceTrendChart';
+import { SimilarProperties } from '@/components/SimilarProperties';
 
 export const PropertyDetails = () => {
     const { id } = useParams();
@@ -536,6 +538,7 @@ export const PropertyDetails = () => {
                     </div>
                 )}
 
+                {/* Price Trend Chart */}
                 <div className="mb-8">
                     <div className="mb-6">
                         <div className="flex items-center gap-4 pb-3">
@@ -553,10 +556,31 @@ export const PropertyDetails = () => {
                     </div>
                     <PriceTrendChart currentPrice={property.price} />
                 </div>
+
+                {/* Similar Properties */}
+                <div className="mb-8">
+                    <div className="mb-6">
+                        <div className="flex items-center gap-4 pb-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-md">
+                                <HousePlus size={20} className="text-white" />
+                            </div>
+
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-800">
+                                    Similar Properties
+                                </h2>
+                                <div className="mt-1 h-1 w-20 rounded-full bg-blue-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mx-auto w-[95%]">
+                        <SimilarProperties />
+                    </div>
+                </div>
             </div>
 
             {/* Right Sidebar */}
-            <div className="mt-6 flex-[2] lg:mt-0">
+            <div className="mt-6 flex-[2] lg:sticky lg:top-0 lg:mt-0 lg:max-h-screen lg:self-start">
                 {/* Location Map */}
                 <div className="h-[400px] rounded-lg border bg-white p-4 shadow-sm">
                     <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold">

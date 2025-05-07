@@ -72,7 +72,7 @@ export const PriceTrendChart = ({ currentPrice = 100 }) => {
                 config={{
                     price: {
                         label: 'Price',
-                        color: '#007FFF'
+                        color: '#2E8B57'
                     }
                 }}
                 className="h-[300px] w-full"
@@ -83,7 +83,7 @@ export const PriceTrendChart = ({ currentPrice = 100 }) => {
                     margin={{
                         top: 20,
                         right: 20,
-                        left: 20,
+                        left: 30,
                         bottom: 20
                     }}
                 >
@@ -120,7 +120,7 @@ export const PriceTrendChart = ({ currentPrice = 100 }) => {
                     <Line
                         type="monotone"
                         dataKey="price"
-                        stroke="#007FFF"
+                        stroke="#2E8B57"
                         strokeWidth={2}
                         dot={{ r: 4 }}
                         activeDot={{ r: 6 }}
