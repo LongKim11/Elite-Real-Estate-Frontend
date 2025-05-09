@@ -538,6 +538,44 @@ export const PropertyDetails = () => {
                     </div>
                 )}
 
+                <div className="mb-8">
+                    <div className="mb-6">
+                        <div className="flex items-center gap-4 pb-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-md">
+                                <MapIcon size={20} className="text-white" />
+                            </div>
+
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-800">
+                                    Property Address
+                                </h2>
+                                <div className="mt-1 h-1 w-20 rounded-full bg-blue-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="h-[500px] rounded-lg border bg-white p-4 shadow-sm">
+                        <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+                            <MapIcon className="text-blue-600" size={20} />
+                            Location
+                        </h3>
+                        <div className="h-[370px] w-full overflow-hidden rounded-lg">
+                            <Map items={[property]} />
+                        </div>
+                        <div className="mt-3 text-sm text-gray-600">
+                            <div className="mb-1 flex items-center gap-2">
+                                <MapPinHouse
+                                    className="text-blue-600"
+                                    size={16}
+                                />
+                                {property.address.ward}, {property.address.town}
+                            </div>
+                            <div className="font-medium text-gray-800">
+                                {property.address.province}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Price Trend Chart */}
                 <div className="mb-8">
                     <div className="mb-6">
@@ -580,28 +618,8 @@ export const PropertyDetails = () => {
 
             {/* Right Sidebar */}
             <div className="sticky top-0 h-fit flex-[2] self-start">
-                {/* Location Map */}
-                <div className="h-[400px] rounded-lg border bg-white p-4 shadow-sm">
-                    <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold">
-                        <MapIcon className="text-blue-600" size={20} />
-                        Location
-                    </h3>
-                    <div className="h-[270px] w-full overflow-hidden rounded-lg">
-                        <Map items={[property]} />
-                    </div>
-                    <div className="mt-3 text-sm text-gray-600">
-                        <div className="mb-1 flex items-center gap-2">
-                            <MapPinHouse className="text-blue-600" size={16} />
-                            {property.address.ward}, {property.address.town}
-                        </div>
-                        <div className="font-medium text-gray-800">
-                            {property.address.province}
-                        </div>
-                    </div>
-                </div>
-
                 {/* Contact Section */}
-                <div className="mt-6 rounded-lg border bg-amber-50 p-6 shadow-sm">
+                <div className="rounded-lg border bg-amber-50 p-6 shadow-sm">
                     <h3 className="mb-4 text-lg font-semibold">
                         Interested in this property?
                     </h3>
