@@ -44,3 +44,13 @@ export const cancelSchedule = (id) => {
         })
         .then((res) => res.data);
 };
+
+export const getAllSchedule = () => {
+    const token = getToken();
+
+    return api
+        .get('/view-schedule', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};
