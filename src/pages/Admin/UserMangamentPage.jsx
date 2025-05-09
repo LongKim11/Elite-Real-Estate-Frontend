@@ -37,7 +37,6 @@ import { toast } from 'sonner';
 
 export const UserMangamentPage = () => {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-    const [openUnblockDialog, setOpenUnblockDialog] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -45,11 +44,6 @@ export const UserMangamentPage = () => {
 
     const handleOpenDeleteDialog = (user) => {
         setOpenDeleteDialog(true);
-        setSelectedUser(user);
-    };
-
-    const handleOpenUnblockDialog = (user) => {
-        setOpenUnblockDialog(true);
         setSelectedUser(user);
     };
 
@@ -193,9 +187,7 @@ export const UserMangamentPage = () => {
                                             <Button
                                                 size="icon"
                                                 onClick={() =>
-                                                    handleOpenUnblockDialog(
-                                                        user
-                                                    )
+                                                    handleOpenDeleteDialog(user)
                                                 }
                                                 className="bg-blue-600 hover:bg-blue-600"
                                             >
@@ -227,7 +219,8 @@ export const UserMangamentPage = () => {
                             Are you absolutely sure?
                         </AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. This will block{' '}
+                            This action cannot be undone. This will{' '}
+                            {selectedUser?.inActive ? 'unblock' : 'block'}{' '}
                             <strong>{selectedUser?.fullName}</strong> from
                             accessing our servers.
                         </AlertDialogDescription>
@@ -239,7 +232,11 @@ export const UserMangamentPage = () => {
                             Cancel
                         </AlertDialogCancel>
                         <AlertDialogAction
-                            className="bg-red-600 text-white hover:bg-red-700"
+                            className={
+                                selectedUser?.inActive
+                                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                    : 'bg-red-600 text-white hover:bg-red-700'
+                            }
                             onClick={handleDeleteUser}
                         >
                             {isDeleting ? (
@@ -248,42 +245,11 @@ export const UserMangamentPage = () => {
                                     Please wait...
                                 </div>
                             ) : (
-                                <>Block</>
-                            )}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-
-            <AlertDialog open={openUnblockDialog}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>
-                            Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                            This action cannot be undone. This will unblock{' '}
-                            <strong>{selectedUser?.fullName}</strong> from
-                            accessing our servers.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel
-                            onClick={() => setOpenUnblockDialog(false)}
-                        >
-                            Cancel
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                            className="bg-blue-600 text-white hover:bg-blue-700"
-                            onClick={handleDeleteUser}
-                        >
-                            {isDeleting ? (
-                                <div className="flex items-center justify-center gap-2">
-                                    <Loader2 className="h-5 w-5 animate-spin" />
-                                    Please wait...
-                                </div>
-                            ) : (
-                                <>Unblock</>
+                                <>
+                                    {selectedUser?.inActive
+                                        ? 'Unblock'
+                                        : 'Block'}
+                                </>
                             )}
                         </AlertDialogAction>
                     </AlertDialogFooter>
