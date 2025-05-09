@@ -18,12 +18,14 @@ import {
     Check,
     CheckCheck,
     Trash2,
+    X,
     Loader2
 } from 'lucide-react';
 import {
     getPropertySchedule,
     updateScheduleStatus,
-    deleteSchedule
+    deleteSchedule,
+    cancelSchedule
 } from '@/api/rentalService';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -74,6 +76,17 @@ export const PropertySchedule = ({ propertyId }) => {
         }
     });
 
+    const { mutate: mutateCancel, isLoading: isCancelling } = useMutation({
+        mutationFn: (id) => cancelSchedule(id),
+        onSuccess: (res) => {
+            console.log('Cancel Schedule', res);
+            queryClient.invalidateQueries(['getPropertySchedule', propertyId]);
+        },
+        onError: (err) => {
+            console.log('Cancel Schedule Error', err.response.data.error);
+        }
+    });
+
     const { mutate: mutateDelete, isLoading: isDeleting } = useMutation({
         mutationFn: (id) => deleteSchedule(id),
         onSuccess: (res) => {
@@ -91,6 +104,10 @@ export const PropertySchedule = ({ propertyId }) => {
 
     const handleDeleteSchedule = (id) => {
         mutateDelete(id);
+    };
+
+    const handleCancelSchedule = (id) => {
+        mutateCancel(id);
     };
 
     const schedules = data?.data;
@@ -241,29 +258,50 @@ export const PropertySchedule = ({ propertyId }) => {
                                     {schedule.status !== 'CANCELLED' &&
                                         schedule.status !== 'COMPLETED' && (
                                             <Button
-                                                disabled={isDeleting}
+                                                disabled={isCancelling}
                                                 size="sm"
                                                 variant="outline"
-                                                className="border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700"
+                                                className="border-gray-500 text-gray-600 hover:bg-gray-50 hover:text-gray-700"
                                                 onClick={() =>
-                                                    handleDeleteSchedule(
+                                                    handleCancelSchedule(
                                                         schedule.id
                                                     )
                                                 }
                                             >
-                                                {isDeleting ? (
+                                                {isCancelling ? (
                                                     <div className="flex items-center justify-center gap-2">
                                                         <Loader2 className="h-5 w-5 animate-spin" />
                                                         Please wait...
                                                     </div>
                                                 ) : (
                                                     <>
-                                                        <Trash2 className="mr-1 h-4 w-4" />
-                                                        Cancell
+                                                        <X className="mr-1 h-4 w-4" />
+                                                        Cancel
                                                     </>
                                                 )}
                                             </Button>
                                         )}
+                                    <Button
+                                        disabled={isDeleting}
+                                        size="sm"
+                                        variant="outline"
+                                        className="border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700"
+                                        onClick={() =>
+                                            handleDeleteSchedule(schedule.id)
+                                        }
+                                    >
+                                        {isDeleting ? (
+                                            <div className="flex items-center justify-center gap-2">
+                                                <Loader2 className="h-5 w-5 animate-spin" />
+                                                Please wait...
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <Trash2 className="mr-1 h-4 w-4" />
+                                                Delete
+                                            </>
+                                        )}
+                                    </Button>
                                 </div>
                             </div>
                         </div>
