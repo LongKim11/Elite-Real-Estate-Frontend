@@ -29,7 +29,7 @@ export const ListingPlanPage = () => {
         }
     });
 
-    const userBalance = userInfo?.data?.balance;
+    const [userBalance, setUserBalance] = useState(userInfo?.data?.balance);
 
     const plans = [
         {
@@ -222,6 +222,7 @@ export const ListingPlanPage = () => {
                         onClose={handleCloseDialog}
                         plan={selectedPlan}
                         userBalance={userBalance}
+                        setUserBalance={setUserBalance}
                     />
                 </div>
             )}

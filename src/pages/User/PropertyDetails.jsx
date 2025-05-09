@@ -558,24 +558,23 @@ export const PropertyDetails = () => {
                 </div>
 
                 {/* Similar Properties */}
-                <div className="mb-8">
-                    <div className="mb-6">
-                        <div className="flex items-center gap-4 pb-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-md">
-                                <HousePlus size={20} className="text-white" />
-                            </div>
 
-                            <div>
-                                <h2 className="text-2xl font-bold text-gray-800">
-                                    Similar Properties
-                                </h2>
-                                <div className="mt-1 h-1 w-20 rounded-full bg-blue-500"></div>
-                            </div>
+                <div className="mb-6">
+                    <div className="flex items-center gap-4 pb-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-md">
+                            <HousePlus size={20} className="text-white" />
+                        </div>
+
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-800">
+                                Similar Properties
+                            </h2>
+                            <div className="mt-1 h-1 w-20 rounded-full bg-blue-500"></div>
                         </div>
                     </div>
-                    <div className="mx-auto w-[95%]">
-                        <SimilarProperties />
-                    </div>
+                </div>
+                <div className="mx-auto w-[95%]">
+                    <SimilarProperties />
                 </div>
             </div>
 
