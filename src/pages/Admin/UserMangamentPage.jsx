@@ -62,7 +62,12 @@ export const UserMangamentPage = () => {
         mutationFn: deleteUser,
         onSuccess: (res) => {
             console.log('Deleted User Successfully', res);
-            toast.success(`Block ${selectedUser.fullName} successfully`);
+            if (selectedUser?.inActive) {
+                toast.success(`Unblock ${selectedUser.fullName} successfully`);
+            } else {
+                toast.success(`Block ${selectedUser.fullName} successfully`);
+            }
+
             setSelectedUser(null);
             setOpenDeleteDialog(false);
             queryClient.invalidateQueries(['getAllUsers']);

@@ -7,8 +7,7 @@ import {
     Landmark,
     CalendarClock,
     Home,
-    FilePen,
-    Trash
+    FilePen
 } from 'lucide-react';
 import { PropertySchedule } from './PropertyScheduleDialog';
 import { DeletePropertyDialog } from './DeletePropertyDialog';
