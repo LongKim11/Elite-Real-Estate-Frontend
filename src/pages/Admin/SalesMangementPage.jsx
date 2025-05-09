@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { getAllPostPayment } from '@/api/saleService';
+import {
+    getAllUserPostPayment,
+    getAllUserListingPlan
+} from '@/api/saleService';
 import { Spinner } from '@/components/Spinner';
 import { Link } from 'react-router-dom';
 import {
@@ -41,50 +44,9 @@ export const SalesMangementPage = () => {
     const [packageFilter, setPackageFilter] = useState('all');
     const [activeTab, setActiveTab] = useState('user-quotas');
 
-    const mockListingPlans = {
-        data: [
-            {
-                id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                userId: '0915307658',
-                vipGoldRemaining: 2,
-                vipSilverRemaining: 4,
-                regularRemaining: 7,
-                expiredAt: '2025-06-07T03:08:20.005Z',
-                createdAt: '2025-05-07T03:08:20.005Z',
-                updatedAt: '2025-05-07T03:08:20.005Z',
-                amountPaid: 350000,
-                packetName: 'VIP'
-            },
-            {
-                id: '8fa85f64-5717-4562-b3fc-2c963f66afa7',
-                userId: '0379649802',
-                vipGoldRemaining: 0,
-                vipSilverRemaining: 3,
-                regularRemaining: 5,
-                expiredAt: '2025-06-12T03:08:20.005Z',
-                createdAt: '2025-04-12T03:08:20.005Z',
-                updatedAt: '2025-04-12T03:08:20.005Z',
-                amountPaid: 200000,
-                packetName: 'STANDARD'
-            },
-            {
-                id: '5fa85f64-5717-4562-b3fc-2c963f66afa9',
-                userId: '0915307659',
-                vipGoldRemaining: 1,
-                vipSilverRemaining: 1,
-                regularRemaining: 2,
-                expiredAt: '2025-07-01T03:08:20.005Z',
-                createdAt: '2025-05-01T03:08:20.005Z',
-                updatedAt: '2025-05-01T03:08:20.005Z',
-                amountPaid: 150000,
-                packetName: 'VIP'
-            }
-        ]
-    };
-
     const { data: postPayments, isLoading: isGettingPostPayments } = useQuery({
-        queryKey: ['getAllPostPayments'],
-        queryFn: getAllPostPayment,
+        queryKey: ['getAllUserPostPayments'],
+        queryFn: getAllUserPostPayment,
         onSuccess: (res) => {
             console.log('Post Payments', res);
         },
@@ -93,7 +55,16 @@ export const SalesMangementPage = () => {
         }
     });
 
-    const listingPlans = mockListingPlans;
+    const { data: listingPlans, isLoading: isGettingListingPlans } = useQuery({
+        queryKey: ['getAllUserListingPlans'],
+        queryFn: getAllUserListingPlan,
+        onSuccess: (res) => {
+            console.log('Listing Plans', res);
+        },
+        onError: (err) => {
+            console.log('Listing Plans Error', err.response.data.error);
+        }
+    });
 
     const filteredPostPayments =
         postPayments?.data?.filter((payment) => {
@@ -138,7 +109,7 @@ export const SalesMangementPage = () => {
     const totalDirectPayments =
         postPayments?.data?.filter((p) => p.paymentType === 'POST').length || 0;
 
-    if (isGettingPostPayments) {
+    if (isGettingPostPayments || isGettingListingPlans) {
         return (
             <div className="flex h-full items-center justify-center">
                 <Spinner />
@@ -440,9 +411,7 @@ export const SalesMangementPage = () => {
                                     <SelectItem value="STANDARD">
                                         Standard
                                     </SelectItem>
-                                    <SelectItem value="REGULAR">
-                                        Regular
-                                    </SelectItem>
+                                    <SelectItem value="BASIC">Basic</SelectItem>
                                 </SelectContent>
                             </Select>
                             <Button

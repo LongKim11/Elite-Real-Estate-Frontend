@@ -11,6 +11,16 @@ export const getAllListingPlanByUser = () => {
         .then((res) => res.data);
 };
 
+export const getAllUserListingPlan = () => {
+    const token = getToken();
+
+    return api
+        .get('/user-post-quotas/all', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};
+
 export const purchaseListingPlan = (data) => {
     const token = getToken();
 
@@ -51,7 +61,7 @@ export const getPostPaymentHistory = () => {
         .then((res) => res.data);
 };
 
-export const getAllPostPayment = () => {
+export const getAllUserPostPayment = () => {
     const token = getToken();
 
     return api
