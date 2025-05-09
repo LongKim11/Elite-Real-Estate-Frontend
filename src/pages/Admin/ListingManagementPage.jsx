@@ -19,7 +19,7 @@ export const ListingManagementPage = () => {
     });
 
     const { data: listing, isLoading } = useQuery({
-        queryKey: ['getListing', queryString],
+        queryKey: ['getListingAdmin', queryString],
         queryFn: () => getListing(queryString),
         onSuccess: (res) => {
             console.log('Listing Response', res);
@@ -71,6 +71,7 @@ export const ListingManagementPage = () => {
                             canUpdate={true}
                             canViewSchedule={true}
                             canDelete={true}
+                            actor={'admin'}
                         />
                     ))}
 

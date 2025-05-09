@@ -34,3 +34,13 @@ export const deleteSchedule = (id) => {
         })
         .then((res) => res.data);
 };
+
+export const cancelSchedule = (id) => {
+    const token = getToken();
+
+    return api
+        .delete(`/view-schedule/${id}/cancel`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};

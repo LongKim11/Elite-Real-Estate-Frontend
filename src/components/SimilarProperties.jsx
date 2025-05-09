@@ -169,7 +169,7 @@ export const SimilarProperties = () => {
                             className="md:basis-1/2 lg:basis-1/3"
                         >
                             <Link to={`/list/${property.propertyId}`}>
-                                <div className="group h-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md">
+                                <div className="group h-full overflow-hidden rounded-lg border-2 border-gray-200 bg-white shadow-sm transition-all hover:shadow-md">
                                     {/* Image */}
                                     <div className="relative h-40 w-full overflow-hidden">
                                         <img

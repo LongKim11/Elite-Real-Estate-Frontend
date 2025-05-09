@@ -74,3 +74,12 @@ export const editProperty = ({ propertyId, formDataToSend }) => {
         })
         .then((res) => res.data);
 };
+
+export const deleteProperty = (id) => {
+    const token = getToken();
+    return api
+        .delete(`/properties/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};

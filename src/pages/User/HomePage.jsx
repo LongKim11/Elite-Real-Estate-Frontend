@@ -622,7 +622,7 @@ export const HomePage = () => {
             </section>
 
             {/* Hero Section 3 */}
-            <section className="container mx-auto my-30 flex flex-col items-center gap-10 md:flex-row md:items-start">
+            <section className="container my-24 flex flex-col items-center gap-10 px-10 md:flex-row md:items-start">
                 {/* Left Content */}
                 <div className="space-y-6 pl-12 md:w-2/3">
                     <h2 className="text-3xl leading-snug font-bold text-gray-900">

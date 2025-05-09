@@ -11,6 +11,7 @@ import {
     Trash
 } from 'lucide-react';
 import { PropertySchedule } from './PropertyScheduleDialog';
+import { DeletePropertyDialog } from './DeletePropertyDialog';
 
 export const Card = ({
     item,
@@ -145,9 +146,10 @@ export const Card = ({
                         )}
                         {/* Delete Property Button */}
                         {canDelete && (
-                            <div className="inline-flex cursor-pointer items-center justify-center rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-600">
-                                <Trash className="h-5 w-5" />
-                            </div>
+                            <DeletePropertyDialog
+                                propertyId={propertyId}
+                                title={title}
+                            />
                         )}
                     </div>
                 </div>

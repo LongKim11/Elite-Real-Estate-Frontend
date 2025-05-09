@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -8,7 +8,13 @@ import {
     DialogHeader,
     DialogTitle
 } from '@/components/ui/dialog';
-import { AlertCircle, CheckCircle2, Wallet, CreditCard } from 'lucide-react';
+import {
+    AlertCircle,
+    CheckCircle2,
+    Wallet,
+    CreditCard,
+    Loader2
+} from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { purchaseListingPlan } from '@/api/saleService';
 import { useMutation } from '@tanstack/react-query';
@@ -18,15 +24,23 @@ export const BuyListingPlanDialog = ({
     isOpen,
     onClose,
     plan,
-    userBalance
+    userBalance,
+    setUserBalance
 }) => {
     const [isSuccess, setIsSuccess] = useState(false);
+
+    useEffect(() => {
+        if (isOpen) {
+            setIsSuccess(false);
+        }
+    }, [isOpen, plan]);
 
     const { mutate, isLoading: isPurchasing } = useMutation({
         mutationFn: purchaseListingPlan,
         onSuccess: (res) => {
             console.log('Buying Listing Plans', res);
             setIsSuccess(true);
+            setUserBalance((prev) => prev - plan.price * 1000);
         },
         onError: (err) => {
             console.log('Buying Listing Plan Error', err.response.data.error);
@@ -188,7 +202,14 @@ export const BuyListingPlanDialog = ({
                                     onClick={handlePurchase}
                                     disabled={isPurchasing}
                                 >
-                                    {isPurchasing ? 'Processing...' : 'Buy Now'}
+                                    {isPurchasing ? (
+                                        <div className="flex items-center justify-center gap-2">
+                                            <Loader2 className="h-5 w-5 animate-spin" />
+                                            Processing...
+                                        </div>
+                                    ) : (
+                                        <>Buy Now</>
+                                    )}
                                 </Button>
                             ) : (
                                 <Link to={'/profile'}>
