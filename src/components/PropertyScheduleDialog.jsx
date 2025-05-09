@@ -111,8 +111,8 @@ export const PropertySchedule = ({ propertyId }) => {
                 </DialogHeader>
 
                 {isLoading && (
-                    <div className="mt-10 flex items-center justify-center gap-2">
-                        <Loader2 className="h-6 w-6 animate-spin" />
+                    <div className="mt-12 flex items-center justify-center gap-2">
+                        <Loader2 className="h-5 w-5 animate-spin" />
                         Loading Schedules...
                     </div>
                 )}

@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Spinner } from '@/components/Spinner';
 import { getOwned } from '@/api/listingService';
 import { getSavedList } from '@/api/listingService';
+import { Box, Heart } from 'lucide-react';
 
 export const Profile = () => {
     const [activeTab, setActiveTab] = useState('myList');
@@ -131,18 +132,37 @@ export const Profile = () => {
                                 {/* Tab Content */}
                                 <div className="mt-6 space-y-8">
                                     {activeTab === 'myList' &&
+                                    ownedPost?.data === null ? (
+                                        <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+                                            <Box className="mb-4 h-24 w-24 opacity-70" />
+                                            <p className="mb-2 text-lg font-semibold">
+                                                You have no posts yet!
+                                            </p>
+                                        </div>
+                                    ) : (
                                         ownedPost?.data?.map((item, index) => (
                                             <Card
                                                 key={index}
                                                 item={item}
                                                 canUpdate={true}
                                                 canViewSchedule={true}
+                                                canDelete={true}
                                             />
-                                        ))}
+                                        ))
+                                    )}
                                     {activeTab === 'savedList' &&
+                                    savedPost?.data === null ? (
+                                        <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+                                            <Heart className="mb-4 h-24 w-24 opacity-70" />
+                                            <p className="mb-2 text-lg font-semibold">
+                                                You haven't saved any posts yet!
+                                            </p>
+                                        </div>
+                                    ) : (
                                         savedPost?.data?.map((item, index) => (
                                             <Card key={index} item={item} />
-                                        ))}
+                                        ))
+                                    )}
                                 </div>
                             </div>
                         </div>

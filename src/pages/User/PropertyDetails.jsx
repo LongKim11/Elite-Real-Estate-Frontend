@@ -579,7 +579,7 @@ export const PropertyDetails = () => {
             </div>
 
             {/* Right Sidebar */}
-            <div className="mt-6 flex-[2] lg:sticky lg:top-0 lg:mt-0 lg:max-h-screen lg:self-start">
+            <div className="sticky top-0 h-fit flex-[2] self-start">
                 {/* Location Map */}
                 <div className="h-[400px] rounded-lg border bg-white p-4 shadow-sm">
                     <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold">
