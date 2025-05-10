@@ -598,7 +598,6 @@ export const PropertyDetails = () => {
                 </div>
 
                 {/* Similar Properties */}
-
                 <div className="mb-6">
                     <div className="flex items-center gap-4 pb-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-md">
@@ -614,7 +613,10 @@ export const PropertyDetails = () => {
                     </div>
                 </div>
                 <div className="mx-auto w-[95%]">
-                    <SimilarProperties />
+                    <SimilarProperties
+                        propertyType={property.category}
+                        propertyId={property.propertyId}
+                    />
                 </div>
             </div>
 
