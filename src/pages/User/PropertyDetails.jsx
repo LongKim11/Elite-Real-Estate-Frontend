@@ -51,7 +51,8 @@ export const PropertyDetails = () => {
         }
     });
 
-    const property = data?.data;
+    const property = data?.data?.property;
+    const item = data?.data;
     const isFollowed = data?.error;
 
     const formatDate = (dateString) => {
@@ -538,6 +539,7 @@ export const PropertyDetails = () => {
                     </div>
                 )}
 
+                {/* Map Location */}
                 <div className="mb-8">
                     <div className="mb-6">
                         <div className="flex items-center gap-4 pb-3">
@@ -559,7 +561,7 @@ export const PropertyDetails = () => {
                             Location
                         </h3>
                         <div className="h-[370px] w-full overflow-hidden rounded-lg">
-                            <Map items={[property]} />
+                            <Map items={[item]} />
                         </div>
                         <div className="mt-3 text-sm text-gray-600">
                             <div className="mb-1 flex items-center gap-2">

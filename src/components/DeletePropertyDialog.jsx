@@ -16,11 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Loader2 } from 'lucide-react';
 
-export const DeletePropertyDialog = ({
-    propertyId,
-    title,
-    actor = 'owner'
-}) => {
+export const DeletePropertyDialog = ({ propertyId, title }) => {
     const [open, setOpen] = useState(false);
 
     const queryClient = useQueryClient();
@@ -31,11 +27,8 @@ export const DeletePropertyDialog = ({
             console.log('Delete Property Response', res);
             setOpen(false);
             toast.success('Property deleted successfully');
-            if (actor === 'owner') {
-                queryClient.invalidateQueries(['getOwned']);
-            } else {
-                queryClient.invalidateQueries(['getListingAdmin']);
-            }
+
+            queryClient.invalidateQueries(['getListingAdmin']);
         },
         onError: (err) => {
             console.log('Delete Property Error', err.response?.data?.error);

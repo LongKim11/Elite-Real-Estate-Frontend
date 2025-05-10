@@ -53,7 +53,7 @@ export const ListPage = () => {
                             onFilter={handleFilter}
                         />
                         {listing?.data?.map((item, index) => (
-                            <Card key={index} item={item} />
+                            <Card key={index} item={item.property} />
                         ))}
                         {listing?.data === null && (
                             <div className="flex h-[200px] items-center justify-center">

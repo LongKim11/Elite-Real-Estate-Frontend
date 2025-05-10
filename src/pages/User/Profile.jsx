@@ -146,7 +146,6 @@ export const Profile = () => {
                                                 item={item}
                                                 canUpdate={true}
                                                 canViewSchedule={true}
-                                                canDelete={true}
                                             />
                                         ))
                                     )}

@@ -67,11 +67,10 @@ export const ListingManagementPage = () => {
                     {listing?.data?.map((item, index) => (
                         <Card
                             key={index}
-                            item={item}
+                            item={item.property}
                             canUpdate={true}
                             canViewSchedule={true}
                             canDelete={true}
-                            actor={'admin'}
                         />
                     ))}
 

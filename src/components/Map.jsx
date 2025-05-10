@@ -11,7 +11,10 @@ const MapBounds = ({ items }) => {
         if (items.length === 0) return;
 
         const bounds = L.latLngBounds(
-            items.map((item) => [item.latitude, item.longitude])
+            items.map((item) => [
+                item.property.latitude,
+                item.property.longitude
+            ])
         );
         map.fitBounds(bounds, { padding: [50, 50] });
     }, [items, map]);
@@ -33,7 +36,9 @@ export const Map = ({ items }) => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {items.length !== 0 &&
-                items?.map((item, index) => <Pin item={item} key={index} />)}
+                items?.map((item, index) => (
+                    <Pin item={item.property} key={index} />
+                ))}
             <MapBounds items={items} />
         </MapContainer>
     );
