@@ -40,6 +40,20 @@ export const ListPage = () => {
         setQueryString(buildQueryString(filters));
     };
 
+    const tierPriority = {
+        VIP_GOLD: 1,
+        VIP_SILVER: 2,
+        REGULAR: 3
+    };
+
+    const filteredListings = {
+        data: [...(listing?.data || [])].sort(
+            (a, b) =>
+                (tierPriority[a.postTier] || 4) -
+                (tierPriority[b.postTier] || 4)
+        )
+    };
+
     return (
         <div className="flex h-full pt-5 pr-12 pl-12">
             <div className="flex-[3]">
@@ -52,10 +66,14 @@ export const ListPage = () => {
                             onChange={setFilters}
                             onFilter={handleFilter}
                         />
-                        {listing?.data?.map((item, index) => (
-                            <Card key={index} item={item.property} />
+                        {filteredListings?.data?.map((item, index) => (
+                            <Card
+                                key={index}
+                                item={item.property}
+                                postTier={item.postTier}
+                            />
                         ))}
-                        {(listing?.data === null ||
+                        {(filteredListings?.data === null ||
                             listing?.data?.length === 0) && (
                             <div className="flex h-[200px] items-center justify-center">
                                 <span className="text-xl font-semibold">
@@ -67,7 +85,7 @@ export const ListPage = () => {
                 )}
             </div>
             <div className="h-full flex-[2] md:bg-[#fcf5f3]">
-                <Map items={listing?.data ?? []} />
+                <Map items={filteredListings?.data ?? []} />
             </div>
         </div>
     );

@@ -52,6 +52,15 @@ export const PropertyDetails = () => {
     });
 
     const property = data?.data?.property;
+
+    if (property === undefined) {
+        return (
+            <div className="flex h-full items-center justify-center">
+                <Spinner />
+            </div>
+        );
+    }
+
     const item = data?.data;
     const isFollowed = data?.error;
 

@@ -7,13 +7,17 @@ import {
     Landmark,
     CalendarClock,
     Home,
-    FilePen
+    FilePen,
+    Award,
+    Crown,
+    Bookmark
 } from 'lucide-react';
 import { PropertySchedule } from './PropertyScheduleDialog';
 import { DeletePropertyDialog } from './DeletePropertyDialog';
 
 export const Card = ({
     item,
+    postTier,
     canUpdate = false,
     canViewSchedule = false,
     canDelete = false
@@ -34,7 +38,43 @@ export const Card = ({
     } = item;
 
     return (
-        <div className="group flex flex-col gap-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-md sm:flex-row">
+        <div className="group relative flex flex-col gap-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-md sm:flex-row">
+            {postTier && (
+                <div
+                    className={`absolute -top-3 -right-3 z-30 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ring-2 transition-transform hover:scale-105 ${
+                        postTier === 'VIP_GOLD'
+                            ? 'animate-glow-gold bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg ring-yellow-300'
+                            : postTier === 'VIP_SILVER'
+                              ? 'bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 text-white shadow-md ring-gray-300'
+                              : 'bg-blue-500 text-white shadow-sm ring-blue-300'
+                    }`}
+                    title={
+                        postTier === 'VIP_GOLD'
+                            ? 'Top-tier premium post'
+                            : postTier === 'VIP_SILVER'
+                              ? 'Mid-tier premium post'
+                              : 'Standard post'
+                    }
+                >
+                    {postTier === 'VIP_GOLD' ? (
+                        <>
+                            <Crown className="h-4 w-4 fill-yellow-100 stroke-yellow-800 drop-shadow" />
+                            <span className="tracking-wide">VIP GOLD</span>
+                        </>
+                    ) : postTier === 'VIP_SILVER' ? (
+                        <>
+                            <Award className="h-4 w-4 fill-gray-100 stroke-gray-700" />
+                            <span className="tracking-wide">VIP SILVER</span>
+                        </>
+                    ) : (
+                        <>
+                            <Bookmark className="h-4 w-4 fill-blue-200 stroke-blue-800" />
+                            <span>REGULAR</span>
+                        </>
+                    )}
+                </div>
+            )}
+
             {/* Image Container with badge */}
             <div className="relative h-[200px] w-full flex-shrink-0 overflow-hidden rounded-lg sm:w-[300px]">
                 <Link to={`/list/${propertyId}`} className="block h-full">
