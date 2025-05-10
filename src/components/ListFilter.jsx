@@ -80,7 +80,7 @@ export const ListFilter = ({ filters, onChange, onFilter }) => {
                                 <SelectValue placeholder="Any" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="any">Any</SelectItem>
+                                <SelectItem value=" ">Any</SelectItem>
                                 <SelectItem value="sale">For Sale</SelectItem>
                                 <SelectItem value="rent">For Rent</SelectItem>
                             </SelectContent>
@@ -88,23 +88,23 @@ export const ListFilter = ({ filters, onChange, onFilter }) => {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="Category">Category</Label>
+                        <Label htmlFor="propertyType">Category</Label>
                         <Select
-                            value={filters.category}
+                            value={filters.propertyType}
                             onValueChange={(value) =>
-                                handleChange('category', value)
+                                handleChange('propertyType', value)
                             }
                         >
-                            <SelectTrigger id="category" className="w-full">
+                            <SelectTrigger id="propertyType" className="w-full">
                                 <SelectValue placeholder="Any" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="any">Any</SelectItem>
+                                <SelectItem value=" ">Any</SelectItem>
                                 <SelectItem value="house">House</SelectItem>
                                 <SelectItem value="apartment">
                                     Apartment
                                 </SelectItem>
-                                <SelectItem value="townhouse">Land</SelectItem>
+                                <SelectItem value="land">Land</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>

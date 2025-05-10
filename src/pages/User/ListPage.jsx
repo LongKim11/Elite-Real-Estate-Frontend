@@ -11,9 +11,9 @@ export const ListPage = () => {
     const [filters, setFilters] = useState({
         fullAddress: '',
         transactionType: '',
-        category: '',
         province: '',
         district: '',
+        propertyType: '',
         minPrice: '',
         maxPrice: ''
     });
@@ -31,7 +31,7 @@ export const ListPage = () => {
 
     const buildQueryString = (filters) => {
         return Object.entries(filters)
-            .filter(([_, value]) => value !== '')
+            .filter(([_, value]) => value !== '' && value != ' ')
             .map(([key, value]) => `${key}=${value}`)
             .join('&');
     };
@@ -55,7 +55,8 @@ export const ListPage = () => {
                         {listing?.data?.map((item, index) => (
                             <Card key={index} item={item.property} />
                         ))}
-                        {listing?.data === null && (
+                        {(listing?.data === null ||
+                            listing?.data?.length === 0) && (
                             <div className="flex h-[200px] items-center justify-center">
                                 <span className="text-xl font-semibold">
                                     No Property Found
