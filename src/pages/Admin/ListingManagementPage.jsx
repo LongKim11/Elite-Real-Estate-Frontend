@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Spinner } from '@/components/Spinner';
-import { getListing } from '@/api/listingService';
+import { getListingAdmin } from '@/api/listingService';
 import { useQuery } from '@tanstack/react-query';
 import { ListFilter } from '@/components/ListFilter';
 import { Card } from '@/components/Card';
@@ -11,16 +11,16 @@ export const ListingManagementPage = () => {
     const [filters, setFilters] = useState({
         fullAddress: '',
         transactionType: '',
-        category: '',
         province: '',
         district: '',
+        propertyType: '',
         minPrice: '',
         maxPrice: ''
     });
 
     const { data: listing, isLoading } = useQuery({
         queryKey: ['getListingAdmin', queryString],
-        queryFn: () => getListing(queryString),
+        queryFn: () => getListingAdmin(queryString),
         onSuccess: (res) => {
             console.log('Listing Response', res);
         },
@@ -31,7 +31,7 @@ export const ListingManagementPage = () => {
 
     const buildQueryString = (filters) => {
         return Object.entries(filters)
-            .filter(([_, value]) => value !== '')
+            .filter(([_, value]) => value !== '' && value !== ' ')
             .map(([key, value]) => `${key}=${value}`)
             .join('&');
     };
@@ -39,13 +39,6 @@ export const ListingManagementPage = () => {
     const handleFilter = () => {
         setQueryString(buildQueryString(filters));
     };
-
-    if (isLoading)
-        return (
-            <div className="flex h-full items-center justify-center">
-                <Spinner />
-            </div>
-        );
 
     return (
         <div className="absolute inset-0 overflow-auto">
@@ -62,27 +55,34 @@ export const ListingManagementPage = () => {
                 </div>
             </div>
 
-            <div className="p-4">
-                <div className="flex flex-col gap-5 pb-10">
-                    {listing?.data?.map((item, index) => (
-                        <Card
-                            key={index}
-                            item={item.property}
-                            canUpdate={true}
-                            canViewSchedule={true}
-                            canDelete={true}
-                        />
-                    ))}
-
-                    {listing?.data === null && (
-                        <div className="flex h-[200px] items-center justify-center">
-                            <span className="text-xl font-semibold">
-                                No Property Found
-                            </span>
-                        </div>
-                    )}
+            {isLoading ? (
+                <div className="mt-20 flex items-center justify-center">
+                    <Spinner />
                 </div>
-            </div>
+            ) : (
+                <div className="p-4">
+                    <div className="flex flex-col gap-5 pb-10">
+                        {listing?.data?.map((item, index) => (
+                            <Card
+                                key={index}
+                                item={item.property}
+                                canUpdate={true}
+                                canViewSchedule={true}
+                                canDelete={true}
+                            />
+                        ))}
+
+                        {(listing?.data === null ||
+                            listing?.data?.length === 0) && (
+                            <div className="flex h-[200px] items-center justify-center">
+                                <span className="text-xl font-semibold">
+                                    No Property Found
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

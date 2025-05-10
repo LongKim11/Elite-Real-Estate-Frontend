@@ -5,6 +5,15 @@ export const getListing = (queryString) => {
     return api.get(`/properties/search?${queryString}`).then((res) => res.data);
 };
 
+export const getListingAdmin = (queryString) => {
+    const token = getToken();
+
+    return api
+        .get(`/properties/search-by-admin?${queryString}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};
 export const getPropertyDetails = (id) => {
     const token = getToken();
 
