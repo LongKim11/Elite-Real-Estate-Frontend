@@ -198,7 +198,6 @@ export const LandForm = ({
             JSON.stringify(propertyRequest)
         );
 
-      
         updateProperty({ propertyId: item.propertyId, formDataToSend });
     };
 
