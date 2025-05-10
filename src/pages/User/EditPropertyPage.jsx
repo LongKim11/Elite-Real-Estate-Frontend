@@ -22,7 +22,7 @@ export const EditPropertyPage = () => {
         }
     });
 
-    const category = propertyData?.data?.category;
+    const category = propertyData?.data?.property?.category;
 
     if (isLoading) {
         return <Spinner />;
@@ -31,13 +31,22 @@ export const EditPropertyPage = () => {
     return (
         <div className="h-full overflow-y-auto">
             {category === 'Apartment' && (
-                <ApartmentForm updateStatus={true} item={propertyData.data} />
+                <ApartmentForm
+                    updateStatus={true}
+                    item={propertyData?.data?.property}
+                />
             )}
             {category === 'Land' && (
-                <LandForm updateStatus={true} item={propertyData.data} />
+                <LandForm
+                    updateStatus={true}
+                    item={propertyData?.data?.property}
+                />
             )}
             {category === 'House' && (
-                <HouseForm updateStatus={true} item={propertyData.data} />
+                <HouseForm
+                    updateStatus={true}
+                    item={propertyData?.data?.property}
+                />
             )}
         </div>
     );
