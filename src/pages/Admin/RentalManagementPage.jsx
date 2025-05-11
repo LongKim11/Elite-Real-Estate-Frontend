@@ -9,12 +9,10 @@ import {
     Phone,
     Mail,
     Clock,
-    RefreshCcw,
     CheckCircle2,
     XCircle,
     AlertCircle
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
@@ -26,15 +24,7 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from '@/components/ui/select';
+import { PropertySchedule } from '@/components/PropertyScheduleDialog';
 
 // Status Badge Component
 const StatusBadge = ({ status }) => {
@@ -290,6 +280,7 @@ export const RentalManagementPage = () => {
                         <TableHead>Schedule</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Notes</TableHead>
+                        <TableHead>Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -344,6 +335,12 @@ export const RentalManagementPage = () => {
                                         {schedule.viewNotes ||
                                             'No notes provided'}
                                     </p>
+                                </TableCell>
+                                <TableCell>
+                                    <PropertySchedule
+                                        propertyId={schedule.propertyId}
+                                        actor="admin"
+                                    />
                                 </TableCell>
                             </TableRow>
                         ))

@@ -30,7 +30,7 @@ import {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
-export const PropertySchedule = ({ propertyId }) => {
+export const PropertySchedule = ({ propertyId, actor = 'owner' }) => {
     const getStatusColor = (status) => {
         switch (status) {
             case 'pending':
@@ -67,6 +67,9 @@ export const PropertySchedule = ({ propertyId }) => {
         onSuccess: (res) => {
             console.log('Update Schedule Status', res);
             queryClient.invalidateQueries(['getPropertySchedule', propertyId]);
+            if (actor === 'admin') {
+                queryClient.invalidateQueries(['getAllSchedule']);
+            }
         },
         onError: (err) => {
             console.log(
@@ -81,6 +84,9 @@ export const PropertySchedule = ({ propertyId }) => {
         onSuccess: (res) => {
             console.log('Cancel Schedule', res);
             queryClient.invalidateQueries(['getPropertySchedule', propertyId]);
+            if (actor === 'admin') {
+                queryClient.invalidateQueries(['getAllSchedule']);
+            }
         },
         onError: (err) => {
             console.log('Cancel Schedule Error', err.response.data.error);
@@ -92,6 +98,9 @@ export const PropertySchedule = ({ propertyId }) => {
         onSuccess: (res) => {
             console.log('Delete Schedule', res);
             queryClient.invalidateQueries(['getPropertySchedule', propertyId]);
+            if (actor === 'admin') {
+                queryClient.invalidateQueries(['getAllSchedule']);
+            }
         },
         onError: (err) => {
             console.log('Delete Schedule Error', err.response.data.error);

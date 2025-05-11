@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CircleDot, Briefcase, Award, PhoneCall } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 
 export const AgentContact = () => {
+    const [visiblePhoneNumber, setVisiblePhoneNumber] = useState(false);
+
     const handleCopy = (text) => {
         navigator.clipboard.writeText(text).then(() => {
             toast.success('Phone number copied successfully!');
@@ -77,14 +79,32 @@ export const AgentContact = () => {
                     </a>
 
                     {/* Phone Call Button */}
-                    <Button
-                        className="flex items-center justify-center gap-2 bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors hover:bg-teal-700"
-                        onClick={() => handleCopy('09135037659')}
-                    >
-                        <PhoneCall className="h-5 w-5" />
-                        0915 307 659
-                        <span className="text-xs text-teal-200">(Copy)</span>
-                    </Button>
+                    {visiblePhoneNumber ? (
+                        <Button
+                            className="flex items-center justify-center gap-2 bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors hover:bg-teal-700"
+                            onClick={() => handleCopy('09135037659')}
+                        >
+                            <PhoneCall className="h-5 w-5" />
+                            0915 307 659
+                            <span className="text-xs text-teal-200">
+                                (Copy)
+                            </span>
+                        </Button>
+                    ) : (
+                        <Button
+                            className="flex items-center justify-center gap-2 bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors hover:bg-teal-700"
+                            onClick={() => {
+                                setVisiblePhoneNumber(true);
+                                handleCopy('09135037659');
+                            }}
+                        >
+                            <PhoneCall className="h-5 w-5" />
+                            {'0915 307 659'.slice(0, -3) + '***'}
+                            <span className="text-xs text-teal-200">
+                                (Show)
+                            </span>
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>
