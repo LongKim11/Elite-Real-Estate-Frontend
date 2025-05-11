@@ -41,8 +41,6 @@ export const SimilarProperties = ({ propertyType, propertyId }) => {
         (item) => item.property.propertyId !== propertyId
     );
 
-    console.log(similarProperties);
-
     return (
         <div className="relative w-full px-8">
             {similarProperties?.length === 0 && (

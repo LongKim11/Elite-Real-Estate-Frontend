@@ -23,7 +23,11 @@ import {
     FilePen,
     ChartLine,
     HousePlus,
-    Map as MapIcon
+    Map as MapIcon,
+    Award,
+    CircleDot,
+    Briefcase,
+    PhoneCall
 } from 'lucide-react';
 import { Map } from '@/components/Map';
 import { HouseVisitDialog } from '@/components/HouseVisitDialog';
@@ -36,6 +40,8 @@ import { Button } from '@/components/ui/button';
 import { PropertySchedule } from '@/components/PropertyScheduleDialog';
 import { PriceTrendChart } from '@/components/PriceTrendChart';
 import { SimilarProperties } from '@/components/SimilarProperties';
+import { Badge } from '@/components/ui/badge';
+import { AgentContact } from '@/components/AgentContact';
 
 export const PropertyDetails = () => {
     const { id } = useParams();
@@ -631,6 +637,9 @@ export const PropertyDetails = () => {
 
             {/* Right Sidebar */}
             <div className="sticky top-0 h-fit flex-[2] self-start">
+                {/* User Info Section */}
+                <AgentContact />
+
                 {/* Contact Section */}
                 <div className="rounded-lg border bg-amber-50 p-6 shadow-sm">
                     <h3 className="mb-4 text-lg font-semibold">
