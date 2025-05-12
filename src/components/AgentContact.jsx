@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 
-export const AgentContact = () => {
+export const AgentContact = ({ agentInfo }) => {
     const [visiblePhoneNumber, setVisiblePhoneNumber] = useState(false);
 
     const handleCopy = (text) => {
@@ -32,14 +32,25 @@ export const AgentContact = () => {
 
                     <div className="flex-1">
                         <h4 className="font-medium text-gray-900">
-                            Nguyen Van A
+                            {agentInfo?.fullName}
                         </h4>
 
                         <div className="mt-2 flex flex-wrap items-center gap-2">
                             {/* Active Status Badge */}
                             <Badge className="flex items-center gap-1.5 border-green-300 bg-gradient-to-r from-green-50 to-green-100 text-green-800 hover:from-green-100 hover:to-green-200">
-                                <CircleDot className="h-3 w-3 text-green-500" />
-                                Active Now
+                                {agentInfo?.inActive ? (
+                                    <>
+                                        {' '}
+                                        <CircleDot className="h-3 w-3 text-red-500" />
+                                        Inactive now
+                                    </>
+                                ) : (
+                                    <>
+                                        {' '}
+                                        <CircleDot className="h-3 w-3 text-green-500" />
+                                        Active Now
+                                    </>
+                                )}
                             </Badge>
 
                             {/* Professional Badge */}
@@ -82,10 +93,10 @@ export const AgentContact = () => {
                     {visiblePhoneNumber ? (
                         <Button
                             className="flex items-center justify-center gap-2 bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors hover:bg-teal-700"
-                            onClick={() => handleCopy('09135037659')}
+                            onClick={() => handleCopy(agentInfo?.phone)}
                         >
                             <PhoneCall className="h-5 w-5" />
-                            0915 307 659
+                            {agentInfo?.phone}
                             <span className="text-xs text-teal-200">
                                 (Copy)
                             </span>
@@ -95,11 +106,11 @@ export const AgentContact = () => {
                             className="flex items-center justify-center gap-2 bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors hover:bg-teal-700"
                             onClick={() => {
                                 setVisiblePhoneNumber(true);
-                                handleCopy('09135037659');
+                                handleCopy(agentInfo?.phone);
                             }}
                         >
                             <PhoneCall className="h-5 w-5" />
-                            {'0915 307 659'.slice(0, -3) + '***'}
+                            {agentInfo?.phone.slice(0, -3) + '***'}
                             <span className="text-xs text-teal-200">
                                 (Show)
                             </span>

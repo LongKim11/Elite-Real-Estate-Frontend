@@ -80,7 +80,12 @@ export const Profile = () => {
                                             </span>{' '}
                                             {userInfo?.data.fullName}
                                         </p>
-
+                                        <p className="text-lg font-medium">
+                                            <span className="font-bold">
+                                                Phone Number:
+                                            </span>{' '}
+                                            {userInfo?.data.phone}
+                                        </p>
                                         <p className="text-lg font-medium">
                                             <span className="font-bold">
                                                 Status:

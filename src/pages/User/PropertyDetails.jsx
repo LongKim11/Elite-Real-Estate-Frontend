@@ -638,7 +638,7 @@ export const PropertyDetails = () => {
             {/* Right Sidebar */}
             <div className="sticky top-0 h-fit flex-[2] self-start">
                 {/* User Info Section */}
-                <AgentContact />
+                <AgentContact agentInfo={item?.userInfor} />
 
                 {/* Contact Section */}
                 <div className="rounded-lg border bg-amber-50 p-6 shadow-sm">
