@@ -6,11 +6,11 @@ import {
     ChartTooltipContent
 } from '@/components/ui/chart';
 
-export const PropertyDistributionChart = () => {
+export const PropertyDistributionChart = ({ propertyDistribution }) => {
     const propertyData = [
-        { type: 'Apartment', count: 320 },
-        { type: 'House', count: 480 },
-        { type: 'Land', count: 150 }
+        { type: 'Apartment', count: propertyDistribution.Apartment },
+        { type: 'House', count: propertyDistribution.House },
+        { type: 'Land', count: propertyDistribution.Land }
     ];
 
     // Chart configuration
@@ -30,9 +30,9 @@ export const PropertyDistributionChart = () => {
                 <h2 className="text-2xl font-bold tracking-tight text-indigo-700">
                     Property Distribution
                 </h2>
-                <p className="text-gradient mt-1 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 bg-clip-text text-lg font-semibold text-transparent">
+                <p className="mt-1 text-lg font-semibold text-indigo-600">
                     Total Properties:{' '}
-                    <span className="font-extrabold">
+                    <span className="font-semibold">
                         {propertyData.reduce(
                             (sum, item) => sum + item.count,
                             0

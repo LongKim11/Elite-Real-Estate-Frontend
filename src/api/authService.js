@@ -46,3 +46,13 @@ export const deleteUser = (id) => {
         })
         .then((res) => res.data);
 };
+
+export const getOverviewStatistics = () => {
+    const token = getToken();
+
+    return api
+        .get('/overview-statistics', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => res.data);
+};

@@ -6,11 +6,11 @@ import {
     ChartTooltipContent
 } from '@/components/ui/chart';
 
-export const UserQuotaDistribution = () => {
+export const UserQuotaDistribution = ({ userQuotasCount }) => {
     const quotaData = [
-        { name: 'VIP', value: 150, color: '#2a9d90' },
-        { name: 'Standard', value: 450, color: '#e76e50' },
-        { name: 'Basic', value: 850, color: '#274754' }
+        { name: 'VIP', value: userQuotasCount.VIP, color: '#2a9d90' },
+        { name: 'Standard', value: userQuotasCount.STANDARD, color: '#e76e50' },
+        { name: 'Basic', value: userQuotasCount.BASIC, color: '#274754' }
     ];
     // Chart configuration
     const chartConfig = {

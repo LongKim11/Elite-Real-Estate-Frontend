@@ -81,9 +81,7 @@ export const UserMangamentPage = () => {
         userInfo?.data?.filter(
             (user) =>
                 !searchQuery ||
-                user?.fullName
-                    ?.toLowerCase()
-                    .includes(searchQuery?.toLowerCase())
+                user?.phone?.toLowerCase().includes(searchQuery?.toLowerCase())
         ) || [];
     const handleDeleteUser = () => {
         mutate(selectedUser.id);
@@ -106,7 +104,7 @@ export const UserMangamentPage = () => {
                 <div className="relative w-full max-w-xs sm:ml-auto">
                     <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
                     <Input
-                        placeholder="Search users..."
+                        placeholder="Search users by phone..."
                         className="pl-9"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -118,6 +116,7 @@ export const UserMangamentPage = () => {
                 <TableHeader>
                     <TableRow>
                         <TableHead>Full Name</TableHead>
+                        <TableHead>Phone Number</TableHead>
                         <TableHead>Role</TableHead>
                         <TableHead>Balance</TableHead>
                         <TableHead>Status</TableHead>
@@ -156,6 +155,11 @@ export const UserMangamentPage = () => {
                                             </p>
                                         </div>
                                     </div>
+                                </TableCell>
+                                <TableCell>
+                                    <span className="font-semibold text-pink-500">
+                                        {user.phone}
+                                    </span>
                                 </TableCell>
                                 <TableCell>
                                     <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800">

@@ -3,14 +3,71 @@ import { Users, Newspaper, Wallet, ShoppingCart } from 'lucide-react';
 import { MonthlySalesChart } from '@/components/MonthlySalesChart';
 import { UserQuotaDistribution } from '@/components/UserQuotaDistribution';
 import { PropertyDistributionChart } from '@/components/PropertyDistributionChart';
+import { useQuery } from '@tanstack/react-query';
+import { getOverviewStatistics } from '@/api/authService';
+import { Spinner } from '@/components/Spinner';
 
 export const DashboardPage = () => {
+    const { data: overviewStatistics, isLoading: isGettingOverviewStatistics } =
+        useQuery({
+            queryKey: ['getOverviewStatistics'],
+            queryFn: getOverviewStatistics,
+            onSuccess: (res) => {
+                console.log('Overview Statistics', res);
+            },
+            onError: (err) => {
+                console.log(
+                    'Overview Statistics Error',
+                    err.response.data.error
+                );
+            }
+        });
+
+    const totalUsers =
+        overviewStatistics !== undefined &&
+        overviewStatistics?.data?.userStatistics?.userRegistrationsByTimePeriod
+            ?.TotalUsers;
+
+    const totalProperties =
+        overviewStatistics !== undefined &&
+        Object.values(
+            overviewStatistics?.data?.listingStatistics.propertyTypeCounts
+        ).reduce((sum, value) => sum + value, 0);
+
+    const totalDeposits =
+        overviewStatistics !== undefined &&
+        overviewStatistics?.data?.walletTopupStatistics?.topupAmountsByStatus
+            ?.Success.Total;
+
+    const totalPostSales =
+        overviewStatistics !== undefined &&
+        Object.values(
+            overviewStatistics?.data?.salesStatistics
+                ?.totalAmountByStatusAndTier?.SUCCESS
+        ).reduce((sum, value) => sum + value, 0);
+
+    const userQuotasCount =
+        overviewStatistics !== undefined &&
+        overviewStatistics?.data?.salesStatistics.packetSalesCount;
+
+    const propertyDistribution =
+        overviewStatistics !== undefined &&
+        overviewStatistics?.data?.listingStatistics?.propertyTypeCounts;
+
     const dashboardData = {
-        users: 5420,
-        posts: 873,
-        deposits: 38750,
-        sales: 12500
+        users: totalUsers,
+        posts: totalProperties,
+        deposits: totalDeposits,
+        sales: totalPostSales
     };
+
+    if (isGettingOverviewStatistics) {
+        return (
+            <div className="flex h-full items-center justify-center">
+                <Spinner />
+            </div>
+        );
+    }
 
     return (
         <div className="h-full overflow-auto p-6">
@@ -133,9 +190,11 @@ export const DashboardPage = () => {
                 <MonthlySalesChart />
 
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
-                    <UserQuotaDistribution />
+                    <UserQuotaDistribution userQuotasCount={userQuotasCount} />
 
-                    <PropertyDistributionChart />
+                    <PropertyDistributionChart
+                        propertyDistribution={propertyDistribution}
+                    />
                 </div>
             </div>
         </div>
