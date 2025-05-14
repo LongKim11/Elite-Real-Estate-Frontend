@@ -12,37 +12,44 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { Bookmark, BellRing } from 'lucide-react';
-import { useMutation } from '@tanstack/react-query';
+import { Bookmark, BellRing, Loader2 } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { registerObserver } from '@/api/listingService';
+import { useForm } from 'react-hook-form';
+import { observerSchema } from '@/schemas/observer.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export const RegisterObserverDialog = ({ id, isFollowed }) => {
-    const [email, setEmail] = useState('');
-    const [open, setOpen] = useState(false);
-    const [error, setError] = useState('');
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm({
+        resolver: zodResolver(observerSchema),
+        mode: 'onSubmit'
+    });
 
-    const { mutate: handleRegisterObserver } = useMutation({
+    const [open, setOpen] = useState(false);
+
+    const queryClient = useQueryClient();
+
+    const { mutate: handleRegisterObserver, isLoading } = useMutation({
         mutationFn: registerObserver,
         onSuccess: (res) => {
             console.log('Register Observer: ', res);
             toast.success(res.message);
+            queryClient.invalidateQueries(['property-details', id]);
             setOpen(false);
-            setError('');
         },
         onError: (err) => {
             console.log('Register Observer Error:', err.response.data.error);
             toast.success(err.response.data.error);
             setOpen(false);
-            setError('');
         }
     });
 
-    const handleRegisterInterest = () => {
-        if (email.length > 0 && email.includes('@')) {
-            handleRegisterObserver({ id, email });
-        } else {
-            setError('Please enter a valid email address.');
-        }
+    const onSubmit = (data) => {
+        handleRegisterObserver({ id, email: data.email });
     };
 
     return (
@@ -74,18 +81,32 @@ export const RegisterObserverDialog = ({ id, isFollowed }) => {
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email</Label>
                         <Input
-                            id="email"
+                            {...register('email')}
                             type="email"
                             placeholder="e,g. example@example.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
-                    <p className="text-sm text-red-500">{error}</p>
+                    {errors.email && (
+                        <p className="text-xs text-red-500">
+                            {errors.email.message}
+                        </p>
+                    )}
                 </div>
 
                 <DialogFooter>
-                    <Button onClick={handleRegisterInterest}>Register</Button>
+                    <Button
+                        onClick={handleSubmit(onSubmit)}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <div className="flex items-center justify-center gap-2">
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                                Please wait...
+                            </div>
+                        ) : (
+                            <>Register</>
+                        )}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

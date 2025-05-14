@@ -47,7 +47,6 @@ export const HouseVisitDialog = ({ id }) => {
 
     const onSubmit = (data) => {
         const requestBody = { propertyId: id, ...data };
-        console.log('Request body', requestBody);
         handleScheduleViewing(requestBody);
     };
 
