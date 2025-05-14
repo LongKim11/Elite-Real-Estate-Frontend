@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ListFilter } from '@/components/ListFilter';
 import { Card } from '@/components/Card';
 import { Map } from '@/components/Map';
 import { useQuery } from '@tanstack/react-query';
 import { getListing } from '@/api/listingService';
 import { Spinner } from '@/components/Spinner';
+import { useLocation } from 'react-router-dom';
 
 export const ListPage = () => {
     const [queryString, setQueryString] = useState('');
     const [filters, setFilters] = useState({
-        fullAddress: '',
         transactionType: '',
         province: '',
         district: '',
@@ -17,6 +17,23 @@ export const ListPage = () => {
         minPrice: '',
         maxPrice: ''
     });
+
+    const location = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+
+        const newFilters = {    
+            transactionType: params.get('transactionType') || '',
+            province: params.get('province') || '',
+            district: params.get('district') || '',
+            propertyType: params.get('propertyType') || '',
+            minPrice: params.get('minPrice') || '',
+            maxPrice: params.get('maxPrice') || ''
+        };
+        setFilters(newFilters);
+        setQueryString(buildQueryString(newFilters));
+    }, [location.search]);
 
     const { data: listing, isLoading } = useQuery({
         queryKey: ['listing', queryString],

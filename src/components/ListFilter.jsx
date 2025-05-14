@@ -30,10 +30,6 @@ export const ListFilter = ({ filters, onChange, onFilter }) => {
                     <Input
                         id="fullAddress"
                         placeholder="e.g. 1600 Amphitheatre Parkway, Mountain View, CA"
-                        value={filters.fullAddress}
-                        onChange={(e) =>
-                            handleChange('fullAddress', e.target.value)
-                        }
                     />
                 </div>
 

@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const HomeSearchBar = () => {
+    const navigate = useNavigate();
+
     const [query, setQuery] = useState({
-        type: 'buy',
-        location: '',
+        transactionType: 'sale',
+        province: '',
         minPrice: '',
         maxPrice: ''
     });
 
     const handleSearch = (e) => {
         e.preventDefault();
-        console.log('Searching for:', query);
-        // Here you would typically handle the search logic or API call
+        const queryString = new URLSearchParams(query).toString();
+        navigate(`/list?${queryString}`);
     };
 
     const handleInputChange = (e) => {
@@ -20,7 +23,7 @@ export const HomeSearchBar = () => {
     };
 
     const handleTabChange = (type) => {
-        setQuery({ ...query, type });
+        setQuery({ ...query, transactionType: type });
     };
 
     return (
@@ -29,17 +32,17 @@ export const HomeSearchBar = () => {
             <div className="flex border-b">
                 <button
                     className={`px-8 py-3 text-sm font-medium transition-colors duration-200 ${
-                        query.type === 'buy'
+                        query.transactionType === 'sale'
                             ? 'bg-black text-white'
                             : 'bg-white text-gray-700 hover:bg-gray-100'
                     }`}
-                    onClick={() => handleTabChange('buy')}
+                    onClick={() => handleTabChange('sale')}
                 >
-                    Buy
+                    Sale
                 </button>
                 <button
                     className={`px-8 py-3 text-sm font-medium transition-colors duration-200 ${
-                        query.type === 'rent'
+                        query.transactionType === 'rent'
                             ? 'bg-black text-white'
                             : 'bg-white text-gray-700 hover:bg-gray-100'
                     }`}
@@ -58,8 +61,8 @@ export const HomeSearchBar = () => {
                             type="text"
                             placeholder="City, Location"
                             className="w-full bg-transparent px-4 py-3 text-black outline-none"
-                            value={query.location}
-                            name="location"
+                            value={query.province}
+                            name="province"
                             onChange={handleInputChange}
                         />
                     </div>
