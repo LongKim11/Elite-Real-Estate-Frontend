@@ -47,8 +47,7 @@ export const PropertyDistributionChart = ({ propertyDistribution }) => {
                     data={propertyData}
                     margin={{
                         top: 20,
-                        right: 30,
-                        left: 30,
+                        right: 60,
                         bottom: 10
                     }}
                 >
