@@ -23,11 +23,7 @@ import {
     FilePen,
     ChartLine,
     HousePlus,
-    Map as MapIcon,
-    Award,
-    CircleDot,
-    Briefcase,
-    PhoneCall
+    Map as MapIcon
 } from 'lucide-react';
 import { Map } from '@/components/Map';
 import { HouseVisitDialog } from '@/components/HouseVisitDialog';
@@ -40,7 +36,6 @@ import { Button } from '@/components/ui/button';
 import { PropertySchedule } from '@/components/PropertyScheduleDialog';
 import { PriceTrendChart } from '@/components/PriceTrendChart';
 import { SimilarProperties } from '@/components/SimilarProperties';
-import { Badge } from '@/components/ui/badge';
 import { AgentContact } from '@/components/AgentContact';
 
 export const PropertyDetails = () => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,21 +9,16 @@ import { Spinner } from '@/components/Spinner';
 import { toast } from 'sonner';
 import { login } from '@/api/authService';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema } from '@/schemas/login.schema';
 
 export const SignInPage = () => {
-    const [formData, setFormData] = useState({
-        phoneNumber: '',
-        password: ''
-    });
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm({ resolver: zodResolver(loginSchema), mode: 'onSubmit' });
 
     const navigate = useNavigate();
 
@@ -44,9 +39,8 @@ export const SignInPage = () => {
         }
     });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        handleLogin(formData);
+    const onSubmit = (data) => {
+        handleLogin(data);
     };
 
     return (
@@ -66,34 +60,40 @@ export const SignInPage = () => {
                                 Welcome back! Enter your credentials to sign in.
                             </p>
 
-                            <form onSubmit={handleSubmit} className="space-y-4">
+                            <form
+                                onSubmit={handleSubmit(onSubmit)}
+                                className="space-y-4"
+                            >
                                 <div className="mb-5 space-y-3">
                                     <Label htmlFor="phoneNumber">
                                         Phone Number
                                     </Label>
                                     <Input
-                                        id="phoneNumber"
-                                        name="phoneNumber"
+                                        {...register('phoneNumber')}
                                         type="text"
                                         placeholder="Enter your phone number"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        required
                                     />
+                                    {errors.phoneNumber && (
+                                        <p className="text-left text-sm text-red-500">
+                                            {errors.phoneNumber.message}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="mb-5 space-y-3">
                                     <Label htmlFor="password">Password</Label>
                                     <Input
-                                        id="password"
-                                        name="password"
+                                        {...register('password')}
                                         type="password"
                                         placeholder="Enter your password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        required
                                     />
+                                    {errors.password && (
+                                        <p className="text-left text-sm text-red-500">
+                                            {errors.password.message}
+                                        </p>
+                                    )}
                                 </div>
+
                                 <div className="mb-5 flex items-center justify-between">
                                     <div className="flex items-center space-x-2">
                                         <Checkbox

@@ -79,7 +79,7 @@ export const DashboardPage = () => {
                             <p className="text-sm font-semibold tracking-wide text-white/80">
                                 REGISTERED USERS
                             </p>
-                            <p className="mt-2 text-4xl font-extrabold text-white">
+                            <p className="mt-2 text-3xl font-extrabold text-white">
                                 {dashboardData.users}
                             </p>
                         </div>
@@ -108,7 +108,7 @@ export const DashboardPage = () => {
                             <p className="text-sm font-semibold tracking-wide text-white/90">
                                 PROPERTY VOLUMES
                             </p>
-                            <p className="mt-2 text-4xl font-extrabold text-white">
+                            <p className="mt-2 text-3xl font-extrabold text-white">
                                 {dashboardData.posts}
                             </p>
                         </div>
@@ -137,7 +137,7 @@ export const DashboardPage = () => {
                             <p className="text-sm font-semibold tracking-wide text-white/90">
                                 TOTAL DEPOSITS
                             </p>
-                            <p className="mt-2 text-4xl font-extrabold text-white">
+                            <p className="mt-2 text-3xl font-extrabold text-white">
                                 ${dashboardData.deposits.toLocaleString()}
                             </p>
                         </div>
@@ -164,7 +164,7 @@ export const DashboardPage = () => {
                             <p className="text-sm font-semibold tracking-wide text-white/90">
                                 POST SALES
                             </p>
-                            <p className="mt-2 text-4xl font-extrabold text-white">
+                            <p className="mt-2 text-3xl font-extrabold text-white">
                                 ${dashboardData.sales.toLocaleString()}
                             </p>
                         </div>

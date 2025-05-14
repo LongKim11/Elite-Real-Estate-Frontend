@@ -110,7 +110,7 @@ export const AgentContact = ({ agentInfo }) => {
                             }}
                         >
                             <PhoneCall className="h-5 w-5" />
-                            {agentInfo?.phone.slice(0, -3) + '***'}
+                            {agentInfo?.phone?.slice(0, -3) + '***'}
                             <span className="text-xs text-teal-200">
                                 (Show)
                             </span>
