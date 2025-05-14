@@ -17,24 +17,21 @@ import { useMutation } from '@tanstack/react-query';
 import { scheduleViewing } from '@/api/rentalService';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import { scheduleSchema } from '@/schemas/schedule.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
 export const HouseVisitDialog = ({ id }) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setValue
+    } = useForm({ resolver: zodResolver(scheduleSchema), mode: 'onSubmit' });
+
     const [openDialog, setOpenDialog] = useState(false);
 
-    const [formData, setFormData] = useState({
-        propertyId: id,
-        viewerName: '',
-        viewerPhone: '',
-        viewerEmail: '',
-        viewNotes: '',
-        scheduledAt: ''
-    });
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const { mutate: handleSchduleViewing, isLoading } = useMutation({
+    const { mutate: handleScheduleViewing, isLoading } = useMutation({
         mutationFn: scheduleViewing,
         onSuccess: (res) => {
             console.log(res);
@@ -48,9 +45,10 @@ export const HouseVisitDialog = ({ id }) => {
         }
     });
 
-    const handleBookingVisit = () => {
-        console.log('Viewer info', formData);
-        handleSchduleViewing(formData);
+    const onSubmit = (data) => {
+        const requestBody = { propertyId: id, ...data };
+        console.log('Request body', requestBody);
+        handleScheduleViewing(requestBody);
     };
 
     return (
@@ -75,49 +73,73 @@ export const HouseVisitDialog = ({ id }) => {
                             Name
                         </Label>
                         <Input
-                            id="name"
+                            {...register('viewerName')}
                             className="col-span-3"
-                            name="viewerName"
                             placeholder="e.g John Doe"
-                            onChange={handleChange}
                         />
                     </div>
+                    {errors.viewerName && (
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <span className="col-span-1"></span>
+                            <p className="col-span-3 text-xs text-red-500">
+                                {errors.viewerName.message}
+                            </p>
+                        </div>
+                    )}
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="phone" className="text-right">
                             Phone Number
                         </Label>
                         <Input
-                            id="phone"
-                            name="viewerPhone"
+                            {...register('viewerPhone')}
                             className="col-span-3"
                             placeholder="Enter your contact number"
-                            onChange={handleChange}
                         />
                     </div>
+                    {errors.viewerPhone && (
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <span className="col-span-1"></span>
+                            <p className="col-span-3 text-xs text-red-500">
+                                {errors.viewerPhone.message}
+                            </p>
+                        </div>
+                    )}
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="email" className="text-right">
                             Email
                         </Label>
                         <Input
-                            id="email"
+                            {...register('viewerEmail')}
                             className="col-span-3"
-                            name="viewerEmail"
                             placeholder="example@example.com"
-                            onChange={handleChange}
                         />
                     </div>
+                    {errors.viewerEmail && (
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <span className="col-span-1"></span>
+                            <p className="col-span-3 text-xs text-red-500">
+                                {errors.viewerEmail.message}
+                            </p>
+                        </div>
+                    )}
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="notes" className="text-right">
                             Notes
                         </Label>
                         <Input
-                            id="notes"
+                            {...register('viewerNotes')}
                             className="col-span-3"
-                            name="viewNotes"
                             placeholder="Add any special notes here..."
-                            onChange={handleChange}
                         />
                     </div>
+                    {errors.viewerNotes && (
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <span className="col-span-1"></span>
+                            <p className="col-span-3 text-xs text-red-500">
+                                {errors.viewerNotes.message}
+                            </p>
+                        </div>
+                    )}
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="date-time" className="text-right">
                             Date & Time
@@ -126,17 +148,27 @@ export const HouseVisitDialog = ({ id }) => {
                             <DateTimePicker
                                 className="w-full"
                                 onChange={(value) => {
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        scheduledAt: value
-                                    }));
+                                    setValue('scheduledAt', value, {
+                                        shouldValidate: true
+                                    });
                                 }}
                             />
                         </div>
                     </div>
+                    {errors.scheduledAt && (
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <span className="col-span-1"></span>
+                            <p className="col-span-3 text-xs text-red-500">
+                                {errors.scheduledAt.message}
+                            </p>
+                        </div>
+                    )}
                 </div>
                 <DialogFooter>
-                    <Button onClick={handleBookingVisit} disabled={isLoading}>
+                    <Button
+                        onClick={handleSubmit(onSubmit)}
+                        disabled={isLoading}
+                    >
                         {' '}
                         {isLoading ? (
                             <div className="flex items-center justify-center gap-2">
