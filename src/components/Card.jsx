@@ -103,10 +103,10 @@ export const Card = ({
             </div>
 
             {/* Info */}
-            <div className="flex flex-1 flex-col justify-between pt-4 sm:pt-0">
+            <div className="flex w-full max-w-full flex-col justify-between pt-4 sm:pt-0">
                 {/* Title and main info */}
                 <div className="space-y-4">
-                    <h3 className="line-clamp-2 text-xl font-bold text-gray-800 transition-colors group-hover:text-amber-500">
+                    <h3 className="w-full max-w-full text-xl font-bold break-words whitespace-normal text-gray-800 transition-colors group-hover:text-amber-500">
                         <Link to={`/list/${item.propertyId}`}>{title}</Link>
                     </h3>
 
@@ -138,7 +138,9 @@ export const Card = ({
                         {/* Address */}
                         <div className="flex items-center gap-2">
                             <MapPin className="h-4 w-4 text-gray-500" />
-                            <span className="truncate">{fullAddress}</span>
+                            <span className="w-full max-w-full break-words whitespace-normal">
+                                {fullAddress}
+                            </span>
                         </div>
 
                         {/* Start and Expiry Date */}

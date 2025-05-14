@@ -56,7 +56,7 @@ export const ListPage = () => {
 
     return (
         <div className="flex h-full pt-5 pr-12 pl-12">
-            <div className="flex-[3]">
+            <div className="max-w-[60%] flex-grow basis-3/5">
                 {isLoading ? (
                     <Spinner />
                 ) : (
@@ -84,7 +84,7 @@ export const ListPage = () => {
                     </div>
                 )}
             </div>
-            <div className="h-full flex-[2] md:bg-[#fcf5f3]">
+            <div className="max-w-[40%] flex-grow basis-2/5">
                 <Map items={filteredListings?.data ?? []} />
             </div>
         </div>
