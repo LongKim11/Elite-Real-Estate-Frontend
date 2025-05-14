@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,13 +9,16 @@ import { register } from '@/api/authService';
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from '@/components/Spinner';
 import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { registerSchema } from '@/schemas/register.schema';
 
 export const SignUpPage = () => {
-    const [formData, setFormData] = useState({
-        fullName: '',
-        password: '',
-        phoneNumber: ''
-    });
+    const {
+        register: formRegister,
+        handleSubmit,
+        formState: { errors }
+    } = useForm({ resolver: zodResolver(registerSchema), mode: 'onSubmit' });
 
     const navigate = useNavigate();
 
@@ -32,25 +35,8 @@ export const SignUpPage = () => {
         }
     });
 
-    const [confirmPassword, setConfirmPassword] = useState('');
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (confirmPassword !== formData.password) {
-            toast.error('Confirmation password does not match');
-        } else {
-            handleRegister(formData);
-        }
+    const onSubmit = (data) => {
+        handleRegister(data);
     };
 
     return (
@@ -73,43 +59,50 @@ export const SignUpPage = () => {
                                 create your account.
                             </p>
 
-                            <form onSubmit={handleSubmit} className="space-y-4">
+                            <form
+                                onSubmit={handleSubmit(onSubmit)}
+                                className="space-y-4"
+                            >
                                 <div className="mb-3 space-y-3">
                                     <Label htmlFor="fullName">Name</Label>
                                     <Input
-                                        id="fullName"
-                                        name="fullName"
+                                        {...formRegister('fullName')}
+                                        type="text"
                                         placeholder="e.g. John Smith"
-                                        value={formData.fullName}
-                                        onChange={handleChange}
-                                        required
                                     />
+                                    {errors.fullName && (
+                                        <p className="text-left text-sm text-red-500">
+                                            {errors.fullName.message}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="mb-3 space-y-3">
                                     <Label htmlFor="phone">Phone Number</Label>
                                     <Input
-                                        id="phone"
-                                        name="phoneNumber"
+                                        {...formRegister('phoneNumber')}
                                         type="text"
                                         placeholder="Enter your phone number"
-                                        value={formData.phoneNumber}
-                                        onChange={handleChange}
-                                        required
                                     />
+                                    {errors.phoneNumber && (
+                                        <p className="text-left text-sm text-red-500">
+                                            {errors.phoneNumber.message}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="mb-3 space-y-3">
                                     <Label htmlFor="password">Password</Label>
                                     <Input
-                                        id="password"
-                                        name="password"
+                                        {...formRegister('password')}
                                         type="password"
                                         placeholder="At least 8 characters"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        required
                                     />
+                                    {errors.password && (
+                                        <p className="text-left text-sm text-red-500">
+                                            {errors.password.message}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="mb-3 space-y-3">
@@ -117,16 +110,15 @@ export const SignUpPage = () => {
                                         Confirm your password
                                     </Label>
                                     <Input
-                                        id="confirmPassword"
-                                        name="confirmPassword"
+                                        {...formRegister('confirmPassword')}
                                         type="password"
                                         placeholder="Re-enter to confirm your password"
-                                        value={formData.confirmPassword}
-                                        onChange={(e) =>
-                                            setConfirmPassword(e.target.value)
-                                        }
-                                        required
                                     />
+                                    {errors.confirmPassword && (
+                                        <p className="text-left text-sm text-red-500">
+                                            {errors.confirmPassword.message}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="flex items-center space-x-2">
