@@ -136,36 +136,55 @@ export const Profile = () => {
 
                                 {/* Tab Content */}
                                 <div className="mt-6 space-y-8">
-                                    {activeTab === 'myList' &&
-                                    ownedPost?.data === null ? (
-                                        <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-                                            <Box className="mb-4 h-24 w-24 opacity-70" />
-                                            <p className="mb-2 text-lg font-semibold">
-                                                You have no posts yet!
-                                            </p>
-                                        </div>
-                                    ) : (
-                                        ownedPost?.data?.map((item, index) => (
-                                            <Card
-                                                key={index}
-                                                item={item}
-                                                canUpdate={true}
-                                                canViewSchedule={true}
-                                            />
-                                        ))
+                                    {activeTab === 'savedList' && (
+                                        <>
+                                            {!savedPost?.data ||
+                                            savedPost.data.length === 0 ? (
+                                                <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+                                                    <Heart className="mb-4 h-24 w-24 opacity-70" />
+                                                    <p className="mb-2 text-lg font-semibold">
+                                                        You haven't saved any
+                                                        posts yet!
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                savedPost.data.map(
+                                                    (item, index) => (
+                                                        <Card
+                                                            key={index}
+                                                            item={item}
+                                                        />
+                                                    )
+                                                )
+                                            )}
+                                        </>
                                     )}
-                                    {activeTab === 'savedList' &&
-                                    savedPost?.data === null ? (
-                                        <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-                                            <Heart className="mb-4 h-24 w-24 opacity-70" />
-                                            <p className="mb-2 text-lg font-semibold">
-                                                You haven't saved any posts yet!
-                                            </p>
-                                        </div>
-                                    ) : (
-                                        savedPost?.data?.map((item, index) => (
-                                            <Card key={index} item={item} />
-                                        ))
+
+                                    {activeTab === 'myList' && (
+                                        <>
+                                            {!ownedPost?.data ||
+                                            ownedPost.data.length === 0 ? (
+                                                <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+                                                    <Box className="mb-4 h-24 w-24 opacity-70" />
+                                                    <p className="mb-2 text-lg font-semibold">
+                                                        You have no posts yet!
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                ownedPost.data.map(
+                                                    (item, index) => (
+                                                        <Card
+                                                            key={index}
+                                                            item={item}
+                                                            canUpdate={true}
+                                                            canViewSchedule={
+                                                                true
+                                                            }
+                                                        />
+                                                    )
+                                                )
+                                            )}
+                                        </>
                                     )}
                                 </div>
                             </div>
