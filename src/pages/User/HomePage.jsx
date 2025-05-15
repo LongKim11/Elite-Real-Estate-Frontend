@@ -87,9 +87,11 @@ export const HomePage = () => {
 
                                 {/* Button that appears on hover */}
                                 <div className="mt-4 transform opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                                    <button className="rounded-full bg-white px-6 py-2 font-semibold text-gray-900 transition-colors hover:bg-amber-400">
-                                        Explore
-                                    </button>
+                                    <Link to={'/list'}>
+                                        <button className="rounded-full bg-white px-6 py-2 font-semibold text-gray-900 transition-colors hover:bg-amber-400">
+                                            Explore
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -121,9 +123,11 @@ export const HomePage = () => {
 
                                 {/* Button that appears on hover */}
                                 <div className="mt-4 transform opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                                    <button className="rounded-full bg-white px-6 py-2 font-semibold text-gray-900 transition-colors hover:bg-amber-400">
-                                        Explore
-                                    </button>
+                                    <Link to={'/list'}>
+                                        <button className="rounded-full bg-white px-6 py-2 font-semibold text-gray-900 transition-colors hover:bg-amber-400">
+                                            Explore
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -155,9 +159,11 @@ export const HomePage = () => {
 
                                 {/* Button that appears on hover */}
                                 <div className="mt-4 transform opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                                    <button className="rounded-full bg-white px-6 py-2 font-semibold text-gray-900 transition-colors hover:bg-amber-400">
-                                        Explore
-                                    </button>
+                                    <Link to={'/list'}>
+                                        <button className="rounded-full bg-white px-6 py-2 font-semibold text-gray-900 transition-colors hover:bg-amber-400">
+                                            Explore
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -337,10 +343,11 @@ export const HomePage = () => {
                                         </span>
                                     </div>
                                 </div>
-
-                                <button className="w-full rounded-lg bg-amber-500 py-2 font-semibold text-white transition-colors hover:bg-amber-600">
-                                    View Details
-                                </button>
+                                <Link to={'/list'}>
+                                    <button className="w-full rounded-lg bg-amber-500 py-2 font-semibold text-white transition-colors hover:bg-amber-600">
+                                        View Details
+                                    </button>
+                                </Link>
                             </div>
                         </div>
 
@@ -460,9 +467,11 @@ export const HomePage = () => {
                                     </div>
                                 </div>
 
-                                <button className="w-full rounded-lg bg-blue-500 py-2 font-semibold text-white transition-colors hover:bg-blue-600">
-                                    View Details
-                                </button>
+                                <Link to={'/list'}>
+                                    <button className="w-full rounded-lg bg-blue-500 py-2 font-semibold text-white transition-colors hover:bg-blue-600">
+                                        View Details
+                                    </button>
+                                </Link>
                             </div>
                         </div>
 
@@ -582,9 +591,11 @@ export const HomePage = () => {
                                     </div>
                                 </div>
 
-                                <button className="w-full rounded-lg bg-green-500 py-2 font-semibold text-white transition-colors hover:bg-green-600">
-                                    View Details
-                                </button>
+                                <Link to={'/list'}>
+                                    <button className="w-full rounded-lg bg-green-500 py-2 font-semibold text-white transition-colors hover:bg-green-600">
+                                        View Details
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     </div>

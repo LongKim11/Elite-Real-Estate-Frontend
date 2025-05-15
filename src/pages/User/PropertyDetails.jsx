@@ -23,6 +23,7 @@ import {
     FilePen,
     ChartLine,
     HousePlus,
+    CheckCheckIcon,
     Map as MapIcon
 } from 'lucide-react';
 import { Map } from '@/components/Map';
@@ -637,9 +638,27 @@ export const PropertyDetails = () => {
 
                 {/* Contact Section */}
                 <div className="rounded-lg border bg-amber-50 p-6 shadow-sm">
-                    <h3 className="mb-4 text-lg font-semibold">
-                        Interested in this property?
-                    </h3>
+                    {isFollowed === '2' ? (
+                        <>
+                            <div className="mb-4 flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <PropertySchedule
+                                        propertyId={property.propertyId}
+                                    />
+                                    <h3 className="text-lg font-semibold text-gray-800">
+                                        Manage your property schedule
+                                    </h3>
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="mb-4 flex items-center gap-2">
+                            <CheckCheckIcon className="text-red-500" />
+                            <h3 className="text-lg font-semibold">
+                                Interested in this property?
+                            </h3>
+                        </div>
+                    )}
 
                     <div className="space-y-4">
                         {isFollowed === '2' ? (
@@ -667,28 +686,6 @@ export const PropertyDetails = () => {
                         )}
                     </div>
                 </div>
-                {isFollowed === '2' && (
-                    <div className="mt-6 overflow-hidden rounded-lg border border-red-200 bg-white shadow-sm">
-                        <div className="bg-gradient-to-r from-red-50 to-red-100 px-6 py-4">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <PropertySchedule
-                                        propertyId={property.propertyId}
-                                    />
-                                    <h3 className="font-semibold text-gray-800">
-                                        Visit Schedule
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="p-4">
-                            <p className="text-sm text-gray-600">
-                                View and manage all scheduled house visits for
-                                this property.
-                            </p>
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );
