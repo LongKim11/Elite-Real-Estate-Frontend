@@ -27,7 +27,6 @@ export const DeletePropertyDialog = ({ propertyId, title }) => {
             console.log('Delete Property Response', res);
             setOpen(false);
             toast.success('Property deleted successfully');
-
             queryClient.invalidateQueries(['getListingAdmin']);
         },
         onError: (err) => {

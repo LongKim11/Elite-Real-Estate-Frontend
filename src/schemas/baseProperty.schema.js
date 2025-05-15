@@ -9,10 +9,10 @@ export const basePropertySchema = z.object({
     price: z
         .string()
         .min(1, 'Price is required')
-        .regex(/^[0-9.]+$/, 'Price must be contain only digits'),
+        .regex(/^[0-9.]+$/, 'Price must contain only digits'),
     title: z.string().min(6, 'Title must be at least 6 characters long'),
     typeTransaction: z.string(),
-    category: z.optional(),
+    category: z.string().optional(),
     fullAddress: z
         .string()
         .min(6, 'Full address must be at least 6 characters long'),
@@ -23,15 +23,15 @@ export const basePropertySchema = z.object({
     squareMeters: z
         .string()
         .min(1, 'Square meters is required')
-        .regex(/^[0-9]+$/, 'Square meters must be contain only digits'),
+        .regex(/^[0-9]+$/, 'Square meters must contain only digits'),
     longitude: z
         .string()
         .min(1, 'Longitude is required')
-        .regex(/^[0-9.]+$/, 'Longitude must be contain only digits'),
+        .regex(/^[0-9.]+$/, 'Longitude must contain only digits'),
     latitude: z
         .string()
         .min(1, 'Latitude is required')
-        .regex(/^[0-9.]+$/, 'Latitude must be contain only digits'),
+        .regex(/^[0-9.]+$/, 'Latitude must contain only digits'),
     startTime: z.string({ required_error: 'Start time must be selected' }),
     expireTime: z.string({ required_error: 'Expire time must be selected' })
 });

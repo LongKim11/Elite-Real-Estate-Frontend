@@ -17,14 +17,15 @@ import {
 import { editProperty } from '@/api/listingService';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
-
 import {
     Popover,
     PopoverContent,
     PopoverTrigger
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import { houseSchema } from '@/schemas/house.schema';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export const HouseForm = ({
     typeTransaction,
@@ -35,32 +36,43 @@ export const HouseForm = ({
     const [images, setImages] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
 
-    const [formData, setFormData] = useState({
-        address: {
-            ward: '',
-            town: '',
-            province: ''
-        },
-        price: '',
-        category: 'House',
-        title: '',
-        fullAddress: '',
-        projectName: '',
-        description: '',
-        typeTransaction: typeTransaction,
-        squareMeters: '',
-        longitude: '',
-        latitude: '',
-        startTime: new Date(),
-        expireTime: new Date(new Date().setMonth(new Date().getMonth() + 1)),
-        numBedrooms: '',
-        numBathrooms: '',
-        floor: '',
-        landArea: '',
-        houseType: '',
-        hasGarden: false,
-        hasGarage: false
+    const { register, handleSubmit, setValue, watch, reset } = useForm({
+        resolver: zodResolver(houseSchema),
+        mode: 'onSubmit',
+        defaultValues: {
+            address: {
+                ward: '',
+                town: '',
+                province: ''
+            },
+            price: '',
+            category: 'House',
+            title: '',
+            fullAddress: '',
+            projectName: '',
+            description: '',
+            typeTransaction: typeTransaction,
+            squareMeters: '',
+            longitude: '',
+            latitude: '',
+            startTime: new Date().toISOString(),
+            expireTime: new Date(
+                new Date().setMonth(new Date().getMonth() + 1)
+            ).toISOString(),
+            numBedrooms: '',
+            numBathrooms: '',
+            floor: '',
+            landArea: '',
+            houseType: '',
+            hasGarden: false,
+            hasGarage: false
+        }
     });
+
+    const hasGarage = watch('hasGarage');
+    const hasGarden = watch('hasGarden');
+    const startTime = watch('startTime');
+    const expireTime = watch('expireTime');
 
     const tabs = ['basic', 'location', 'details', 'additional'];
     const [activeTab, setActiveTab] = useState('basic');
@@ -78,49 +90,28 @@ export const HouseForm = ({
                 ...filteredItem
             } = item;
 
-            setFormData({
-                ...filteredItem,
-                floor: numFloors
+            const fieldsToString = [
+                'price',
+                'squareMeters',
+                'numBedrooms',
+                'numBathrooms',
+                'floor',
+                'landArea'
+            ];
+
+            const fixedItem = { floor: numFloors, ...filteredItem };
+
+            fieldsToString.forEach((field) => {
+                fixedItem[field] = String(fixedItem[field]);
             });
+
+            reset(fixedItem);
 
             if (item.images) {
                 setImageUrls(item.images.map((img) => img.imageUrl));
             }
         }
     }, [item]);
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleAddressChange = (e) => {
-        const { name, value } = e.target;
-
-        setFormData((prev) => ({
-            ...prev,
-            address: {
-                ...prev.address,
-                [name]: value
-            }
-        }));
-    };
-
-    const handleDateChange = (name, value) => {
-        setFormData({
-            ...formData,
-            [name]: new Date(value).toISOString()
-        });
-    };
-
-    const handleCheckboxChange = (name, checked) => {
-        setFormData({
-            ...formData,
-            [name]: checked
-        });
-    };
 
     const handleImageChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -156,12 +147,10 @@ export const HouseForm = ({
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const onSubmit = (data) => {
         const formDataToSend = new FormData();
 
-        const propertyRequest = { ...formData };
+        const propertyRequest = { ...data };
 
         formDataToSend.append(
             'propertyRequest',
@@ -173,7 +162,36 @@ export const HouseForm = ({
         onFormSubmit(formDataToSend);
     };
 
-    const navigate = useNavigate();
+    function extractErrorMessages(errorsObj) {
+        const messages = [];
+
+        function traverse(obj) {
+            for (const key in obj) {
+                const value = obj[key];
+
+                if (value && typeof value === 'object') {
+                    if (value.message) {
+                        messages.push(value.message);
+                    } else {
+                        traverse(value);
+                    }
+                }
+            }
+        }
+
+        traverse(errorsObj);
+        return messages;
+    }
+
+    const onError = (formErrors) => {
+        console.log('Form Errors', formErrors);
+
+        const errorMsg = extractErrorMessages(formErrors);
+
+        if (errorMsg?.length > 0) {
+            toast.error(errorMsg[0]);
+        }
+    };
 
     const { mutate: updateProperty, isLoading } = useMutation({
         mutationFn: ({ propertyId, formDataToSend }) =>
@@ -181,7 +199,7 @@ export const HouseForm = ({
         onSuccess: (res) => {
             console.log('Update Property Data', res);
             toast.success('Update Property Successfully');
-            navigate(`/list/${item.propertyId}`);
+            window.location.href = `/list/${item.propertyId}`;
         },
         onError: (err) => {
             console.log('Update Property Error', err.response.data.error);
@@ -189,14 +207,12 @@ export const HouseForm = ({
         }
     });
 
-    const handleUpdate = () => {
+    const onUpdate = (data) => {
         const formDataToSend = new FormData();
 
-        const { address, startTime, expireTime, ...formUpdateData } = formData;
+        const { address, startTime, expireTime, ...formUpdateData } = data;
 
         const propertyRequest = { ...formUpdateData };
-
-        console.log(formUpdateData);
 
         formDataToSend.append(
             'propertyRequest',
@@ -212,7 +228,10 @@ export const HouseForm = ({
                 Provide House Information
             </h1>
 
-            <form onSubmit={handleSubmit} className="mb-10 space-y-8">
+            <form
+                onSubmit={handleSubmit(onSubmit, onError)}
+                className="mb-10 space-y-8"
+            >
                 <Tabs
                     value={activeTab}
                     className="w-full"
@@ -243,12 +262,8 @@ export const HouseForm = ({
                                 <div className="space-y-2">
                                     <Label htmlFor="title">Title</Label>
                                     <Input
-                                        id="title"
-                                        name="title"
+                                        {...register('title')}
                                         placeholder="e.g., Luxury 2BR Apartment with City View"
-                                        value={formData.title}
-                                        onChange={handleChange}
-                                        required
                                     />
                                 </div>
 
@@ -257,24 +272,16 @@ export const HouseForm = ({
                                         Project Name
                                     </Label>
                                     <Input
-                                        id="projectName"
-                                        name="projectName"
+                                        {...register('projectName')}
                                         placeholder="e.g., Sunshine Towers"
-                                        value={formData.projectName}
-                                        onChange={handleChange}
                                     />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="price">Price</Label>
                                     <Input
-                                        id="price"
-                                        name="price"
-                                        type="number"
+                                        {...register('price')}
                                         placeholder="e.g., 250000"
-                                        value={formData.price}
-                                        onChange={handleChange}
-                                        required
                                     />
                                 </div>
 
@@ -366,26 +373,18 @@ export const HouseForm = ({
                                             Province
                                         </Label>
                                         <Input
-                                            id="province"
-                                            name="province"
+                                            {...register('address.province')}
                                             placeholder="e.g., Ontario"
-                                            value={formData.address.province}
-                                            onChange={handleAddressChange}
                                             disabled={updateStatus}
-                                            required
                                         />
                                     </div>
 
                                     <div className="space-y-2">
                                         <Label htmlFor="town">Town/City</Label>
                                         <Input
-                                            id="town"
-                                            name="town"
+                                            {...register('address.town')}
                                             placeholder="e.g., Toronto"
-                                            value={formData.address.town}
-                                            onChange={handleAddressChange}
                                             disabled={updateStatus}
-                                            required
                                         />
                                     </div>
 
@@ -394,13 +393,9 @@ export const HouseForm = ({
                                             Ward/District
                                         </Label>
                                         <Input
-                                            id="ward"
-                                            name="ward"
+                                            {...register('address.ward')}
                                             placeholder="e.g., Downtown"
-                                            value={formData.address.ward}
-                                            onChange={handleAddressChange}
                                             disabled={updateStatus}
-                                            required
                                         />
                                     </div>
                                 </div>
@@ -410,12 +405,8 @@ export const HouseForm = ({
                                         Full Address
                                     </Label>
                                     <Input
-                                        id="fullAddress"
-                                        name="fullAddress"
+                                        {...register('fullAddress')}
                                         placeholder="e.g., 123 Main Street, Apt 4B"
-                                        value={formData.fullAddress}
-                                        onChange={handleChange}
-                                        required
                                     />
                                 </div>
 
@@ -425,13 +416,8 @@ export const HouseForm = ({
                                             Longitude
                                         </Label>
                                         <Input
-                                            id="longitude"
-                                            name="longitude"
-                                            type="number"
-                                            step="0.000001"
+                                            {...register('longitude')}
                                             placeholder="e.g., -79.347015"
-                                            value={formData.longitude}
-                                            onChange={handleChange}
                                         />
                                         <p className="text-muted-foreground text-sm">
                                             Precise longitude coordinates
@@ -443,13 +429,8 @@ export const HouseForm = ({
                                             Latitude
                                         </Label>
                                         <Input
-                                            id="latitude"
-                                            name="latitude"
-                                            type="number"
-                                            step="0.000001"
+                                            {...register('latitude')}
                                             placeholder="e.g., 43.651070"
-                                            value={formData.latitude}
-                                            onChange={handleChange}
                                         />
                                         <p className="text-muted-foreground text-sm">
                                             Precise latitude coordinates
@@ -477,13 +458,8 @@ export const HouseForm = ({
                                             Square Meters
                                         </Label>
                                         <Input
-                                            id="squareMeters"
-                                            name="squareMeters"
-                                            type="number"
+                                            {...register('squareMeters')}
                                             placeholder="e.g., 85"
-                                            value={formData.squareMeters}
-                                            onChange={handleChange}
-                                            required
                                         />
                                     </div>
 
@@ -492,13 +468,8 @@ export const HouseForm = ({
                                             Land Area
                                         </Label>
                                         <Input
-                                            id="landArea"
-                                            name="landArea"
-                                            type="number"
-                                            min="0"
+                                            {...register('landArea')}
                                             placeholder="e.g., 250"
-                                            value={formData.landArea}
-                                            onChange={handleChange}
                                         />
                                     </div>
                                 </div>
@@ -508,12 +479,8 @@ export const HouseForm = ({
                                         House Type
                                     </Label>
                                     <Input
-                                        id="houseType"
-                                        name="houseType"
-                                        type="text"
+                                        {...register('houseType')}
                                         placeholder="e.g,. Single-family House"
-                                        value={formData.houseType}
-                                        onChange={handleChange}
                                     />
                                     <p className="text-muted-foreground text-sm">
                                         Specify the type of home
@@ -526,14 +493,8 @@ export const HouseForm = ({
                                             Bedrooms
                                         </Label>
                                         <Input
-                                            id="numBedrooms"
-                                            name="numBedrooms"
-                                            type="number"
-                                            min="0"
+                                            {...register('numBedrooms')}
                                             placeholder="e.g., 4"
-                                            value={formData.numBedrooms}
-                                            onChange={handleChange}
-                                            required
                                         />
                                     </div>
 
@@ -542,27 +503,16 @@ export const HouseForm = ({
                                             Bathrooms
                                         </Label>
                                         <Input
-                                            id="numBathrooms"
-                                            name="numBathrooms"
-                                            type="number"
-                                            min="0"
+                                            {...register('numBathrooms')}
                                             placeholder="e.g., 3"
-                                            value={formData.numBathrooms}
-                                            onChange={handleChange}
-                                            required
                                         />
                                     </div>
 
                                     <div className="space-y-2">
                                         <Label htmlFor="floor">Floor</Label>
                                         <Input
-                                            id="floor"
-                                            name="floor"
-                                            type="number"
-                                            min="0"
+                                            {...register('floor')}
                                             placeholder="e.g., 2"
-                                            value={formData.floor}
-                                            onChange={handleChange}
                                         />
                                     </div>
                                 </div>
@@ -571,11 +521,11 @@ export const HouseForm = ({
                                     <div className="flex items-start space-x-3 rounded-md border p-4">
                                         <Checkbox
                                             id="hasGarden"
-                                            checked={formData.hasGarden}
+                                            checked={hasGarden}
                                             onCheckedChange={(checked) =>
-                                                handleCheckboxChange(
+                                                setValue(
                                                     'hasGarden',
-                                                    checked
+                                                    checked === true
                                                 )
                                             }
                                         />
@@ -593,11 +543,11 @@ export const HouseForm = ({
                                     <div className="flex items-start space-x-3 rounded-md border p-4">
                                         <Checkbox
                                             id="hasGarage"
-                                            checked={formData.hasGarage}
+                                            checked={hasGarage}
                                             onCheckedChange={(checked) =>
-                                                handleCheckboxChange(
+                                                setValue(
                                                     'hasGarage',
-                                                    checked
+                                                    checked === true
                                                 )
                                             }
                                         />
@@ -632,13 +582,9 @@ export const HouseForm = ({
                                         Description
                                     </Label>
                                     <Textarea
-                                        id="description"
-                                        name="description"
+                                        {...register('description')}
                                         placeholder="Describe your apartment in detail..."
                                         className="min-h-[150px]"
-                                        value={formData.description}
-                                        onChange={handleChange}
-                                        required
                                     />
                                 </div>
 
@@ -654,13 +600,12 @@ export const HouseForm = ({
                                                     className="w-full justify-start text-left font-normal"
                                                 >
                                                     <CalendarIcon className="mr-2 h-4 w-4" />
-                                                    {formData.startTime ? (
-                                                        format(
-                                                            formData.startTime,
-                                                            'PPP'
-                                                        )
+                                                    {startTime ? (
+                                                        format(startTime, 'PPP')
                                                     ) : (
-                                                        <span>Pick a date</span>
+                                                        <span className="text-gray-500">
+                                                            Pick a date
+                                                        </span>
                                                     )}
                                                 </Button>
                                             </PopoverTrigger>
@@ -670,13 +615,14 @@ export const HouseForm = ({
                                             >
                                                 <Calendar
                                                     mode="single"
-                                                    selected={
-                                                        formData.startTime
-                                                    }
+                                                    selected={startTime}
                                                     onSelect={(date) =>
-                                                        handleDateChange(
+                                                        setValue(
                                                             'startTime',
-                                                            date
+                                                            date.toISOString(),
+                                                            {
+                                                                shouldValidate: true
+                                                            }
                                                         )
                                                     }
                                                     initialFocus
@@ -701,13 +647,15 @@ export const HouseForm = ({
                                                     className="w-full justify-start text-left font-normal"
                                                 >
                                                     <CalendarIcon className="mr-2 h-4 w-4" />
-                                                    {formData.expireTime ? (
+                                                    {expireTime ? (
                                                         format(
-                                                            formData.expireTime,
+                                                            expireTime,
                                                             'PPP'
                                                         )
                                                     ) : (
-                                                        <span>Pick a date</span>
+                                                        <span className="text-gray-500">
+                                                            Pick a date
+                                                        </span>
                                                     )}
                                                 </Button>
                                             </PopoverTrigger>
@@ -717,13 +665,14 @@ export const HouseForm = ({
                                             >
                                                 <Calendar
                                                     mode="single"
-                                                    selected={
-                                                        formData.expireTime
-                                                    }
+                                                    selected={expireTime}
                                                     onSelect={(date) =>
-                                                        handleDateChange(
+                                                        setValue(
                                                             'expireTime',
-                                                            date
+                                                            date.toISOString(),
+                                                            {
+                                                                shouldValidate: true
+                                                            }
                                                         )
                                                     }
                                                     initialFocus
@@ -757,7 +706,7 @@ export const HouseForm = ({
                             {updateStatus && (
                                 <Button
                                     type="button"
-                                    onClick={handleUpdate}
+                                    onClick={handleSubmit(onUpdate, onError)}
                                     disabled={isLoading}
                                 >
                                     {isLoading ? (

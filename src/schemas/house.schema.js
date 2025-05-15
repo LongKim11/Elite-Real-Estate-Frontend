@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { basePropertySchema } from './baseProperty.schema';
 
-export const apartmentSchema = basePropertySchema.extend({
+export const houseSchema = basePropertySchema.extend({
     numBedrooms: z
         .string()
         .min(1, 'Bedrooms is required')
@@ -11,13 +11,11 @@ export const apartmentSchema = basePropertySchema.extend({
         .min(1, 'Bathrooms is required')
         .regex(/^[0-9]+$/, 'Bathrooms must contain only digits'),
     floor: z.string().min(1, 'Floor is required'),
-    buildingName: z
+    landArea: z
         .string()
-        .min(3, 'Building name must be at least 3 characters long'),
-    hasBalcony: z.boolean().default(false),
-    maintenanceFee: z
-        .string()
-        .min(1, 'Maintenance fee is required')
-        .regex(/^[0-9]+$/, 'Maintenance fee must contain only digits'),
-    parkingAvailability: z.boolean().default(false)
+        .min(1, 'Land area is required')
+        .regex(/^[0-9]+$/, 'Land area must contain only digits'),
+    houseType: z.string().min(1, 'House type is required'),
+    hasGarden: z.boolean().default(false),
+    hasGarage: z.boolean().default(false)
 });

@@ -194,8 +194,8 @@ export const ApartmentForm = ({
             editProperty({ propertyId, formDataToSend }),
         onSuccess: (res) => {
             console.log('Update Property Data', res);
+            window.locatiohn.href = `/list/${item.propertyId}`;
             toast.success('Update Property Successfully');
-            window.location.href = `/list/${item.propertyId}`;
         },
         onError: (err) => {
             console.log('Update Property Error', err.response.data.error);
@@ -255,7 +255,6 @@ export const ApartmentForm = ({
                                     <Label htmlFor="title">Title</Label>
                                     <Input
                                         {...register('title')}
-                                        name="title"
                                         placeholder="e.g., Luxury 2BR Apartment with City View"
                                     />
                                 </div>
@@ -516,7 +515,7 @@ export const ApartmentForm = ({
                                     <div className="flex items-start space-x-3 rounded-md border p-4">
                                         <Checkbox
                                             id="parkingAvailability"
-                                            check={parkingAvailability}
+                                            checked={parkingAvailability}
                                             onCheckedChange={(checked) =>
                                                 setValue(
                                                     'parkingAvailability',
