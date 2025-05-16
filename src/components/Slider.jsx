@@ -33,6 +33,7 @@ export const Slider = ({ images }) => {
                     <div className="h-[95%] flex-[10]">
                         <img
                             src={images[imageIdx]}
+                            loading="lazy"
                             className="h-full w-full rounded-md object-cover"
                         ></img>
                     </div>
@@ -57,6 +58,7 @@ export const Slider = ({ images }) => {
             <div className="flex-[3]">
                 <img
                     src={images[0]}
+                    loading="lazy"
                     className="h-full w-full cursor-pointer rounded-md object-cover"
                     onClick={() => setImageIdx(0)}
                 ></img>
@@ -66,6 +68,7 @@ export const Slider = ({ images }) => {
                     <img
                         src={image}
                         key={index}
+                        loading="lazy"
                         className="h-[120px] w-full cursor-pointer rounded-md object-cover"
                         onClick={() => {
                             setImageIdx(index + 1);

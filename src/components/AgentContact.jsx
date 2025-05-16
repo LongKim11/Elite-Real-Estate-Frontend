@@ -78,7 +78,12 @@ export const AgentContact = ({ agentInfo }) => {
                 {/* Contact Buttons */}
                 <div className="mt-6 flex flex-col gap-4">
                     {/* Zalo Button */}
-                    <a href="https://zalo.me/0915307659" className="w-full">
+                    <a
+                        href="https://zalo.me/0915307659"
+                        className="w-full"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         <Button className="text-back flex w-full items-center justify-center gap-2 border border-blue-300 bg-white hover:bg-blue-50">
                             <img
                                 src="/zalo.png"
