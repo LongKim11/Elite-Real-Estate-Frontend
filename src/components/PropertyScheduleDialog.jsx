@@ -290,27 +290,31 @@ export const PropertySchedule = ({ propertyId, actor = 'owner' }) => {
                                                 )}
                                             </Button>
                                         )}
-                                    <Button
-                                        disabled={isDeleting}
-                                        size="sm"
-                                        variant="outline"
-                                        className="border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700"
-                                        onClick={() =>
-                                            handleDeleteSchedule(schedule.id)
-                                        }
-                                    >
-                                        {isDeleting ? (
-                                            <div className="flex items-center justify-center gap-2">
-                                                <Loader2 className="h-5 w-5 animate-spin" />
-                                                Please wait...
-                                            </div>
-                                        ) : (
-                                            <>
-                                                <Trash2 className="mr-1 h-4 w-4" />
-                                                Delete
-                                            </>
-                                        )}
-                                    </Button>
+                                    {actor === 'admin' && (
+                                        <Button
+                                            disabled={isDeleting}
+                                            size="sm"
+                                            variant="outline"
+                                            className="border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700"
+                                            onClick={() =>
+                                                handleDeleteSchedule(
+                                                    schedule.id
+                                                )
+                                            }
+                                        >
+                                            {isDeleting ? (
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                                    Please wait...
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <Trash2 className="mr-1 h-4 w-4" />
+                                                    Delete
+                                                </>
+                                            )}
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                         </div>

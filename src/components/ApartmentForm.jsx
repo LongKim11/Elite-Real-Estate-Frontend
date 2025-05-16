@@ -194,7 +194,7 @@ export const ApartmentForm = ({
             editProperty({ propertyId, formDataToSend }),
         onSuccess: (res) => {
             console.log('Update Property Data', res);
-            window.locatiohn.href = `/list/${item.propertyId}`;
+            window.location.href = `/list/${item.propertyId}`;
             toast.success('Update Property Successfully');
         },
         onError: (err) => {

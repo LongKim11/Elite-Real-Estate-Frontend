@@ -126,16 +126,16 @@ export const HouseVisitDialog = ({ id }) => {
                             Notes
                         </Label>
                         <Input
-                            {...register('viewerNotes')}
+                            {...register('viewNotes')}
                             className="col-span-3"
                             placeholder="Add any special notes here..."
                         />
                     </div>
-                    {errors.viewerNotes && (
+                    {errors.viewNotes && (
                         <div className="grid grid-cols-4 items-center gap-4">
                             <span className="col-span-1"></span>
                             <p className="col-span-3 text-xs text-red-500">
-                                {errors.viewerNotes.message}
+                                {errors.viewNotes.message}
                             </p>
                         </div>
                     )}

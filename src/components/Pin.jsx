@@ -36,12 +36,27 @@ export const Pin = ({ item }) => {
                     </Link>
                     <div className="mt-2 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <span className="font-bold text-amber-600">
-                                {item.numBedrooms} bedrooms
-                            </span>
-                            <span className="font-bold text-amber-600">
-                                {item.numBathrooms} badrooms
-                            </span>
+                            {item.category === 'Land' ? (
+                                <>
+                                    {' '}
+                                    <span className="font-bold text-amber-600">
+                                        {item.roadFrontage}m road
+                                    </span>
+                                    <span className="font-bold text-amber-600">
+                                        {item.squareMeters}m² square
+                                    </span>
+                                </>
+                            ) : (
+                                <>
+                                    {' '}
+                                    <span className="font-bold text-amber-600">
+                                        {item.numBedrooms} bedrooms
+                                    </span>
+                                    <span className="font-bold text-amber-600">
+                                        {item.numBathrooms} badrooms
+                                    </span>
+                                </>
+                            )}
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="font-bold text-amber-600">

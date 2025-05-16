@@ -43,7 +43,7 @@ export const RegisterObserverDialog = ({ id, isFollowed }) => {
         },
         onError: (err) => {
             console.log('Register Observer Error:', err.response.data.error);
-            toast.success(err.response.data.error);
+            toast.error('You must be logged in to perform this action');
             setOpen(false);
         }
     });
