@@ -14,7 +14,7 @@ export const Pin = ({ item }) => {
                     }}
                 >
                     <Link
-                        to={`/list/${item.id}`}
+                        to={`/list/${item.propertyId}`}
                         style={{
                             fontWeight: 'bold',
                             fontSize: '16px'

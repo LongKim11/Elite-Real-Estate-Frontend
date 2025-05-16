@@ -23,7 +23,7 @@ export const ListPage = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
 
-        const newFilters = {    
+        const newFilters = {
             transactionType: params.get('transactionType') || '',
             province: params.get('province') || '',
             district: params.get('district') || '',
