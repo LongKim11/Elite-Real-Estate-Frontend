@@ -215,17 +215,21 @@ export const FundHistoryCard = () => {
                                             )
                                         )}
 
-                                    {paymentHistory?.data?.length === 0 &&
-                                        purchaseHistory?.length === 0 && (
-                                            <div className="flex flex-col items-center justify-center py-8 text-center">
-                                                <div className="rounded-full bg-gray-100 p-3">
-                                                    <CreditCard className="h-6 w-6 text-gray-400" />
-                                                </div>
-                                                <p className="mt-2 text-gray-500">
-                                                    No transaction history found
-                                                </p>
+                                    {(paymentHistory?.data === null ||
+                                        purchaseHistory?.data === null) && (
+                                        <div className="mt-6 flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 bg-white px-6 py-10 text-center">
+                                            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-50">
+                                                <CreditCard className="h-8 w-8 text-blue-400" />
                                             </div>
-                                        )}
+                                            <h3 className="text-lg font-semibold text-gray-700">
+                                                No Transactions Yet
+                                            </h3>
+                                            <p className="mt-1 text-sm text-gray-500">
+                                                You haven't made any purchases
+                                                or payments yet.
+                                            </p>
+                                        </div>
+                                    )}
                                 </>
                             )}
                         </div>
