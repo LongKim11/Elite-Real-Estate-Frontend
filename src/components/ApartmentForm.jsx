@@ -410,6 +410,7 @@ export const ApartmentForm = ({
                                         <Input
                                             {...register('longitude')}
                                             placeholder="e.g., -79.347015"
+                                            disabled={updateStatus}
                                         />
                                         <p className="text-muted-foreground text-sm">
                                             Precise longitude coordinates
@@ -423,6 +424,7 @@ export const ApartmentForm = ({
                                         <Input
                                             {...register('latitude')}
                                             placeholder="e.g., 43.651070"
+                                            disabled={updateStatus}
                                         />
                                         <p className="text-muted-foreground text-sm">
                                             Precise latitude coordinates
