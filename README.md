@@ -28,7 +28,7 @@ A modern fullstack real estate platform with interactive maps, secure payments, 
 
 ## 📽 Demo
 
-🎥 [Watch Demo on YouTube](https://youtu.be/QRGZJrSvpZo)
+Checkout the full project walkthrough video here: [Watch on YouTube](https://youtu.be/QRGZJrSvpZo)
 
 ---
 
