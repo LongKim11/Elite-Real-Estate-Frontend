@@ -1,0 +1,44 @@
+server:
+  port: 8100
+jwt:
+  expiration:
+    access: 15
+    refresh: 1400
+  secret: "GzEXvFhjs3gXhaj2fCm5FGtUMiwyCzvM8qNE+LoeVFI="
+  issuer: "rental-property-auth-service"
+  audience: "rental-property-users"
+
+# kafka:
+#   bootstrap-servers: localhost:9092
+#   consumer:
+#     group-id: real-estate-group
+#     auto-offset-reset: earliest
+#     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#     value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#   producer:
+#     acks: all
+#     key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#   listener:
+#     missing-topics-fatal: false
+
+kafka:
+  bootstrap-servers: real-estate-kafka:9093  
+  consumer:
+    group-id: real-estate-group
+    auto-offset-reset: earliest
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.apache.kafka.common.serialization.JsonDeserializer
+  producer:
+    acks: all
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.apache.kafka.common.serialization.JsonDeserializer
+  listener:
+    missing-topics-fatal: false
+
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

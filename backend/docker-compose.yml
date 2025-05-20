@@ -1,0 +1,269 @@
+version: "3.9"
+
+services:
+  my-sql:
+    container_name: real-estate-db
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin123
+    ports:
+      - "3310:3306"
+    volumes:
+      - my-sql:/var/lib/mysql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./db-auth.sql:/docker-entrypoint-initdb.d/db-auth.sql
+    networks:
+      - spring-boot-network
+
+  redis:
+    container_name: real-estate-redis
+    image: redis:7.2
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - spring-boot-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+
+  zookeeper:
+    container_name: real-estate-zookeeper
+    image: bitnami/zookeeper:latest
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - spring-boot-network
+
+  kafka:
+    container_name: real-estate-kafka
+    image: wurstmeister/kafka:latest
+    restart: always
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: real-estate-zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://real-estate-kafka:9093,EXTERNAL://localhost:9092
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,EXTERNAL://0.0.0.0:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    depends_on:
+      - zookeeper
+    networks:
+      - spring-boot-network
+
+  authentication-service:
+    container_name: real-estate-auth
+    build:
+      context: ./authentication-service
+    ports:
+      - "8100:8100" 
+    environment:
+      SERVER_PORT: 8100
+      JWT_SECRET: "GzEXvFhjs3gXhaj2fCm5FGtUMiwyCzvM8qNE+LoeVFI="
+      JWT_ISSUER: "rental-property-auth-service"
+      JWT_AUDIENCE: "rental-property-users"
+      JWT_EXPIRATION_ACCESS: 15
+      JWT_EXPIRATION_REFRESH: 1400
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: "real-estate-kafka:9093"
+      SPRING_KAFKA_CONSUMER_GROUP_ID: "real-estate-group"
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: "earliest"
+      SPRING_KAFKA_PRODUCER_ACKS: "all"
+    depends_on:
+      - my-sql
+      - redis
+      - kafka
+    networks:
+      - spring-boot-network
+      
+  listing-service:
+    container_name: real-estate-listing
+    build:
+      context: ./listing-service
+    ports:
+      - "8101:8101"
+    environment:
+      SERVER_PORT: 8101
+      
+      SPRING_DATASOURCE_URL: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres.iqjzpkwxosxhbbbrkeyv
+      SPRING_DATASOURCE_PASSWORD: "1234"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SUPABASE_BUCKET_NAME: propertyimgv01
+      SUPABASE_BASE_URL: https://iqjzpkwxosxhbbbrkeyv.supabase.co/storage/v1/
+      SUPABASE_API_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlxanpwa3d4b3N4aGJiYnJrZXl2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0Mjg3MjQ1MSwiZXhwIjoyMDU4NDQ4NDUxfQ.jx_REzuSJzH9zXMPp-cJJL0k1nkGt77HaqwrFQUwfL8"
+      
+      JWT_SECRET: "GzEXvFhjs3gXhaj2fCm5FGtUMiwyCzvM8qNE+LoeVFI="
+      JWT_ISSUER: "rental-property-auth-service"
+      JWT_AUDIENCE: "rental-property-users"
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 587
+      MAIL_USERNAME: userchatgptnlgb@gmail.com
+      MAIL_PASSWORD: "sfeuzsxrfaazwiip"
+      
+      SPRING_REDIS_HOST: real-estate-redis
+      SPRING_REDIS_PORT: 6379
+
+      # Kafka configuration
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: real-estate-kafka:9093
+      SPRING_KAFKA_CONSUMER_GROUP_ID: real-estate-group
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+      SPRING_KAFKA_PRODUCER_ACKS: all
+      
+    depends_on:
+      - redis
+      - kafka
+    networks:
+      - spring-boot-network
+
+  payment-service:
+    container_name: real-estate-payment
+    build:
+      context: ./sales-service
+    ports:
+      - "8102:8102"
+    environment:
+      SERVER_PORT: 8102
+      SPRING_APPLICATION_NAME: sales-service
+      
+      TZ: Asia/Ho_Chi_Minh
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=Asia/Ho_Chi_Minh"
+
+      # VNPAY configuration
+      VNPAY_TMN_CODE: XY9GJBC5
+      VNPAY_HASH_SECRET: B5V47OE9SWWMCH4MORJTVRZK4GRKEN2Y
+      VNPAY_URL: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+      VNPAY_RETURN_URL: http://localhost:8102/api/v1/payment/return
+      VNPAY_IPN_URL: http://localhost:8102/api/v1/payment/ipn
+      VNPAY_VERSION: 2.1.0
+      VNPAY_COMMAND: pay
+      VNPAY_CURR_CODE: VND
+      VNPAY_LOCALE: vn
+      
+      # Database configuration
+      SPRING_DATASOURCE_URL: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres.zeggjgftajkegxdvrvof
+      SPRING_DATASOURCE_PASSWORD: "1234"
+      
+      # JPA configuration
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      
+      # Kafka configuration
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: real-estate-kafka:9093
+      SPRING_KAFKA_CONSUMER_GROUP_ID: real-estate-group
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+      SPRING_KAFKA_PRODUCER_ACKS: all
+    depends_on:
+      - kafka
+    networks:
+      - spring-boot-network
+
+  sales-service:
+    container_name: real-estate-sales
+    build:
+      context: ./payment-service
+    ports:
+      - "8103:8103"
+    environment:
+      SERVER_PORT: 8103
+      SPRING_APPLICATION_NAME: payment-service
+      
+      # Kafka configuration
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: real-estate-kafka:9093
+      SPRING_KAFKA_CONSUMER_GROUP_ID: real-estate-group
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+      SPRING_KAFKA_PRODUCER_ACKS: all
+      
+      # Database configuration
+      SPRING_DATASOURCE_URL: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres.sunmxhwtghzpuzpntjpt
+      SPRING_DATASOURCE_PASSWORD: "1234"
+      
+      # JPA configuration
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+    depends_on:
+      - kafka
+    networks:
+      - spring-boot-network
+
+  rental-service:
+    container_name: real-estate-rental
+    build:
+      context: ./rental-service
+    ports:
+      - "8104:8104"
+    environment:
+      SERVER_PORT: 8104
+      SPRING_APPLICATION_NAME: rental-service
+      
+      # Kafka configuration
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: real-estate-kafka:9093
+      SPRING_KAFKA_CONSUMER_GROUP_ID: real-estate-group
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+      SPRING_KAFKA_PRODUCER_ACKS: all
+      
+      # Database configuration
+      SPRING_DATASOURCE_URL: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres.efniutgecmwptmfyxztt
+      SPRING_DATASOURCE_PASSWORD: "1234"
+      
+      # JPA configuration
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+    depends_on:
+      - kafka
+    networks:
+      - spring-boot-network
+
+  api-gateway:
+    container_name: real-estate-gateway
+    build:
+      context: ./api-gateway
+    ports:
+      - "8200:8200"
+    environment:
+      SERVER_PORT: 8200
+      SPRING_APPLICATION_NAME: api-gateway
+      SPRING_CLOUD_GATEWAY_DEFAULT-FILTERS_0: "AddRequestHeader=X-Gateway, RentalGateway"
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS-CONFIGURATIONS_[/**]_ALLOWEDORIGINS: "*"
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS-CONFIGURATIONS_[/**]_ALLOWEDMETHODS: "GET,POST,PUT,DELETE,OPTIONS"
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS-CONFIGURATIONS_[/**]_ALLOWEDHEADERS: "*"
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS-CONFIGURATIONS_[/**]_ALLOWCREDENTIALS: "true"
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUE-TOKEN_ENABLED: "false"
+      SPRING_SECURITY_USER_NAME: ""
+      SPRING_SECURITY_USER_PASSWORD: ""
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS-CONFIGURATIONS_[/**]_MAXAGE: "3600"
+      JWT_SECRET: "GzEXvFhjs3gXhaj2fCm5FGtUMiwyCzvM8qNE+LoeVFI="
+      JWT_ISSUER: "rental-property-auth-service"
+      JWT_AUDIENCE: "rental-property-users"
+      JWT_EXPIRATION_ACCESS: 15
+      JWT_EXPIRATION_REFRESH: 1400
+    depends_on:
+      - authentication-service
+      - listing-service
+      - payment-service
+      - sales-service
+      - rental-service
+    networks:
+      - spring-boot-network
+
+volumes:
+  my-sql:
+
+networks:
+  spring-boot-network:
+    driver: bridge

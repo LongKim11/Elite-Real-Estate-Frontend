@@ -1,0 +1,125 @@
+server:
+  port: 8200
+
+# spring:
+#   application:
+#     name: api-gateway
+
+#   cloud:
+#     gateway:
+#       default-filters:
+#         - AddRequestHeader=X-Gateway, RentalGateway
+#       routes:
+#         - id: security-service
+#           uri: http://localhost:8100
+#           predicates:
+#             - Path=/auth/**  # Đổi thành /auth/** để khớp với route trong rental-auth-service
+#         - id: listing-service
+#           uri: http://localhost:8101  # Đảm bảo service listing chạy trên cổng này
+#           predicates:
+#             - Path=/api/properties/**
+
+spring:
+  application:
+    name: api-gateway
+  
+  cloud:
+    gateway:
+      default-filters:
+        - AddRequestHeader=X-Gateway, RentalGateway
+
+      # globalcors:
+      #   corsConfigurations:  
+      #     '[/**]':
+      #       allowedOrigins:
+      #         - "http://localhost:5173"
+      #       allowedMethods:
+      #         - GET
+      #         - POST
+      #         - PUT
+      #         - DELETE
+      #         - OPTIONS
+      #       allowedHeaders:
+      #         - "*"
+      #       exposedHeaders: 
+      #         - Authorization
+      #         - Content-Type
+      #       allowCredentials: true
+      #       maxAge: 3600
+
+      routes:
+        # Auth service
+        - id: security-service
+          uri: http://authentication-service:8100
+          predicates:
+            - Path=/api/v1/auth/**, /api/v1/tiers/**, /api/v1/overview-statistics
+
+        - id: listing-service
+          uri: http://listing-service:8101
+          predicates:
+            - Path=/api/v1/properties/**, /api/v1/command/**
+
+        - id: payment-service
+          uri: http://payment-service:8102
+          predicates:
+            - Path=/api/v1/payment/**
+
+        - id: sales-service
+          uri: http://sales-service:8103
+          predicates:
+            - Path=/api/v1/user-post-quotas/**, /api/v1/post-payments/**
+        - id: rentals-service
+          uri: http://rental-service:8104
+          predicates:
+            - Path=/api/v1/view-schedule/**
+      # routes:
+      #   - id: security-service
+      #     uri: http://localhost:8100
+      #     predicates:
+      #       - Path=/api/v1/auth/**
+      #   - id: listing-service
+      #     uri: http://localhost:8101  
+      #     predicates:
+      #       - Path=/api/v1/properties/**
+      #   - id: payment-service
+      #     uri: http://localhost:8102
+      #     predicates:
+      #       - Path=/api/v1/payment/**
+      #   - id: sales-service
+      #     uri: http://localhost:8103
+      #     predicates:
+      #       - Path=/api/v1/sales/**
+
+# springdoc:
+#   use-forward-headers: true 
+#   swagger-ui:
+#     urls:
+#       - name: Auth Service
+#         url: http://authentication-service:8100/v3/api-docs 
+#       - name: Listing Service
+#         url: http://listing-service:8101/v3/api-docs
+#       - name: Payment Service
+#         url: http://payment-service:8102/v3/api-docs
+#       - name: Sales Service
+#         url: http://sales-service:8103/v3/api-docs
+
+# springdoc:
+#   use-forward-headers: true 
+#   swagger-ui:
+#     urls:
+#       - name: Auth Service
+#         url: http://localhost:8100/v3/api-docs 
+#       - name: Listing Service
+#         url: http://localhost:8101/v3/api-docs
+#       - name: Payment Service
+#         url: http://localhost:8102/v3/api-docs
+#       - name: Sales Service
+#         url: http://localhost:8103/v3/api-docs
+
+jwt:
+  expiration:
+    access: 15
+    refresh: 1400
+  secret: "GzEXvFhjs3gXhaj2fCm5FGtUMiwyCzvM8qNE+LoeVFI="
+  issuer: "rental-property-auth-service"
+  audience: "rental-property-users"

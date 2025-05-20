@@ -1,0 +1,46 @@
+server:
+  port: 8102
+vnpay:
+  tmn-code: XY9GJBC5
+  hash-secret: B5V47OE9SWWMCH4MORJTVRZK4GRKEN2Y
+  url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  return-url: http://localhost:8102/api/v1/payment/return
+  ipn-url: http://localhost:8102/api/v1/payment/ipn
+  version: 2.1.0
+  command: pay
+  curr-code: VND
+  locale: vn
+
+
+# kafka:
+#   bootstrap-servers: localhost:9092
+#   consumer:
+#     group-id: real-estate-group
+#     auto-offset-reset: earliest
+#     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#     value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#   producer:
+#     acks: all
+#     key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+
+kafka:
+  bootstrap-servers: real-estate-kafka:9093  
+  consumer:
+    group-id: real-estate-group
+    auto-offset-reset: earliest
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.apache.kafka.common.serialization.JsonDeserializer
+  producer:
+    acks: all
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.apache.kafka.common.serialization.JsonDeserializer
+  listener:
+    missing-topics-fatal: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

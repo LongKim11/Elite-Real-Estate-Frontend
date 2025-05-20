@@ -1,0 +1,63 @@
+server:
+  port: 8101
+jwt:
+  secret: "GzEXvFhjs3gXhaj2fCm5FGtUMiwyCzvM8qNE+LoeVFI="
+  issuer: "rental-property-auth-service"
+  audience: "rental-property-users"
+
+# kafka:
+#   bootstrap-servers: localhost:9092
+#   consumer:
+#     group-id: real-estate-group 
+#     auto-offset-reset: earliest
+#     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#     value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#   producer:
+#     acks: all
+#     key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#     value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#   listener:
+#     missing-topics-fatal: false
+spring:
+  redis:
+    host: real-estate-redis
+    port: 6379
+    
+kafka:
+  bootstrap-servers: real-estate-kafka:9093  
+  consumer:
+    group-id: real-estate-group
+    auto-offset-reset: earliest
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  producer:
+    acks: all
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  listener:
+    missing-topics-fatal: false
+
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: userchatgptnlgb@gmail.com
+  password: sfeuzsxrfaazwiip
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+        ssl:
+          trust: smtp.gmail.com
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    use-forward-headers: true
+
+logging:
+  level:
+    org.springframework.data.redis: DEBUG
